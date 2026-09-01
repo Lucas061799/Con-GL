@@ -86,14 +86,19 @@ export default function PageZero({ onContinue }) {
         <div className="flex-1 lg:w-1/2 lg:flex-none overflow-y-auto custom-scroll relative">
           <div className="relative z-10 min-h-full flex flex-col justify-center items-center py-10 px-6 md:px-[8%] lg:px-[10%]">
           <div className="w-full max-w-xl">
-            <p className="text-[14px] font-bold uppercase tracking-[0.1em] text-gradient mb-3">
-              Contractor General Liability
-            </p>
-            <h1 className="text-[32px] md:text-[36px] font-bold text-navy leading-[1.12] mb-3">
-              Get Multiple Quotes.<br />
-              <span className="text-gradient">One Easy Application.</span>
-            </h1>
-            <p className="text-[16px] text-gray-500 mb-8">First, let's start with the basics…</p>
+            {/* Landing type scale, identical to Builder's Risk and Commercial Auto. */}
+            <div className="mb-6">
+              <p className="text-xs md:text-sm font-bold tracking-widest uppercase text-gradient mb-2 md:mb-3">
+                Contractor General Liability
+              </p>
+              <h1 className="text-3xl md:text-4xl font-bold text-navy leading-tight mb-2 md:mb-3">
+                Get Multiple Quotes.<br />
+                <span className="text-gradient">One Easy Application.</span>
+              </h1>
+              <p className="text-sm md:text-base text-gray-500 leading-relaxed">
+                First, let's start with the basics…
+              </p>
+            </div>
 
             {/* Once every answer is in, the indication takes the place of the
                 questions rather than floating over them — the column stays
