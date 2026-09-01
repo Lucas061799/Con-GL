@@ -4,13 +4,10 @@ export const BRAND_GRADIENT = 'linear-gradient(88.09deg, #5C2ED4 0.11%, #A614C3 
 
 /* ── Shared bits ──────────────────────────────────────────────────── */
 
-function Label({ label, required, hint, size = 'md' }) {
+function Label({ label, required, hint }) {
   if (!label) return null
-  const cls = size === 'lg'
-    ? 'flex items-center gap-1.5 text-[14px] font-semibold text-navy mb-2'
-    : 'flex items-center gap-1.5 text-[13px] font-semibold text-gray-600 mb-1.5 tracking-wide'
   return (
-    <label className={cls}>
+    <label className="flex items-center gap-1.5 text-[13px] font-semibold text-gray-600 mb-1.5 tracking-wide">
       <span>{label}{required && <span className="text-red-400 ml-0.5">*</span>}</span>
       {hint && <InfoTip title={hint.title}>{hint.body}</InfoTip>}
     </label>
@@ -99,10 +96,8 @@ function FieldError({ error }) {
   )
 }
 
-const inputClass = (error, size = 'md') =>
-  `w-full border text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 transition-all ${
-    size === 'lg' ? 'rounded-xl px-4 py-4 text-[15px]' : 'rounded-lg px-3.5 py-2.5 text-sm'
-  } ${
+const inputClass = (error) =>
+  `w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 transition-all ${
     error
       ? 'border-red-300 bg-red-50/50 focus:ring-red-100 focus:border-red-400'
       : 'border-gray-200 bg-white focus:ring-[#7C3AED]/10 focus:border-[#7C3AED]/40 hover:border-gray-300'
@@ -172,9 +167,7 @@ function CheckMark({ id }) {
   )
 }
 
-const triggerCls = (size) => size === 'lg'
-  ? 'w-full flex items-center justify-between px-4 py-4 rounded-xl border text-[15px] text-left transition-all'
-  : 'w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg border text-sm text-left transition-all'
+const triggerCls = 'w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg border text-sm text-left transition-all'
 
 const triggerStyle = (open, error, hasValue) => ({
   background: 'white',
@@ -196,17 +189,17 @@ const hoverOff = (selected) => (e) => { if (!selected) e.currentTarget.style.bac
 
 /* ── Text input ───────────────────────────────────────────────────── */
 
-export function Input({ label, required, hint, placeholder, type = 'text', value, onChange, maxLength, size = 'md', className = '', error = false }) {
+export function Input({ label, required, hint, placeholder, type = 'text', value, onChange, maxLength, className = '', error = false }) {
   return (
     <div className={className}>
-      <Label label={label} required={required} hint={hint} size={size} />
+      <Label label={label} required={required} hint={hint} />
       <input
         type={type}
         value={value || ''}
         maxLength={maxLength}
         onChange={(e) => onChange && onChange(e.target.value)}
         placeholder={placeholder}
-        className={inputClass(error, size)}
+        className={inputClass(error)}
       />
       <FieldError error={error} />
     </div>
@@ -218,10 +211,10 @@ export function Input({ label, required, hint, placeholder, type = 'text', value
 const digitsOnly = (s) => String(s ?? '').replace(/\D/g, '')
 export const groupThousands = (s) => digitsOnly(s).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
-export function CurrencyInput({ label, required, hint, placeholder = '0', value, onChange, size = 'md', className = '', error = false }) {
+export function CurrencyInput({ label, required, hint, placeholder = '0', value, onChange, className = '', error = false }) {
   return (
     <div className={className}>
-      <Label label={label} required={required} hint={hint} size={size} />
+      <Label label={label} required={required} hint={hint} />
       <div className="relative">
         <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-gray-400 pointer-events-none">$</span>
         <input
@@ -230,7 +223,7 @@ export function CurrencyInput({ label, required, hint, placeholder = '0', value,
           value={value ? groupThousands(value) : ''}
           onChange={(e) => onChange && onChange(digitsOnly(e.target.value))}
           placeholder={placeholder}
-          className={`${inputClass(error, size)} ${size === 'lg' ? 'pl-8' : 'pl-7'}`}
+          className={`${inputClass(error)} pl-7`}
         />
       </div>
       <FieldError error={error} />
@@ -240,7 +233,7 @@ export function CurrencyInput({ label, required, hint, placeholder = '0', value,
 
 /* ── Plain select ─────────────────────────────────────────────────── */
 
-export function Select({ label, required, hint, options = [], value, onChange, placeholder = 'Select...', size = 'md', className = '', error = false }) {
+export function Select({ label, required, hint, options = [], value, onChange, placeholder = 'Select...', className = '', error = false }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   const triggerRef = useRef(null)
@@ -253,12 +246,12 @@ export function Select({ label, required, hint, options = [], value, onChange, p
 
   return (
     <div className={`${className} relative`} ref={ref}>
-      <Label label={label} required={required} hint={hint} size={size} />
+      <Label label={label} required={required} hint={hint} />
       <button
         ref={triggerRef}
         type="button"
         onClick={() => setOpen(v => !v)}
-        className={triggerCls(size)}
+        className={triggerCls}
         style={triggerStyle(open, error, !!selected)}
       >
         <span className="truncate pr-2">{selected ? optLabel(selected) : placeholder}</span>
@@ -296,7 +289,7 @@ export function Select({ label, required, hint, options = [], value, onChange, p
 
 /* ── Searchable select — for the long class-code list ─────────────── */
 
-export function SearchableSelect({ label, required, hint, options = [], value, onChange, placeholder = 'Select...', searchPlaceholder = 'Search…', size = 'md', className = '', error = false }) {
+export function SearchableSelect({ label, required, hint, options = [], value, onChange, placeholder = 'Select...', searchPlaceholder = 'Search…', className = '', error = false }) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const ref = useRef(null)
@@ -316,12 +309,12 @@ export function SearchableSelect({ label, required, hint, options = [], value, o
 
   return (
     <div className={`${className} relative`} ref={ref}>
-      <Label label={label} required={required} hint={hint} size={size} />
+      <Label label={label} required={required} hint={hint} />
       <button
         ref={triggerRef}
         type="button"
         onClick={() => setOpen(v => !v)}
-        className={triggerCls(size)}
+        className={triggerCls}
         style={triggerStyle(open, error, !!selected)}
       >
         <span className="truncate pr-2">{selected ? selected.label : placeholder}</span>
@@ -376,7 +369,7 @@ export function SearchableSelect({ label, required, hint, options = [], value, o
 /* ── Tree select — for Prior Insurance History ────────────────────── */
 
 // Groups expand/collapse with a +/− affordance; only leaves are selectable.
-export function TreeSelect({ label, required, hint, tree = [], leafLabels = {}, value, onChange, placeholder = 'Select...', size = 'md', className = '', error = false }) {
+export function TreeSelect({ label, required, hint, tree = [], leafLabels = {}, value, onChange, placeholder = 'Select...', className = '', error = false }) {
   const [open, setOpen] = useState(false)
   const [expanded, setExpanded] = useState(() => new Set())
   const ref = useRef(null)
@@ -449,12 +442,12 @@ export function TreeSelect({ label, required, hint, tree = [], leafLabels = {}, 
 
   return (
     <div className={`${className} relative`} ref={ref}>
-      <Label label={label} required={required} hint={hint} size={size} />
+      <Label label={label} required={required} hint={hint} />
       <button
         ref={triggerRef}
         type="button"
         onClick={() => setOpen(v => !v)}
-        className={triggerCls(size)}
+        className={triggerCls}
         style={triggerStyle(open, error, !!selectedLabel)}
       >
         <span className="truncate pr-2">{selectedLabel || placeholder}</span>
@@ -483,17 +476,17 @@ export function formatPhone(raw) {
   return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`
 }
 
-export function PhoneInput({ label, required, hint, placeholder = '(555) 000-0000', value, onChange, size = 'md', className = '', error = false }) {
+export function PhoneInput({ label, required, hint, placeholder = '(555) 000-0000', value, onChange, className = '', error = false }) {
   return (
     <div className={className}>
-      <Label label={label} required={required} hint={hint} size={size} />
+      <Label label={label} required={required} hint={hint} />
       <input
         type="text"
         inputMode="numeric"
         value={value || ''}
         onChange={(e) => onChange && onChange(formatPhone(e.target.value))}
         placeholder={placeholder}
-        className={inputClass(error, size)}
+        className={inputClass(error)}
       />
       <FieldError error={error} />
     </div>
@@ -611,7 +604,7 @@ function Calendar({ value, onPick }) {
   )
 }
 
-export function DateInput({ label, required, hint, value, onChange, size = 'md', className = '', error = false }) {
+export function DateInput({ label, required, hint, value, onChange, className = '', error = false }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   const triggerRef = useRef(null)
@@ -627,7 +620,7 @@ export function DateInput({ label, required, hint, value, onChange, size = 'md',
 
   return (
     <div className={`${className} relative`} ref={ref}>
-      <Label label={label} required={required} hint={hint} size={size} />
+      <Label label={label} required={required} hint={hint} />
       <div className="relative" ref={triggerRef}>
         <input
           type="text"
@@ -684,10 +677,10 @@ export function Checkbox({ label, checked, onChange, className = '' }) {
 
 /* ── Textarea ─────────────────────────────────────────────────────── */
 
-export function Textarea({ label, required, hint, placeholder, rows = 4, value, onChange, size = 'md', className = '', error = false }) {
+export function Textarea({ label, required, hint, placeholder, rows = 4, value, onChange, className = '', error = false }) {
   return (
     <div className={className}>
-      <Label label={label} required={required} hint={hint} size={size} />
+      <Label label={label} required={required} hint={hint} />
       <textarea
         rows={rows}
         value={value || ''}

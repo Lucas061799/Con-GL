@@ -140,8 +140,8 @@ export default function PageZero({ onContinue }) {
                   <button
                     type="button"
                     onClick={submit}
-                    className="w-full mt-5 flex items-center justify-center gap-2 rounded-xl text-[15px] font-bold text-white transition hover:opacity-90"
-                    style={{ height: 52, background: BRAND_GRADIENT, boxShadow: '0 6px 18px rgba(92,46,212,0.22)' }}
+                    className="w-full mt-5 flex items-center justify-center gap-2 rounded-xl text-sm font-bold text-white transition hover:opacity-90"
+                    style={{ height: 44, background: BRAND_GRADIENT, boxShadow: '0 6px 18px rgba(92,46,212,0.22)' }}
                   >
                     Shop the Marketplace
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -172,32 +172,32 @@ export default function PageZero({ onContinue }) {
               <>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-5">
                 <Input
-                  label="DBA" required size="lg"
+                  label="DBA" required
                   placeholder="Business name"
                   value={form.dba} onChange={set('dba')}
                   error={errorFor('dba')}
                 />
                 <CurrencyInput
-                  label="Sub-Contracting Costs" required size="lg"
+                  label="Sub-Contracting Costs" required
                       value={form.subContractingCosts} onChange={set('subContractingCosts')}
                   error={errorFor('subContractingCosts')}
                 />
                 <Input
-                  label="Postal Code" required size="lg"
+                  label="Postal Code" required
                   placeholder="95070" maxLength={5}
                   value={form.postalCode}
                   onChange={(v) => set('postalCode')(v.replace(/\D/g, ''))}
                   error={errorFor('postalCode')}
                 />
                 <Select
-                  label="Years of Experience" required size="lg"
+                  label="Years of Experience" required
                   options={YEARS_OF_EXPERIENCE}
                   value={form.yearsOfExperience} onChange={set('yearsOfExperience')}
                   placeholder="Select years of experience"
                   error={errorFor('yearsOfExperience')}
                 />
                 <SearchableSelect
-                  label="Main Class Code" required size="lg"
+                  label="Main Class Code" required
                   hint={FIELD_HELP.mainClassCode}
                   options={CLASS_CODE_OPTIONS}
                   value={form.mainClassCode} onChange={set('mainClassCode')}
@@ -206,19 +206,19 @@ export default function PageZero({ onContinue }) {
                   error={errorFor('mainClassCode')}
                 />
                 <Select
-                  label="Years in Business" required size="lg"
+                  label="Years in Business" required
                   options={YEARS_IN_BUSINESS}
                   value={form.yearsInBusiness} onChange={set('yearsInBusiness')}
                   placeholder="Select years in business"
                   error={errorFor('yearsInBusiness')}
                 />
                 <CurrencyInput
-                  label="Gross Receipts" required size="lg"
+                  label="Gross Receipts" required
                       value={form.grossReceipts} onChange={set('grossReceipts')}
                   error={errorFor('grossReceipts')}
                 />
                 <TreeSelect
-                  label="Prior Insurance History" required size="lg"
+                  label="Prior Insurance History" required
                   tree={PRIOR_INSURANCE_TREE}
                   leafLabels={PRIOR_INSURANCE_LEAVES}
                   value={form.priorInsurance} onChange={set('priorInsurance')}
@@ -226,12 +226,12 @@ export default function PageZero({ onContinue }) {
                   error={errorFor('priorInsurance')}
                 />
                 <CurrencyInput
-                  label="Employee Payroll" required size="lg"
+                  label="Employee Payroll" required
                       value={form.employeePayroll} onChange={set('employeePayroll')}
                   error={errorFor('employeePayroll')}
                 />
                 <Select
-                  label="New Residential Construction?" required size="lg"
+                  label="New Residential Construction?" required
                     options={YES_NO}
                   value={form.newResidential} onChange={set('newResidential')}
                   placeholder="Select an answer"
@@ -244,18 +244,18 @@ export default function PageZero({ onContinue }) {
                 onClick={submit}
                 disabled={!ready}
                 title={ready ? undefined : 'Answer every question to shop the marketplace'}
-                className={`w-full mt-8 flex items-center justify-center gap-2 rounded-xl text-[16px] font-bold transition ${
+                className={`w-full mt-8 flex items-center justify-center gap-2 rounded-xl text-sm font-bold transition ${
                   ready ? 'text-white hover:opacity-90' : 'cursor-not-allowed'
                 }`}
                 style={{
-                  height: 56,
+                  height: 44,
                   background: ready ? BRAND_GRADIENT : '#E5E7EB',
                   color: ready ? 'white' : '#9CA3AF',
                   boxShadow: ready ? '0 6px 18px rgba(92,46,212,0.22)' : 'none',
                 }}
               >
                 Shop the Marketplace
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                 </svg>
