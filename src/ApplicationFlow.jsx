@@ -80,7 +80,11 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
       out.push(...['effectiveDate', 'yearsInBusiness', 'yearsOfExperience'].filter(blank))
     }
 
-    if (step === 'inland-marine' && form.contractorsInstall) {
+    if (step === 'supplemental' && form.toolFloater === 'yes' && blank('toolFloaterLimit')) {
+      out.push('toolFloaterLimit')
+    }
+
+    if (step === 'inland-marine') {
       out.push(...['imPerJobSite', 'imInstallDeductible'].filter(blank))
       if (form.imTempStructures === 'yes' && blank('imTempStructuresDetail')) out.push('imTempStructuresDetail')
     }

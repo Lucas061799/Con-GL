@@ -135,30 +135,34 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
           Please select following coverages
         </p>
         <div className="space-y-2">
-          {OPTIONAL_COVERAGES.map(cov => (
+          {OPTIONAL_COVERAGES
+            .filter(cov => !cov.states || cov.states.includes(form.state))
+            .map(cov => (
             <QuestionCard key={cov.key}>
               <div className="flex items-start justify-between gap-6">
                 <p className="text-[14px] text-navy leading-snug">
                   {cov.label}
-                  <span className="inline-flex align-middle ml-1.5 -mt-px">
-                    <InfoTip title={cov.label}><p>{cov.help}</p></InfoTip>
-                  </span>
+                  {cov.help && (
+                    <span className="inline-flex align-middle ml-1.5 -mt-px">
+                      <InfoTip title={cov.label}><p>{cov.help}</p></InfoTip>
+                    </span>
+                  )}
                 </p>
                 <div className="shrink-0">
                   <ToggleQuestion value={form[cov.key]} onChange={set(cov.key)} />
                 </div>
               </div>
 
-              {cov.options && form[cov.key] === 'yes' && (
-                <div className="mt-4 flex flex-wrap gap-x-8 gap-y-3">
-                  {cov.options.map(o => (
-                    <Checkbox
-                      key={o.key}
-                      label={o.label}
-                      checked={!!form[o.key]}
-                      onChange={set(o.key)}
-                    />
-                  ))}
+              {cov.select && form[cov.key] === 'yes' && (
+                <div className="mt-4 max-w-[420px]">
+                  <Select
+                    label={cov.select.label} required
+                    options={cov.select.options}
+                    value={form[cov.select.key]}
+                    onChange={set(cov.select.key)}
+                    placeholder={cov.select.placeholder}
+                    error={errorFor(cov.select.key)}
+                  />
                 </div>
               )}
             </QuestionCard>

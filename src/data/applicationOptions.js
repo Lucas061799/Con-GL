@@ -52,39 +52,51 @@ export const SUBCONTRACTOR_COMPLIANCE = [
   { key: 'namedAI',      label: 'Insured will be named as additional insured on all subcontractors general liability policies.' },
 ]
 
-// Optional coverages. The tool floater opens the Inland Marine step.
+export const TOOL_FLOATER_LIMITS = [
+  { value: '2500-1000',  label: '$2,500 Blanket Tools Limit w/$1,000 deductible' },
+  { value: '5000-1000',  label: '$5,000 Blanket Tools Limit w/$1,000 deductible' },
+  { value: '7500-1000',  label: '$7,500 Blanket Tools Limit w/$1,000 deductible' },
+  { value: '10000-1000', label: '$10,000 Blanket Tools Limit w/$1,000 deductible' },
+  { value: '15000-1000', label: '$15,000 Blanket Tools Limit w/$1,000 deductible' },
+  { value: '20000-2500', label: '$20,000 Blanket Tools Limit w/$2,500 deductible' },
+]
+
+// Optional coverages, with the carrier's own descriptions. `states` limits a
+// cover to the states that offer it; `options` renders a dropdown under the
+// Yes pill.
 export const OPTIONAL_COVERAGES = [
   {
     key: 'blanketAI',
     label: 'Blanket Additional Insured Endorsement',
-    help: 'Adds any party you are contractually required to cover as an additional insured, without endorsing them one at a time.',
+    help: 'Provides additional insured status on a blanket basis as required by written contract for the insured\u2019s ongoing operations. Coverage is provided on a primary/non-contributory basis and includes waiver of subrogation when required by written contract.',
   },
   {
     key: 'stopGap',
-    label: 'Stop Gap – Employers Liability Coverage Endorsement Insurance',
-    help: 'Employers liability cover in monopolistic states, where the state fund writes workers compensation but not the liability piece.',
+    label: 'Stop Gap \u2013 Employers Liability Coverage Endorsement Insurance',
+    help: 'Coverage protection for the policyholder in the event an employee sues for amounts beyond what is covered by workers compensation.',
+    // Monopolistic states only.
+    states: ['WA', 'ND', 'WY', 'OH'],
   },
   {
     key: 'cyberLiability',
     label: 'Cyber Liability',
-    help: 'Covers breach response, data restoration and liability arising from a cyber incident.',
+    help: '$50K limit providing comprehensive data security and privacy coverage that addresses both first party losses and third-party liability claims. Includes breach response and cyber expert claim assistance.',
+  },
+  {
+    key: 'glEnhancement',
+    label: 'GL Enhancement Endorsement',
+    help: 'Provides 16 key coverage enhancements to the base GL policy form. Highlights include: Damage to property in your care custody and control or for costs to repair or restore \u2018your work\u2019 $15K per occurrence / $50K aggregate. Unintentional errors and omissions coverage. $10K Lost key coverage.',
   },
   {
     key: 'toolFloater',
     label: 'Inland Marine - Tool Floater',
-    help: 'Covers tools, equipment and materials away from the premises. Selecting this opens the Inland Marine step.',
     opens: 'inland-marine',
-    options: [
-      { key: 'contractorTools',      label: 'Contractor Tools & Equip' },
-      { key: 'contractorsInstall',   label: 'Contractors Installation' },
-      { key: 'computerEquipment',    label: 'Computer Equipment' },
-      { key: 'businessPersonalProp', label: 'Business Personal Property' },
-    ],
-  },
-  {
-    key: 'limitedLiabilityEnhancement',
-    label: 'Contractors Limited Liability Enhancement',
-    help: 'Bundles the endorsements contractors most often need into one enhancement.',
+    select: {
+      key: 'toolFloaterLimit',
+      label: 'Blanket Tools Limit',
+      placeholder: 'Select a limit',
+      options: TOOL_FLOATER_LIMITS,
+    },
   },
 ]
 

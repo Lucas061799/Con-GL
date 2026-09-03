@@ -3,7 +3,7 @@ import { PER_JOB_SITE_LIMITS, IM_DEDUCTIBLES, LOCATION_OPTIONS } from '../../dat
 import { FieldGroup } from '../../components/Section'
 import { formatUSD } from '../../lib/rating'
 
-// Only the covers ticked on the Supplemental step appear here.
+// Opened by the tool floater on the Supplemental step.
 export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
   const perSite = Number(form.imPerJobSite) || 0
   const edp = Number(String(form.imEdpLimit ?? '').replace(/\D/g, '')) || 0
@@ -13,7 +13,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
 
   return (
     <>
-      {form.contractorsInstall && (
+      {(
         <FieldGroup label="Contractors Installation">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-5">
             <Select
@@ -73,7 +73,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
         </FieldGroup>
       )}
 
-      {form.computerEquipment && (
+      {(
         <FieldGroup label="Computer Equipment">
           <div className="grid grid-cols-[1fr_180px_180px] gap-4 pb-2" style={{ borderBottom: '1px solid #F3F4F6' }}>
             {['Equipement Description', 'Limits', 'Deductible'].map(h => (
@@ -105,7 +105,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
         </FieldGroup>
       )}
 
-      {form.businessPersonalProp && (
+      {(
         <FieldGroup label="Business Personal Property">
           <div className="grid grid-cols-[110px_110px_150px_1fr_1fr_1fr_auto] gap-3 pb-2" style={{ borderBottom: '1px solid #F3F4F6' }}>
             {['Location', 'Bldg', 'Deductible', 'Office Contents', 'Shop Contents', 'Yard Contents', ''].map((h, i) => (
@@ -134,11 +134,6 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
         </FieldGroup>
       )}
 
-      {!form.contractorsInstall && !form.computerEquipment && !form.businessPersonalProp && (
-        <p className="text-[13px] text-gray-500 py-8 text-center">
-          Pick the inland marine covers you want on the Supplemental step and they'll appear here.
-        </p>
-      )}
     </>
   )
 }
