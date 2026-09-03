@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Select, BRAND_GRADIENT } from '../components/FormField'
-import CarrierMark from '../components/CarrierMark'
 import { formatUSD } from '../lib/rating'
 import { CARRIER_TERMS, premiumWithTerms } from '../data/carrierTerms'
 
@@ -49,7 +48,7 @@ function Panel({ title, children }) {
 
 function CarrierRow({ quote, terms, onTermsChange, selected, best, onSelect }) {
   const t = CARRIER_TERMS[quote.id]
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   if (!t) return null
 
   const premium = premiumWithTerms(quote, terms)
@@ -66,7 +65,7 @@ function CarrierRow({ quote, terms, onTermsChange, selected, best, onSelect }) {
       <div className="px-4 py-3.5 cursor-pointer" onClick={() => setOpen(o => !o)}>
         <div className="flex items-center justify-between gap-3 mb-2.5">
           <div className="flex items-center gap-2.5 min-w-0 flex-wrap">
-            <CarrierMark carrier={quote.carrier} product={quote.product} logo={quote.logo} size="sm" />
+            <span className="rounded-full shrink-0" style={{ width: 8, height: 8, background: BRAND_GRADIENT }} />
             <span className="text-sm font-semibold text-gray-800 truncate">{quote.carrier}</span>
             <span className="text-[10px] font-bold tracking-widest uppercase text-gray-400">{quote.product}</span>
             {best && (
@@ -147,21 +146,29 @@ function CarrierRow({ quote, terms, onTermsChange, selected, best, onSelect }) {
 
 // Its own page rather than a section of the form scroll. The carriers stack in
 // one column, the way Builder's Risk lists them on Compare Your Quotes.
-export default function PriceIndication({ quotes, terms, onTermsChange, selected, onSelect }) {
+export default function PriceIndication({ quotes, terms, onTermsChange, selected, onSelect, submissionNumber }) {
   const cheapest = quotes.reduce(
     (lo, q) => (lo == null || premiumWithTerms(q, terms[q.id]) < premiumWithTerms(lo, terms[lo.id]) ? q : lo),
     null,
   )
 
   return (
-    <div className="px-4 md:px-10 py-6 md:py-8">
-      {/* Same header treatment the form sections use, so the page still
-          announces itself now that it lives outside the scroll. */}
-      <div
-        className="flex items-center justify-between gap-4 pb-3 md:pb-4 mb-8"
-        style={{ borderBottom: '1px solid #D1D5DB' }}
-      >
-        <h2 className="text-base md:text-lg font-bold text-navy">Price Indication</h2>
+    <div className="px-4 md:px-10 py-6 md:py-8 space-y-6 md:space-y-8">
+      {/* Page header, not a form-section header — this is a destination, so it
+          takes the eyebrow / title / submission line Compare Your Quotes uses. */}
+      <div className="pb-1">
+        <p
+          className="text-[11px] font-bold tracking-widest uppercase mb-1.5"
+          style={{ background: BRAND_GRADIENT, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+        >
+          Compare &amp; Select
+        </p>
+        <h1 className="text-2xl md:text-3xl font-bold mb-1.5" style={{ color: '#1F1B47' }}>
+          Price Indication
+        </h1>
+        <p className="text-sm text-gray-500">
+          Quote <span className="font-bold">{submissionNumber}</span> · Contractor General Liability
+        </p>
       </div>
 
       {quotes.length === 0 ? (
@@ -187,7 +194,7 @@ export default function PriceIndication({ quotes, terms, onTermsChange, selected
             ))}
           </div>
 
-          <p className="text-[12px] text-gray-400 leading-relaxed text-center mt-10 max-w-xl mx-auto">
+          <p className="text-[12px] text-gray-400 leading-relaxed text-center max-w-xl mx-auto">
             Indication only — the final premium is set after underwriting review and may change
             based on the answers in the full application.
           </p>
