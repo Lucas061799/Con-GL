@@ -31,15 +31,62 @@ function AutoSaveIcon() {
   )
 }
 
+const COMPARE_STEPS = [
+  { n: 1, label: 'Select Carrier' },
+  { n: 2, label: 'Complete Application' },
+]
+
+// The rail's compare mode, as Builder's Risk does it: the carrier list is the
+// page itself by then, so the rail keeps only the chosen quote and says where
+// you are in the hand-off.
+function WhereYouAre({ activeIndex }) {
+  return (
+    <div className="mb-6">
+      <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-400 mb-4 pl-0.5">
+        Where you are
+      </div>
+      <div className="space-y-5">
+        {COMPARE_STEPS.map((s, i) => {
+          const active = i === activeIndex
+          return (
+            <div key={s.n} className="flex items-center gap-4">
+              <span
+                className="w-9 h-9 rounded-full text-sm font-bold flex items-center justify-center shrink-0"
+                style={{
+                  background: 'linear-gradient(88.09deg, rgba(92,46,212,0.25) 0%, rgba(166,20,195,0.25) 100%)',
+                  ...(active ? { boxShadow: '0 0 0 3px rgba(124,58,237,0.14)' } : {}),
+                  opacity: active ? 1 : 0.55,
+                }}
+              >
+                <span style={{ background: BRAND_GRADIENT, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                  {s.n}
+                </span>
+              </span>
+              <span
+                className="text-sm leading-tight"
+                style={{ fontWeight: active ? 700 : 500, color: active ? '#111827' : '#9CA3AF' }}
+              >
+                {s.label}
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // Right rail, following the GL-BOP layout: progress at the top, the cheapest
 // carrier promoted to a hero card, the rest as a compact list.
 export default function RightPanel({
   progress, quotes = [], stale, onRefresh,
   selectedCarrier, onSelectCarrier,
   onFormReview, formComplete = false,
+  inCompare = false,
 }) {
   const hasQuotes = quotes.length > 0
-  const top = quotes[0]
+  const chosen = quotes.find(q => q.id === selectedCarrier)
+  const top = inCompare ? (chosen ?? quotes[0]) : quotes[0]
   const rest = quotes.slice(1)
 
   return (
@@ -103,7 +150,7 @@ export default function RightPanel({
                     className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider text-white"
                     style={{ background: BRAND_GRADIENT }}
                   >
-                    BEST
+                    {inCompare && isSelected ? 'SELECTED' : 'BEST'}
                   </div>
                   {isSelected && (
                     <div
@@ -117,6 +164,13 @@ export default function RightPanel({
                   )}
 
                   <CarrierMark carrier={top.carrier} product={top.product} logo={top.logo} size="lg" />
+
+                  {inCompare && (
+                    <>
+                      <p className="text-base font-bold text-gray-900 mt-3">{top.carrier}</p>
+                      <p className="text-[11px] text-gray-400 mt-0.5">{top.product}</p>
+                    </>
+                  )}
 
                   <div className="mt-3">
                     {stale ? (
@@ -146,7 +200,7 @@ export default function RightPanel({
               )
             })()}
 
-            <div className="space-y-2">
+            {!inCompare && <div className="space-y-2">
               {rest.map(q => {
                 const isSelected = selectedCarrier === q.id
                 return (
@@ -191,11 +245,13 @@ export default function RightPanel({
                   </button>
                 )
               })}
-            </div>
+            </div>}
+
+            {inCompare && <WhereYouAre activeIndex={selectedCarrier ? 1 : 0} />}
 
             {/* Answers that move the price were edited — prices stay blank
                 until the applicant asks for a fresh set. */}
-            <button
+            {!inCompare && <button
               type="button"
               onClick={onRefresh}
               disabled={!stale}
@@ -208,7 +264,7 @@ export default function RightPanel({
                 <path d="M21 12a9 9 0 1 1-2.64-6.36" /><path d="M21 3v6h-6" />
               </svg>
               Refresh My Quote
-            </button>
+            </button>}
           </>
         )}
 

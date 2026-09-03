@@ -252,6 +252,7 @@ export default function App() {
       onFormReview={() => window.alert('Application summary download is not wired up yet.')}
       formComplete={completed.applicant && completed.business && completed.operations}
       bare={view === 'indication'}
+      inCompare={view === 'indication'}
       scrollRef={scrollRef}
     >
       {view === 'form' ? (

@@ -9,7 +9,7 @@ export default function AppShell({
   productName, submissionNumber,
   steps, activeStep, completed, onStepClick,
   progress, quotes, stale, onRefresh, selectedCarrier, onSelectCarrier, onFormReview, formComplete,
-  bare = false,
+  bare = false, inCompare = false,
   scrollRef,
   children,
 }) {
@@ -54,6 +54,7 @@ export default function AppShell({
           onSelectCarrier={onSelectCarrier}
           onFormReview={onFormReview}
           formComplete={formComplete}
+          inCompare={inCompare}
         />
       </div>
     </div>
