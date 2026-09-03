@@ -98,7 +98,16 @@ function CarrierCard({ quote, terms, onTermsChange, selected, onSelect }) {
 // the full column to sit side by side with their feature lists.
 export default function PriceIndication({ quotes, terms, onTermsChange, selected, onSelect, onCompare }) {
   return (
-    <div className="px-4 md:px-10 py-8 md:py-12">
+    <div className="px-4 md:px-10 py-6 md:py-8">
+      {/* Same header treatment the form sections use, so the page still
+          announces itself now that it lives outside the scroll. */}
+      <div
+        className="flex items-center justify-between gap-4 pb-3 md:pb-4 mb-8"
+        style={{ borderBottom: '1px solid #D1D5DB' }}
+      >
+        <h2 className="text-base md:text-lg font-bold text-navy">Price Indication</h2>
+      </div>
+
       <div className="flex items-start justify-center gap-6 flex-wrap">
         {quotes.length === 0 ? (
           <div className="py-16 text-center">

@@ -706,9 +706,11 @@ export function DateInput({ label, required, hint, value, onChange, className = 
 
 export function Checkbox({ label, checked, onChange, className = '' }) {
   return (
-    <label className={`flex items-center gap-2.5 cursor-pointer select-none ${className}`}>
+    <label
+      onClick={() => onChange && onChange(!checked)}
+      className={`flex items-center gap-2.5 cursor-pointer select-none ${className}`}
+    >
       <span
-        onClick={() => onChange && onChange(!checked)}
         className="w-[18px] h-[18px] rounded-[5px] flex items-center justify-center shrink-0 transition-all"
         style={{
           background: checked ? BRAND_GRADIENT : 'white',

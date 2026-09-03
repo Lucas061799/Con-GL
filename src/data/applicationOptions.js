@@ -87,3 +87,28 @@ export const OPTIONAL_COVERAGES = [
     help: 'Bundles the endorsements contractors most often need into one enhancement.',
   },
 ]
+
+/* ── Inland Marine ────────────────────────────────────────────────── */
+
+export const PER_JOB_SITE_LIMITS = ['5000', '10000', '15000', '20000', '25000']
+  .map(v => ({ value: v, label: `$${Number(v).toLocaleString()}` }))
+
+// The classic flow spells these without a separator, unlike the GL deductibles.
+export const IM_DEDUCTIBLES = [
+  { value: '1000', label: '$1000' },
+  { value: '2500', label: '$2500' },
+]
+
+export const LOCATION_OPTIONS = ['1', '2', '3'].map(v => ({ value: v, label: v }))
+
+/* ── General Questions ────────────────────────────────────────────── */
+
+export const GENERAL_DISCLOSURES = [
+  { key: 'none',            label: 'Check if None', isNone: true },
+  { key: 'claims5yr',       label: 'The insured has claims against their insurance within the past 5 years.' },
+  { key: 'withoutIns',      label: 'The insured has operated for any period without insurance.' },
+  { key: 'lawsuits',        label: 'The insured has lawsuits or arbitrations or disputes pending in which they are being assessed by a lawyer.' },
+  { key: 'knownDefects',    label: 'The insured has knowledge of any existing problems or construction defects on one or more of their jobs that may potentially give rise to any future claims of legal action against such person or entity.' },
+  { key: 'priorCancelled',  label: "The insured's prior insurance cancelled, declined or non-renewed due to claims or ineligible operations." },
+  { key: 'bankruptcies',    label: 'The insured has any bankruptcies, taxes or credit liens within the past 5 years' },
+]

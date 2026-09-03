@@ -5,6 +5,10 @@ import ApplicantBusiness from './pages/ApplicantBusiness'
 import BusinessOperations from './pages/BusinessOperations'
 import PriceIndication from './pages/PriceIndication'
 import AppShell from './components/AppShell'
+import ApplicationFlow from './ApplicationFlow'
+import { TurnaroundNotice, QuoteReady } from './components/QuoteHandoff'
+import { premiumWithTerms } from './data/carrierTerms'
+import { APP_LIMITS, APP_DEDUCTIBLES } from './data/applicationOptions'
 import { todayMDY, BRAND_GRADIENT } from './components/FormField'
 import { rateAll } from './lib/rating'
 import { defaultTermsFor } from './data/carrierTerms'
@@ -29,6 +33,10 @@ const ratingSnapshot = (form) => JSON.stringify(RATING_KEYS.map(k => form[k]))
 const newSubmissionNumber = () =>
   `QMGL${String(Math.floor(Math.random() * 9_000_000) + 1_000_000)}`
 
+// The application gets its own number when the quote is handed over.
+const newApplicationNumber = () =>
+  `QCGL${String(Math.floor(Math.random() * 9_000_000) + 1_000_000).padStart(7, '0')}`
+
 const defaultTerms = () => ({ rli: defaultTermsFor('rli'), bravado: defaultTermsFor('bravado') })
 
 export default function App() {
@@ -42,6 +50,9 @@ export default function App() {
   const [activeStep, setActiveStep] = useState('applicant')
   // 'form' holds the three scrolling sections; the indication gets its own page.
   const [view, setView] = useState('form')
+  // 'none' → turnaround warning → quote-ready → the application itself.
+  const [handoff, setHandoff] = useState('none')
+  const [application, setApplication] = useState(null)
 
   const [quotes, setQuotes] = useState([])
   const [ratedAt, setRatedAt] = useState('')
@@ -176,6 +187,26 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [started, view])
 
+  const chosenQuote = quotes.find(q => q.id === selectedCarrier)
+  const chosenPremium = chosenQuote ? premiumWithTerms(chosenQuote, terms[chosenQuote.id]) : 0
+
+  // Carry everything already answered into the application so nothing gets
+  // asked twice.
+  const startApplicationPhase = () => {
+    setApplication({
+      ...form,
+      applicationNumber: newApplicationNumber(),
+      classifications: classifications.map(r => ({ ...r })),
+      hasEmployees: Number(form.employeeCount) > 0 ? 'yes' : form.hasEmployees,
+      appLimit: APP_LIMITS[APP_LIMITS.length - 1].value,
+      appDeductible: APP_DEDUCTIBLES[0].value,
+      workPct: {},
+      subTrades: [],
+      disclosures: {},
+    })
+    setHandoff('none')
+  }
+
   const updateTerms = (carrierId, patch) =>
     setTerms(t => ({ ...t, [carrierId]: { ...t[carrierId], ...patch } }))
 
@@ -192,6 +223,17 @@ export default function App() {
   /* ── Render ─────────────────────────────────────────────────────── */
 
   if (!started) return <PageZero onContinue={startApplication} />
+
+  if (application) {
+    return (
+      <ApplicationFlow
+        seed={application}
+        quote={chosenQuote}
+        amount={chosenPremium}
+        onExit={() => setApplication(null)}
+      />
+    )
+  }
 
   return (
     <AppShell
@@ -248,9 +290,19 @@ export default function App() {
           terms={terms}
           onTermsChange={updateTerms}
           selected={selectedCarrier}
-          onSelect={setSelectedCarrier}
+          onSelect={(id) => { setSelectedCarrier(id); setHandoff('turnaround') }}
           onCompare={() => window.alert('Carrier comparison is not built yet.')}
         />
+      )}
+
+      {handoff === 'turnaround' && (
+        <TurnaroundNotice
+          onContinue={() => setHandoff('ready')}
+          onCancel={() => setHandoff('none')}
+        />
+      )}
+      {handoff === 'ready' && chosenQuote && (
+        <QuoteReady quote={chosenQuote} onGo={startApplicationPhase} />
       )}
     </AppShell>
   )

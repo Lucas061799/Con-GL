@@ -10,7 +10,7 @@ import { formatUSD } from '../lib/rating'
 export default function ApplicationShell({
   submissionNumber, steps, activeStep, completed, onStepClick,
   progress, amount, onBack, onContinue, continueLabel = 'Save & Continue',
-  continueDisabled = false,
+  continueDisabled = false, hideFooter = false,
   children,
 }) {
   return (
@@ -48,6 +48,7 @@ export default function ApplicationShell({
 
             {children}
 
+            {!hideFooter && (
             <div className="flex items-center justify-between gap-4 mt-10 pb-10">
               {onBack ? (
                 <button
@@ -71,6 +72,7 @@ export default function ApplicationShell({
                 {continueLabel}
               </button>
             </div>
+            )}
           </div>
         </main>
       </div>
