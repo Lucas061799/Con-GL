@@ -24,6 +24,23 @@ const EMPTY = {
 
 const REQUIRED = Object.keys(EMPTY)
 
+// Two placements for the ACORD/competitor-quote shortcut, so both can be
+// compared on the same deployment: ?upload=hero pins it to the corner of the
+// illustration, anything else keeps the row under the primary CTA.
+const uploadPlacement = () =>
+  new URLSearchParams(window.location.search).get('upload') === 'hero' ? 'hero' : 'inline'
+
+const notWiredUp = () => window.alert('Document upload is not wired up yet.')
+
+function UploadCopy() {
+  return (
+    <p>
+      Send us an existing quote or a completed ACORD 125/126 and we'll pre-fill
+      the application from it instead of asking you to retype the answers.
+    </p>
+  )
+}
+
 export default function PageZero({ onContinue }) {
   const [form, setForm] = useState(EMPTY)
   const [touched, setTouched] = useState(false)
@@ -32,6 +49,7 @@ export default function PageZero({ onContinue }) {
   // reachable again. It re-arms once the form goes incomplete and is filled
   // back in, so a changed answer still surfaces its new price.
   const [dismissed, setDismissed] = useState(false)
+  const [placement] = useState(uploadPlacement)
 
   const set = (key) => (value) => setForm(f => ({ ...f, [key]: value }))
 
@@ -272,9 +290,8 @@ export default function PageZero({ onContinue }) {
                 </svg>
               </button>
 
-              {/* The upload route belongs before the ten questions — its whole
-                  value is skipping them. Kept quiet so it reads as the
-                  alternative to the button above, not a rival to it. */}
+              {/* Option A — a quiet row under the primary CTA. */}
+              {placement === 'inline' && (
               <div
                 className="mt-5 pt-5 flex items-center justify-between gap-4"
                 style={{ borderTop: '1px solid #F3F4F6' }}
@@ -291,7 +308,7 @@ export default function PageZero({ onContinue }) {
                 </p>
                 <button
                   type="button"
-                  onClick={() => window.alert('Document upload is not wired up yet.')}
+                  onClick={notWiredUp}
                   className="shrink-0 inline-flex items-center gap-1.5 text-[12.5px] font-bold transition hover:opacity-70"
                   style={{ color: '#5C2ED4' }}
                 >
@@ -302,6 +319,7 @@ export default function PageZero({ onContinue }) {
                   Upload
                 </button>
               </div>
+              )}
               </>
             )}
 
@@ -311,20 +329,48 @@ export default function PageZero({ onContinue }) {
 
         {/* Right — Norbie over the palm watermark, same treatment as the
             Commercial Auto landing. */}
-        <div className="hidden lg:flex relative overflow-hidden shrink-0 items-center justify-center px-10"
+        <div className="hidden lg:flex relative shrink-0 items-center justify-center px-10"
           style={{ width: '50%' }}>
           <img
             src={jungleImg} alt=""
             className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
-            style={{ opacity: 0.25 }}
+            style={{ opacity: 0.25, clipPath: 'inset(0)' }}
           />
 
-          <img
-            src={norbieContractor}
-            alt="Norbie"
-            className="relative z-10 select-none pointer-events-none"
-            style={{ width: 500, height: 500, objectFit: 'contain' }}
-          />
+          <div className="relative z-10">
+            <img
+              src={norbieContractor}
+              alt="Norbie"
+              className="select-none pointer-events-none"
+              style={{ width: 500, height: 500, objectFit: 'contain' }}
+            />
+
+            {/* Option B — tucked into the corner of the portrait, so it reads
+                as something Norbie is handing over rather than a loose card. */}
+            {placement === 'hero' && (
+              <div
+                className="absolute bottom-4 -right-6 w-[264px] rounded-2xl bg-white px-5 py-4"
+                style={{ boxShadow: '0 12px 32px rgba(27,7,80,0.14), 0 0 0 1px rgba(27,7,80,0.05)' }}
+              >
+                <p className="inline-flex items-start gap-1.5 text-[12.5px] font-bold text-navy leading-snug">
+                  Have a competitor quote or ACORD form?
+                  <InfoTip title="Competitor quote or ACORD form"><UploadCopy /></InfoTip>
+                </p>
+                <button
+                  type="button"
+                  onClick={notWiredUp}
+                  className="w-full mt-3 flex items-center justify-center gap-2 rounded-xl text-[13px] font-bold text-white transition hover:opacity-90"
+                  style={{ height: 40, background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <path d="M17 8l-5-5-5 5M12 3v12" />
+                  </svg>
+                  Upload Here
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
       </div>

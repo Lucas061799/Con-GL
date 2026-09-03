@@ -41,6 +41,17 @@ Field help uses `InfoTip`: a gradient "i" dot that opens a 340px card on
 hover (and on focus, or tap for touch). Content lives in `data/fieldHelp.jsx`
 as `{ title, body }` pairs.
 
+## Open decision — where the ACORD upload lives
+
+Both placements ship behind a query param so they can be compared on one
+deployment:
+
+- `/` — a quiet row under the primary CTA (default)
+- `/?upload=hero` — a card tucked into the corner of the Norbie portrait
+
+Pick one and delete the other along with the `uploadPlacement` switch in
+`pages/PageZero.jsx`.
+
 ## Placeholders — replace before this goes live
 
 - **`lib/rating.js`** is not a rating engine. It produces stable, plausible
