@@ -25,10 +25,10 @@ const EMPTY = {
 const REQUIRED = Object.keys(EMPTY)
 
 // Two placements for the ACORD/competitor-quote shortcut, so both can be
-// compared on the same deployment: ?upload=hero pins it to the corner of the
-// illustration, anything else keeps the row under the primary CTA.
+// compared on the same deployment. The corner-of-the-illustration card is the
+// chosen one; ?upload=inline still brings back the row under the CTA.
 const uploadPlacement = () =>
-  new URLSearchParams(window.location.search).get('upload') === 'hero' ? 'hero' : 'inline'
+  new URLSearchParams(window.location.search).get('upload') === 'inline' ? 'inline' : 'hero'
 
 const notWiredUp = () => window.alert('Document upload is not wired up yet.')
 

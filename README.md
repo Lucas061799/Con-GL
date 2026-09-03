@@ -46,11 +46,11 @@ as `{ title, body }` pairs.
 Both placements ship behind a query param so they can be compared on one
 deployment:
 
-- `/` — a quiet row under the primary CTA (default)
-- `/?upload=hero` — a card tucked into the corner of the Norbie portrait
+- `/` — a card tucked into the corner of the Norbie portrait (chosen)
+- `/?upload=inline` — a quiet row under the primary CTA
 
-Pick one and delete the other along with the `uploadPlacement` switch in
-`pages/PageZero.jsx`.
+Once the corner card is signed off, delete the row and the `uploadPlacement`
+switch in `pages/PageZero.jsx`.
 
 ## Placeholders — replace before this goes live
 
