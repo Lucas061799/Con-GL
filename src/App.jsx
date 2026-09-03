@@ -5,10 +5,10 @@ import ApplicantBusiness from './pages/ApplicantBusiness'
 import BusinessOperations from './pages/BusinessOperations'
 import PriceIndication from './pages/PriceIndication'
 import AppShell from './components/AppShell'
-import { todayMDY } from './components/FormField'
+import { todayMDY, BRAND_GRADIENT } from './components/FormField'
 import { rateAll } from './lib/rating'
-import { LIMIT_OPTIONS, DEDUCTIBLE_OPTIONS } from './data/carrierTerms'
-import { rulesForCodes, subKey, needsUnderwriterReview } from './data/conditionalQuestions'
+import { defaultTermsFor } from './data/carrierTerms'
+import { rulesForCodes, subKey } from './data/conditionalQuestions'
 
 const STEPS = [
   { key: 'applicant',  number: 1, label: 'Applicant' },
@@ -29,10 +29,7 @@ const ratingSnapshot = (form) => JSON.stringify(RATING_KEYS.map(k => form[k]))
 const newSubmissionNumber = () =>
   `QMGL${String(Math.floor(Math.random() * 9_000_000) + 1_000_000)}`
 
-const defaultTerms = () => ({
-  rli:     { limit: LIMIT_OPTIONS[0].value, deductible: DEDUCTIBLE_OPTIONS[0].value },
-  bravado: { limit: LIMIT_OPTIONS[0].value, deductible: DEDUCTIBLE_OPTIONS[0].value },
-})
+const defaultTerms = () => ({ rli: defaultTermsFor('rli'), bravado: defaultTermsFor('bravado') })
 
 export default function App() {
   const [started, setStarted] = useState(false)
@@ -43,6 +40,8 @@ export default function App() {
   const [selectedCarrier, setSelectedCarrier] = useState(null)
   const [touched, setTouched] = useState(false)
   const [activeStep, setActiveStep] = useState('applicant')
+  // 'form' holds the three scrolling sections; the indication gets its own page.
+  const [view, setView] = useState('form')
 
   const [quotes, setQuotes] = useState([])
   const [ratedAt, setRatedAt] = useState('')
@@ -86,8 +85,6 @@ export default function App() {
   const splitTotal = (Number(form.newWorkPct) || 0) + (Number(form.remodelPct) || 0)
 
   const classCodes = classifications.map(r => r.code).filter(Boolean)
-  const conditionalRules = useMemo(() => rulesForCodes(classCodes), [classCodes.join(',')]) // eslint-disable-line react-hooks/exhaustive-deps
-  const underwriterReview = needsUnderwriterReview(conditionalRules, form)
 
   const missingBySection = useMemo(() => {
     const blank = (k) => !String(form[k] ?? '').trim()
@@ -148,11 +145,20 @@ export default function App() {
   /* ── Sidebar navigation + scroll spy ────────────────────────────── */
 
   const jumpTo = (key) => {
-    sectionRefs[key]?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (key === 'indication') {
+      setView('indication')
+      setActiveStep('indication')
+      return
+    }
+    setView('form')
+    setActiveStep(key)
+    // Wait for the form to be back on screen before scrolling to the section.
+    requestAnimationFrame(() =>
+      sectionRefs[key]?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
   }
 
   useEffect(() => {
-    if (!started) return
+    if (!started || view !== 'form') return
     const root = scrollRef.current
     if (!root) return
     // Highlight whichever section owns the top third of the viewport.
@@ -168,21 +174,19 @@ export default function App() {
     Object.values(sectionRefs).forEach(r => r.current && observer.observe(r.current))
     return () => observer.disconnect()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [started])
+  }, [started, view])
 
   const updateTerms = (carrierId, patch) =>
     setTerms(t => ({ ...t, [carrierId]: { ...t[carrierId], ...patch } }))
 
-  const continueToApplication = () => {
+  const goToIndication = () => {
     setTouched(true)
     if (allMissing.length || !classificationsValid || !splitValid) {
-      const firstIncomplete = STEPS.find(s => !completed[s.key])
+      const firstIncomplete = STEPS.find(s => !completed[s.key] && s.key !== 'indication')
       if (firstIncomplete) jumpTo(firstIncomplete.key)
       return
     }
-    window.alert(underwriterReview
-      ? 'Submitted for underwriter review — bind & pay is not built yet.'
-      : 'Bind & pay is not built yet.')
+    jumpTo('indication')
   }
 
   /* ── Render ─────────────────────────────────────────────────────── */
@@ -205,31 +209,50 @@ export default function App() {
       onSelectCarrier={(id) => setSelectedCarrier(cur => (cur === id ? null : id))}
       onFormReview={() => window.alert('Application summary download is not wired up yet.')}
       formComplete={completed.applicant && completed.business && completed.operations}
+      showRail={view === 'form'}
+      bare={view === 'indication'}
       scrollRef={scrollRef}
     >
-      <ApplicantContact
-        ref={sectionRefs.applicant}
-        form={form} set={set} errorFor={errorFor}
-      />
-      <ApplicantBusiness
-        ref={sectionRefs.business}
-        form={form} set={set} errorFor={errorFor}
-        classifications={classifications} setClassifications={setClassifications}
-      />
-      <BusinessOperations
-        ref={sectionRefs.operations}
-        form={form} set={set} errorFor={errorFor} splitTotal={splitTotal}
-        classCodes={classCodes}
-      />
-      <PriceIndication
-        ref={sectionRefs.indication}
-        quotes={stale ? [] : quotes}
-        terms={terms}
-        onTermsChange={updateTerms}
-        selected={selectedCarrier}
-        onSelect={setSelectedCarrier}
-        onContinue={continueToApplication}
-      />
+      {view === 'form' ? (
+        <>
+          <ApplicantContact
+            ref={sectionRefs.applicant}
+            form={form} set={set} errorFor={errorFor}
+          />
+          <ApplicantBusiness
+            ref={sectionRefs.business}
+            form={form} set={set} errorFor={errorFor}
+            classifications={classifications} setClassifications={setClassifications}
+          />
+          <BusinessOperations
+            ref={sectionRefs.operations}
+            form={form} set={set} errorFor={errorFor} splitTotal={splitTotal}
+            classCodes={classCodes}
+          />
+          <div className="px-4 md:px-10 pb-4 flex justify-end">
+            <button
+              type="button"
+              onClick={goToIndication}
+              className="flex items-center gap-2 px-8 py-3 rounded-xl text-[13.5px] font-bold text-white transition hover:opacity-90"
+              style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
+            >
+              See Price Indication
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </>
+      ) : (
+        <PriceIndication
+          quotes={stale ? [] : quotes}
+          terms={terms}
+          onTermsChange={updateTerms}
+          selected={selectedCarrier}
+          onSelect={setSelectedCarrier}
+          onCompare={() => window.alert('Carrier comparison is not built yet.')}
+        />
+      )}
     </AppShell>
   )
 }

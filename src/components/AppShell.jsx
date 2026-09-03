@@ -9,6 +9,7 @@ export default function AppShell({
   productName, submissionNumber,
   steps, activeStep, completed, onStepClick,
   progress, quotes, stale, onRefresh, selectedCarrier, onSelectCarrier, onFormReview, formComplete,
+  showRail = true, bare = false,
   scrollRef,
   children,
 }) {
@@ -36,12 +37,17 @@ export default function AppShell({
         />
 
         <main ref={scrollRef} className="flex-1 min-w-0 overflow-y-auto custom-scroll relative">
-          <div className="mx-auto px-4 md:px-10 py-6 md:py-8 space-y-6 md:space-y-8 max-w-5xl 2xl:max-w-6xl">
+          <div className={`mx-auto max-w-5xl 2xl:max-w-6xl ${
+            bare ? '' : 'px-4 md:px-10 py-6 md:py-8 space-y-6 md:space-y-8'
+          }`}>
             {children}
-            <div className="pb-8" />
+            {!bare && <div className="pb-8" />}
           </div>
         </main>
 
+        {/* The indication page gives the carrier cards the whole column, so
+            the rail steps aside there. */}
+        {showRail && (
         <RightPanel
           progress={progress}
           quotes={quotes}
@@ -52,6 +58,7 @@ export default function AppShell({
           onFormReview={onFormReview}
           formComplete={formComplete}
         />
+        )}
       </div>
     </div>
   )
