@@ -271,6 +271,37 @@ export default function PageZero({ onContinue }) {
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                 </svg>
               </button>
+
+              {/* The upload route belongs before the ten questions — its whole
+                  value is skipping them. Kept quiet so it reads as the
+                  alternative to the button above, not a rival to it. */}
+              <div
+                className="mt-5 pt-5 flex items-center justify-between gap-4"
+                style={{ borderTop: '1px solid #F3F4F6' }}
+              >
+                <p className="inline-flex items-center gap-1.5 text-[12.5px] text-gray-500">
+                  Have a competitor quote or ACORD form?
+                  <InfoTip title="Competitor quote or ACORD form">
+                    <p>
+                      Send us an existing quote or a completed ACORD 125/126 and we'll
+                      pre-fill the application from it instead of asking you to retype
+                      the answers.
+                    </p>
+                  </InfoTip>
+                </p>
+                <button
+                  type="button"
+                  onClick={() => window.alert('Document upload is not wired up yet.')}
+                  className="shrink-0 inline-flex items-center gap-1.5 text-[12.5px] font-bold transition hover:opacity-70"
+                  style={{ color: '#5C2ED4' }}
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <path d="M17 8l-5-5-5 5M12 3v12" />
+                  </svg>
+                  Upload
+                </button>
+              </div>
               </>
             )}
 
@@ -280,7 +311,7 @@ export default function PageZero({ onContinue }) {
 
         {/* Right — Norbie over the palm watermark, same treatment as the
             Commercial Auto landing. */}
-        <div className="hidden lg:flex relative overflow-hidden shrink-0 flex-col items-center justify-center gap-6 px-10"
+        <div className="hidden lg:flex relative overflow-hidden shrink-0 items-center justify-center px-10"
           style={{ width: '50%' }}>
           <img
             src={jungleImg} alt=""
@@ -294,38 +325,6 @@ export default function PageZero({ onContinue }) {
             className="relative z-10 select-none pointer-events-none"
             style={{ width: 500, height: 500, objectFit: 'contain' }}
           />
-
-          {/* The upload shortcut earns its place here, before any typing —
-              its whole value is skipping the ten questions on the left. It
-              stays put once the indication replaces the form, where it reads
-              as "not happy with this? send us the competitor's quote". */}
-          <div
-            className="relative z-10 rounded-2xl bg-white px-6 py-5 w-[340px] text-center"
-            style={{ boxShadow: '0 8px 24px rgba(27,7,80,0.08), 0 0 0 1px rgba(27,7,80,0.05)' }}
-          >
-            <p className="inline-flex items-center gap-1.5 text-[13px] font-bold text-navy">
-              Have a competitor quote or ACORD form?
-              <InfoTip title="Competitor quote or ACORD form">
-                <p>
-                  Send us an existing quote or a completed ACORD 125/126 and we'll
-                  pre-fill the application from it instead of asking you to retype
-                  the answers.
-                </p>
-              </InfoTip>
-            </p>
-            <button
-              type="button"
-              onClick={() => window.alert('Document upload is not wired up yet.')}
-              className="w-full mt-3.5 flex items-center justify-center gap-2 rounded-xl text-sm font-bold text-white transition hover:opacity-90"
-              style={{ height: 44, background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <path d="M17 8l-5-5-5 5M12 3v12" />
-              </svg>
-              Upload Here
-            </button>
-          </div>
         </div>
 
       </div>
