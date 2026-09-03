@@ -7,16 +7,13 @@ const labelOf = (options, value) => options.find(o => o.value === value)?.label 
 export default function Pricing({ form, amount, onProceed }) {
   return (
     <div>
-      <div
-        className="grid grid-cols-[1fr_1fr_1.4fr_auto] gap-4 pb-3"
-        style={{ borderBottom: '1px solid #D1D5DB' }}
-      >
+      <div className="grid grid-cols-[1fr_1fr_1.4fr_auto] gap-4 pb-3" style={{ borderBottom: '1px solid #E5E7EB' }}>
         {['Limits', 'Deductible', 'Amount', 'Action'].map(h => (
           <p key={h} className="text-[13px] font-bold text-navy">{h}</p>
         ))}
       </div>
 
-      <div className="grid grid-cols-[1fr_1fr_1.4fr_auto] gap-4 items-start py-5">
+      <div className="grid grid-cols-[1fr_1fr_1.4fr_auto] gap-4 items-center pt-5">
         <p className="text-[14px] text-navy">{labelOf(APP_LIMITS, form.appLimit)}</p>
         <p className="text-[14px] text-navy">{labelOf(APP_DEDUCTIBLES, form.appDeductible)}</p>
         <div>

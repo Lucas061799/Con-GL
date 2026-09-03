@@ -12,7 +12,7 @@ export default function ApplicationShell({
   submissionNumber, steps, activeStep, completed, onStepClick,
   progress, amount, onBack, onContinue, continueLabel = 'Save & Continue',
   continueDisabled = false, hideFooter = false,
-  quote, quoteAmount, onFormReview,
+  quote, quoteAmount, onFormReview, title,
   children,
 }) {
   // The rail follows the applicant across the hand-off — same quote, same
@@ -44,14 +44,23 @@ export default function ApplicationShell({
 
         <main className="flex-1 min-w-0 overflow-y-auto custom-scroll">
           <div className="mx-auto px-4 md:px-10 py-6 md:py-8 max-w-4xl">
-            {amount != null && (
-              <p className="text-[18px] font-bold text-navy text-right pb-2 mb-6"
-                style={{ borderBottom: '1px solid #D1D5DB' }}>
-                Amount: <span className="font-extrabold">{formatUSD(amount)}</span>
-              </p>
+            {/* Same header rule the phase-one sections use, with the running
+                amount taking the section's action slot. */}
+            {title && (
+              <div
+                className="flex items-center justify-between gap-4 pb-3 md:pb-4 mb-6"
+                style={{ borderBottom: '1px solid #D1D5DB' }}
+              >
+                <h2 className="text-base md:text-lg font-bold text-navy">{title}</h2>
+                {amount != null && (
+                  <p className="text-[15px] font-bold text-navy shrink-0">
+                    Amount: <span className="font-extrabold">{formatUSD(amount)}</span>
+                  </p>
+                )}
+              </div>
             )}
 
-            {children}
+            <div className="space-y-6">{children}</div>
 
             {!hideFooter && (
             <div className="flex items-center justify-between gap-4 mt-10 pb-10">

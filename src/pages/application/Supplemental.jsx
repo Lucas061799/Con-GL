@@ -1,4 +1,5 @@
 import { Input, CurrencyInput, Select, Checkbox, PercentInput, ToggleQuestion, InfoTip } from '../../components/FormField'
+import { FieldGroup, QuestionCard } from '../../components/Section'
 import {
   STRUCTURE_TYPES, CONSTRUCTION_TYPES, SUBCONTRACTOR_TRADES,
   SUBCONTRACTOR_COMPLIANCE, OPTIONAL_COVERAGES, APP_LIMITS, APP_DEDUCTIBLES,
@@ -44,9 +45,8 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
   const updateClaim = (i, patch) => setClaims(cs => cs.map((c, idx) => (idx === i ? { ...c, ...patch } : c)))
 
   return (
-    <div className="space-y-10">
-      <div>
-        <p className="text-[16px] font-bold text-navy mb-4">% of Work</p>
+    <>
+      <FieldGroup label="% of Work">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
           <PercentColumn
             title="Structure Type" rows={STRUCTURE_TYPES}
@@ -57,13 +57,11 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
             values={form.workPct || {}} onChange={setWorkPct}
           />
         </div>
-      </div>
+      </FieldGroup>
 
-      <div>
-        <p className="text-[16px] font-bold text-navy">
-          Subcontractors <span className="text-[13px] italic font-normal text-gray-500">(Select the list of trades of the subcontractors)</span>
-        </p>
-        <div className="mt-3 pt-4 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3" style={{ borderTop: '1px solid #D1D5DB' }}>
+      <FieldGroup label="Subcontractors">
+        <p className="text-[13px] italic text-gray-500 mb-4">Select the list of trades of the subcontractors.</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3">
           {SUBCONTRACTOR_TRADES.map(trade => (
             <Checkbox
               key={trade}
@@ -77,9 +75,9 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
           <span className="text-[14px] text-navy">Other</span>
           <Input value={form.subTradesOther} onChange={set('subTradesOther')} className="max-w-[380px] flex-1" />
         </div>
-      </div>
+      </FieldGroup>
 
-      <div>
+      <FieldGroup label="Compliance">
         <p className="text-[14px] font-bold text-navy mb-3">
           Mark the checkbox confirming that the applicant will comply with:
         </p>
@@ -110,9 +108,9 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
             className="w-[260px]"
           />
         </div>
-      </div>
+      </FieldGroup>
 
-      <div className="pt-6" style={{ borderTop: '1px solid #D1D5DB' }}>
+      <QuestionCard>
         <ToggleQuestion
           label="Has the applicant had any prior claims?"
           value={form.priorClaims} onChange={set('priorClaims')}
@@ -130,15 +128,15 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
             </div>
           ))}
         </ToggleQuestion>
-      </div>
+      </QuestionCard>
 
       <div>
-        <p className="text-[16px] font-bold text-navy pb-3" style={{ borderBottom: '1px solid #D1D5DB' }}>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-400 mb-2.5 pl-0.5">
           Please select following coverages
         </p>
-        <div className="divide-y" style={{ borderColor: '#F3F4F6' }}>
+        <div className="space-y-2">
           {OPTIONAL_COVERAGES.map(cov => (
-            <div key={cov.key} className="py-4">
+            <QuestionCard key={cov.key}>
               <div className="flex items-start justify-between gap-6">
                 <p className="text-[14px] text-navy leading-snug">
                   {cov.label}
@@ -163,10 +161,10 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
                   ))}
                 </div>
               )}
-            </div>
+            </QuestionCard>
           ))}
         </div>
       </div>
-    </div>
+    </>
   )
 }

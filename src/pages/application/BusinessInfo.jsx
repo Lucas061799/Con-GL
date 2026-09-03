@@ -1,12 +1,14 @@
 import { Input, CurrencyInput, Select, Textarea, PercentInput, ToggleQuestion } from '../../components/FormField'
 import { FIELD_HELP } from '../../data/fieldHelp'
+import { FieldGroup, QuestionCard } from '../../components/Section'
 import { STRUCTURE_OF_BUSINESS } from '../../data/applicationOptions'
 
 export default function BusinessInfo({ form, set, errorFor }) {
   const occupancyTotal = (Number(form.newWorkPct) || 0) + (Number(form.remodelPct) || 0)
 
   return (
-    <div className="space-y-6">
+    <>
+      <FieldGroup label="Legal Identity">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
         <Input
           label="Legal business name" required
@@ -40,7 +42,10 @@ export default function BusinessInfo({ form, set, errorFor }) {
           error={errorFor('grossReceipts')}
         />
       </div>
+      </FieldGroup>
 
+      <div className="space-y-2">
+      <QuestionCard>
       <ToggleQuestion
         label="Does the applicant have employees?"
         value={form.hasEmployees} onChange={set('hasEmployees')}
@@ -60,7 +65,9 @@ export default function BusinessInfo({ form, set, errorFor }) {
           />
         </div>
       </ToggleQuestion>
+      </QuestionCard>
 
+      <QuestionCard>
       <ToggleQuestion
         label="Does the applicant hire subcontractors?"
         value={form.hiresSubs} onChange={set('hiresSubs')}
@@ -85,7 +92,9 @@ export default function BusinessInfo({ form, set, errorFor }) {
           </div>
         </div>
       </ToggleQuestion>
+      </QuestionCard>
 
+      <QuestionCard>
       <ToggleQuestion
         label="The applicant performs residential work prior to the structure being approved for occupancy."
         hint={FIELD_HELP.newResidential}
@@ -118,7 +127,10 @@ export default function BusinessInfo({ form, set, errorFor }) {
           <p className="text-[12px] text-red-500 mt-1.5">The total percentage must be 100.</p>
         )}
       </ToggleQuestion>
+      </QuestionCard>
+      </div>
 
+      <FieldGroup label="Operations">
       <div>
         <p className="text-[13px] font-semibold text-gray-600 tracking-wide">
           Describe the operations of the business.
@@ -133,6 +145,7 @@ export default function BusinessInfo({ form, set, errorFor }) {
           error={errorFor('operationsDescription') && 'Describe the operations in 10 words or more.'}
         />
       </div>
-    </div>
+      </FieldGroup>
+    </>
   )
 }

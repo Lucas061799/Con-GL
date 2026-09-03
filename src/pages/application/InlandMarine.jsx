@@ -1,14 +1,7 @@
 import { Input, Select, Textarea, CurrencyInput, YesNo, BRAND_GRADIENT } from '../../components/FormField'
 import { PER_JOB_SITE_LIMITS, IM_DEDUCTIBLES, LOCATION_OPTIONS } from '../../data/applicationOptions'
+import { FieldGroup } from '../../components/Section'
 import { formatUSD } from '../../lib/rating'
-
-function Heading({ children }) {
-  return (
-    <p className="text-[16px] font-bold text-navy text-center pb-3 mb-5" style={{ borderBottom: '1px solid #D1D5DB' }}>
-      {children}
-    </p>
-  )
-}
 
 // Only the covers ticked on the Supplemental step appear here.
 export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
@@ -19,10 +12,9 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
   const addBpp = () => setBpp(rs => [...rs, { location: '', bldg: '', deductible: '', office: '', shop: '', yard: '' }])
 
   return (
-    <div className="space-y-12">
+    <>
       {form.contractorsInstall && (
-        <section>
-          <Heading>Contractors Installation</Heading>
+        <FieldGroup label="Contractors Installation">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-5">
             <Select
               label="Per Job Site" required
@@ -78,12 +70,11 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
               />
             </div>
           )}
-        </section>
+        </FieldGroup>
       )}
 
       {form.computerEquipment && (
-        <section>
-          <Heading>Computer Equipment</Heading>
+        <FieldGroup label="Computer Equipment">
           <div className="grid grid-cols-[1fr_180px_180px] gap-4 pb-2" style={{ borderBottom: '1px solid #F3F4F6' }}>
             {['Equipement Description', 'Limits', 'Deductible'].map(h => (
               <p key={h} className="text-[13px] font-bold text-navy">{h}</p>
@@ -111,12 +102,11 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
             </div>
             <p className="text-[13px] text-gray-500">@25% of EDP</p>
           </div>
-        </section>
+        </FieldGroup>
       )}
 
       {form.businessPersonalProp && (
-        <section>
-          <Heading>Business Personal Property</Heading>
+        <FieldGroup label="Business Personal Property">
           <div className="grid grid-cols-[110px_110px_150px_1fr_1fr_1fr_auto] gap-3 pb-2" style={{ borderBottom: '1px solid #F3F4F6' }}>
             {['Location', 'Bldg', 'Deductible', 'Office Contents', 'Shop Contents', 'Yard Contents', ''].map((h, i) => (
               <p key={i} className="text-[13px] font-bold text-navy leading-snug">{h}</p>
@@ -141,7 +131,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
               </button>
             </div>
           ))}
-        </section>
+        </FieldGroup>
       )}
 
       {!form.contractorsInstall && !form.computerEquipment && !form.businessPersonalProp && (
@@ -149,6 +139,6 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
           Pick the inland marine covers you want on the Supplemental step and they'll appear here.
         </p>
       )}
-    </div>
+    </>
   )
 }
