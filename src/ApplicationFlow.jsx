@@ -169,6 +169,8 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
         activeStep={null}
         completed={Object.fromEntries(steps.map(s => [s.key, true]))}
         progress={100}
+        quote={quote}
+        quoteAmount={amount}
         hideFooter
       >
         <Submitted
@@ -193,6 +195,9 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
       }}
       progress={progress}
       amount={['supplemental', 'inland-marine'].includes(step) ? amount : undefined}
+      quote={quote}
+      quoteAmount={amount}
+      onFormReview={() => window.alert('Application summary download is not wired up yet.')}
       onBack={back}
       onContinue={advance}
       continueLabel={

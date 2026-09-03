@@ -1,6 +1,7 @@
 import norbielinkLogo from '../assets/norbielink-logo.png'
 import btisLogo from '../assets/btislogo.png'
 import Sidebar from './Sidebar'
+import RightPanel from './RightPanel'
 import { BRAND_GRADIENT } from './FormField'
 import { formatUSD } from '../lib/rating'
 
@@ -11,8 +12,12 @@ export default function ApplicationShell({
   submissionNumber, steps, activeStep, completed, onStepClick,
   progress, amount, onBack, onContinue, continueLabel = 'Save & Continue',
   continueDisabled = false, hideFooter = false,
+  quote, quoteAmount, onFormReview,
   children,
 }) {
+  // The rail follows the applicant across the hand-off — same quote, same
+  // progress, now sitting on step two.
+  const railQuotes = quote ? [{ ...quote, premium: quoteAmount ?? quote.premium }] : []
   return (
     <div className="h-screen flex flex-col bg-white font-montserrat overflow-hidden">
       <header
@@ -75,6 +80,16 @@ export default function ApplicationShell({
             )}
           </div>
         </main>
+
+        <RightPanel
+          progress={progress}
+          quotes={railQuotes}
+          selectedCarrier={quote?.id}
+          onFormReview={onFormReview}
+          formComplete
+          inCompare
+          compareStep={1}
+        />
       </div>
     </div>
   )

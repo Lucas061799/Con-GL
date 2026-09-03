@@ -82,7 +82,7 @@ export default function RightPanel({
   progress, quotes = [], stale, onRefresh,
   selectedCarrier, onSelectCarrier,
   onFormReview, formComplete = false,
-  inCompare = false,
+  inCompare = false, compareStep,
 }) {
   const hasQuotes = quotes.length > 0
   const chosen = quotes.find(q => q.id === selectedCarrier)
@@ -247,7 +247,7 @@ export default function RightPanel({
               })}
             </div>}
 
-            {inCompare && <WhereYouAre activeIndex={selectedCarrier ? 1 : 0} />}
+            {inCompare && <WhereYouAre activeIndex={compareStep ?? (selectedCarrier ? 1 : 0)} />}
 
             {/* Answers that move the price were edited — prices stay blank
                 until the applicant asks for a fresh set. */}
