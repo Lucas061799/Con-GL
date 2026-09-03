@@ -303,7 +303,11 @@ export default function App() {
         />
       )}
       {handoff === 'ready' && chosenQuote && (
-        <QuoteReady quote={chosenQuote} onGo={startApplicationPhase} />
+        <QuoteReady
+          quote={chosenQuote}
+          onGo={startApplicationPhase}
+          onCancel={() => setHandoff('none')}
+        />
       )}
     </AppShell>
   )
