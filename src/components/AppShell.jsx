@@ -9,7 +9,7 @@ export default function AppShell({
   productName, submissionNumber,
   steps, activeStep, completed, onStepClick,
   progress, quotes, stale, onRefresh, selectedCarrier, onSelectCarrier, onFormReview, formComplete,
-  showRail = true, bare = false,
+  bare = false,
   scrollRef,
   children,
 }) {
@@ -45,9 +45,6 @@ export default function AppShell({
           </div>
         </main>
 
-        {/* The indication page gives the carrier cards the whole column, so
-            the rail steps aside there. */}
-        {showRail && (
         <RightPanel
           progress={progress}
           quotes={quotes}
@@ -58,7 +55,6 @@ export default function AppShell({
           onFormReview={onFormReview}
           formComplete={formComplete}
         />
-        )}
       </div>
     </div>
   )

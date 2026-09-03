@@ -26,7 +26,7 @@ function CarrierCard({ quote, terms, onTermsChange, selected, onSelect }) {
 
   return (
     <div
-      className="rounded-2xl bg-white p-7 w-[340px] flex flex-col"
+      className="rounded-2xl bg-white p-6 w-[300px] flex flex-col"
       style={{
         boxShadow: selected
           ? '0 0 0 2px #5C2ED4, 0 12px 32px rgba(92,46,212,0.16)'
@@ -99,7 +99,7 @@ function CarrierCard({ quote, terms, onTermsChange, selected, onSelect }) {
 export default function PriceIndication({ quotes, terms, onTermsChange, selected, onSelect, onCompare }) {
   return (
     <div className="px-4 md:px-10 py-8 md:py-12">
-      <div className="flex items-start justify-center gap-8 flex-wrap">
+      <div className="flex items-start justify-center gap-6 flex-wrap">
         {quotes.length === 0 ? (
           <div className="py-16 text-center">
             <p className="text-[15px] font-bold text-navy">No indication yet</p>
@@ -120,29 +120,34 @@ export default function PriceIndication({ quotes, terms, onTermsChange, selected
               />
             ))}
 
-            <button
-              type="button"
-              onClick={onCompare}
-              className="flex flex-col items-center gap-2 pt-8 transition hover:opacity-70"
-            >
-              <span
-                className="w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ background: 'rgba(92,46,212,0.08)' }}
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24">
-                  <path d="M5 13l4 4L19 7" stroke="url(#cmpG)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <defs>
-                    <linearGradient id="cmpG" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#5C2ED4" /><stop offset="100%" stopColor="#A614C3" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </span>
-              <span className="text-[13px] font-semibold text-navy">Compare Carriers</span>
-            </button>
           </>
         )}
       </div>
+
+      {quotes.length > 0 && (
+        <div className="flex justify-center mt-8">
+          <button
+            type="button"
+            onClick={onCompare}
+            className="inline-flex items-center gap-2.5 transition hover:opacity-70"
+          >
+            <span
+              className="w-9 h-9 rounded-full flex items-center justify-center"
+              style={{ background: 'rgba(92,46,212,0.08)' }}
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24">
+                <path d="M5 13l4 4L19 7" stroke="url(#cmpG)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                <defs>
+                  <linearGradient id="cmpG" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#5C2ED4" /><stop offset="100%" stopColor="#A614C3" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+            <span className="text-[13px] font-semibold text-navy">Compare Carriers</span>
+          </button>
+        </div>
+      )}
 
       {quotes.length > 0 && (
         <p className="text-[11px] text-gray-400 leading-relaxed text-center mt-10 max-w-xl mx-auto">

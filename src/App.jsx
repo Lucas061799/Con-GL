@@ -209,7 +209,6 @@ export default function App() {
       onSelectCarrier={(id) => setSelectedCarrier(cur => (cur === id ? null : id))}
       onFormReview={() => window.alert('Application summary download is not wired up yet.')}
       formComplete={completed.applicant && completed.business && completed.operations}
-      showRail={view === 'form'}
       bare={view === 'indication'}
       scrollRef={scrollRef}
     >

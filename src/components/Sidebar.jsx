@@ -4,7 +4,7 @@ import norbieface from '../assets/norbieface.png'
 // Left step rail — same shape as the Commercial Auto / GL-BOP apps: white
 // panel, numbered steps, Norbie chat card pinned at the bottom over the
 // palm-leaf watermark.
-export default function Sidebar({ productName, submissionNumber, steps, activeStep, completed, onStepClick }) {
+export default function Sidebar({ productName, submissionNumber, steps, activeStep, completed, onStepClick, progress }) {
   return (
     <aside
       className="w-64 2xl:w-72 hidden lg:flex flex-col h-full shrink-0 relative overflow-hidden"
@@ -13,6 +13,19 @@ export default function Sidebar({ productName, submissionNumber, steps, activeSt
       <div className="px-5 pt-5 pb-3 relative z-10">
         <h2 className="text-base font-bold leading-tight text-navy">{productName}</h2>
         <p className="text-[11px] mt-0.5 text-gray-400 whitespace-nowrap">Submission Number: {submissionNumber}</p>
+
+        {progress != null && (
+          <div className="flex items-center gap-2.5 mt-3">
+            <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#F3F4F6' }}>
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{ width: `${progress}%`, background: 'linear-gradient(88.09deg, #5C2ED4 0%, #A614C3 100%)' }}
+              />
+            </div>
+            <span className="text-[11px] font-bold text-gray-400 tabular-nums">{progress}%</span>
+          </div>
+        )}
+
         <div className="mt-3" style={{ borderBottom: '1px solid #F3F4F6' }} />
       </div>
 
