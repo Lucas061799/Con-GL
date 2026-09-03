@@ -8,8 +8,8 @@ export function TurnaroundNotice({ onContinue, onCancel }) {
   return (
     <Modal title="HEADS UP!" onDismiss={onCancel} footer={
       <>
-        <ModalButton onClick={onContinue}>Continue</ModalButton>
         <ModalButton variant="ghost" onClick={onCancel}>Cancel</ModalButton>
+        <ModalButton onClick={onContinue}>Continue</ModalButton>
       </>
     }>
       <p className="text-[14px] text-gray-600 leading-relaxed">This quote has a 24-hour turnaround time.</p>

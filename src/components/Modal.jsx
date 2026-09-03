@@ -20,8 +20,12 @@ export default function Modal({ title, onDismiss, children, footer, width = 460 
             <div className="mt-4" style={{ borderBottom: '1px solid #F3F4F6' }} />
           </div>
         )}
-        <div className="px-7 pb-6">{children}</div>
-        {footer && <div className="px-7 pb-7 flex items-center gap-3">{footer}</div>}
+        <div className="px-7 pb-7">{children}</div>
+        {/* Secondary left, primary right — the same footer order the
+            application wizard uses. */}
+        {/* Secondary left, primary right, each taking half the width — a
+            plain justify-between leaves a dead gap in the middle. */}
+        {footer && <div className="px-7 pb-7 flex items-center gap-3 [&>button]:flex-1">{footer}</div>}
       </div>
     </div>
   )

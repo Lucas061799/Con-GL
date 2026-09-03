@@ -291,7 +291,6 @@ export default function App() {
           onTermsChange={updateTerms}
           selected={selectedCarrier}
           onSelect={(id) => { setSelectedCarrier(id); setHandoff('turnaround') }}
-          onCompare={() => window.alert('Carrier comparison is not built yet.')}
         />
       )}
 
