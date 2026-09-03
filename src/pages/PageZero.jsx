@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import norbielinkLogo from '../assets/norbielink-logo.png'
 import btisLogo from '../assets/btislogo.png'
 import jungleImg from '../assets/jungle.png'
-import norbieCircle from '../assets/norbie-circle-00.png'
+import norbieContractor from '../assets/norbie-contractor.png'
 import { Input, CurrencyInput, Select, SearchableSelect, TreeSelect, BRAND_GRADIENT } from '../components/FormField'
 import CarrierMark from '../components/CarrierMark'
 import { formatUSD } from '../lib/rating'
@@ -83,7 +83,13 @@ export default function PageZero({ onContinue }) {
       <div className="flex-1 flex flex-col lg:flex-row min-h-0">
 
         {/* Left — intake */}
-        <div className="flex-1 lg:w-1/2 lg:flex-none overflow-y-auto custom-scroll relative">
+        <div className="flex-1 lg:w-1/2 lg:flex-none overflow-y-auto custom-scroll relative"
+          style={{ borderRight: '1px solid #F3F4F6' }}>
+          <img
+            src={jungleImg} alt=""
+            className="lg:hidden absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+            style={{ opacity: 0.06 }}
+          />
           <div className="relative z-10 min-h-full flex flex-col justify-center items-center py-10 px-6 md:px-[8%] lg:px-[10%]">
           <div className="w-full max-w-xl">
             {/* Landing type scale, identical to Builder's Risk and Commercial Auto. */}
@@ -272,20 +278,21 @@ export default function PageZero({ onContinue }) {
           </div>
         </div>
 
-        {/* Right — Norbie */}
+        {/* Right — Norbie over the palm watermark, same treatment as the
+            Commercial Auto landing. */}
         <div className="hidden lg:flex relative overflow-hidden shrink-0 items-center justify-center px-10"
-          style={{ width: '50%', borderLeft: '1px solid #F3F4F6' }}>
+          style={{ width: '50%' }}>
           <img
             src={jungleImg} alt=""
             className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
-            style={{ opacity: 0.06 }}
+            style={{ opacity: 0.25 }}
           />
 
           <img
-            src={norbieCircle}
+            src={norbieContractor}
             alt="Norbie"
-            className="relative z-10 select-none pointer-events-none transition-all duration-500"
-            style={{ width: 430, height: 'auto', objectFit: 'contain' }}
+            className="relative z-10 select-none pointer-events-none"
+            style={{ width: 500, height: 500, objectFit: 'contain' }}
           />
 
         </div>
