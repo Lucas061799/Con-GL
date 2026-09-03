@@ -147,7 +147,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
     classes: <Classifications rows={rows} setRows={setRows} />,
     business: <BusinessInfo form={form} set={set} errorFor={errorFor} />,
     history: <InsuranceHistory form={form} set={set} errorFor={errorFor} />,
-    pricing: <Pricing form={form} amount={amount} onProceed={advance} />,
+    pricing: <Pricing form={form} quote={quote} amount={amount} onProceed={advance} />,
     supplemental: (
       <Supplemental
         form={form} set={set} errorFor={errorFor}
