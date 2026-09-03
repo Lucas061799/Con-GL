@@ -7,21 +7,34 @@ export const BRAND_GRADIENT = 'linear-gradient(88.09deg, #5C2ED4 0.11%, #A614C3 
 function Label({ label, required, hint }) {
   if (!label) return null
   return (
-    <label className="flex items-center gap-1.5 text-[13px] font-semibold text-gray-600 mb-1.5 tracking-wide">
-      <span>{label}{required && <span className="text-red-400 ml-0.5">*</span>}</span>
-      {hint && <InfoTip title={hint.title}>{hint.body}</InfoTip>}
+    <label className="block text-[13px] font-semibold text-gray-600 mb-1.5 tracking-wide">
+      {label}{required && <span className="text-red-400 ml-0.5">*</span>}
+      {hint && (
+        <span className="inline-flex align-middle ml-1.5 -mt-px">
+          <InfoTip title={hint.title}>{hint.body}</InfoTip>
+        </span>
+      )}
     </label>
   )
 }
 
 // Hover-to-open help popover, styled after the Builder's Risk app: a gradient
-// "i" dot and a 340px card below it with a tinted title bar. The card sits
-// inside a padded wrapper so the gap between dot and card stays hoverable —
-// otherwise the pointer would cross dead space and dismiss it on the way down.
+// "i" dot and a 340px card with a tinted title bar.
+//
+// The card is positioned `fixed` against the dot's rect rather than absolutely
+// inside it — an absolute panel gets clipped the moment a section or the
+// scrolling column boundary crosses it. It flips above the dot when there is
+// no room below and is clamped to the viewport on both axes.
+const TIP_W = 340
+const TIP_GAP = 8
+const TIP_MARGIN = 12
+
 export function InfoTip({ title, children, size = 'sm', label }) {
   const [open, setOpen] = useState(false)
-  const [alignRight, setAlignRight] = useState(false)
+  const [pos, setPos] = useState(null)
   const wrapRef = useRef(null)
+  const dotRef = useRef(null)
+  const cardRef = useRef(null)
 
   // Tapping elsewhere dismisses it on touch, where there is no pointer to
   // move away.
@@ -34,29 +47,54 @@ export function InfoTip({ title, children, size = 'sm', label }) {
     return () => document.removeEventListener('mousedown', handler)
   }, [open])
 
-  useEffect(() => {
-    if (!open || !wrapRef.current) return
-    setAlignRight(wrapRef.current.getBoundingClientRect().left + 340 + 16 > window.innerWidth)
+  useLayoutEffect(() => {
+    if (!open) return
+    const place = () => {
+      const d = dotRef.current?.getBoundingClientRect()
+      const card = cardRef.current?.getBoundingClientRect()
+      if (!d || !card) return
+      const left = Math.min(
+        Math.max(TIP_MARGIN, d.left + d.width / 2 - TIP_W / 2),
+        window.innerWidth - TIP_W - TIP_MARGIN,
+      )
+      const roomBelow = window.innerHeight - d.bottom - TIP_GAP - TIP_MARGIN
+      const below = card.height <= roomBelow
+      setPos({
+        left,
+        top: below ? d.bottom : Math.max(TIP_MARGIN, d.top - TIP_GAP - card.height),
+        below,
+      })
+    }
+    place()
+    window.addEventListener('scroll', place, true)
+    window.addEventListener('resize', place)
+    return () => {
+      window.removeEventListener('scroll', place, true)
+      window.removeEventListener('resize', place)
+    }
   }, [open])
+
+  const show = () => { setPos(null); setOpen(true) }
+  const hide = () => { setOpen(false); setPos(null) }
 
   return (
     <span
       className="relative inline-flex items-center"
       ref={wrapRef}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onMouseEnter={show}
+      onMouseLeave={hide}
     >
       <button
+        ref={dotRef}
         type="button"
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(v => !v) }}
-        onFocus={() => setOpen(true)}
-        onBlur={() => setOpen(false)}
+        onFocus={show}
+        onBlur={hide}
         className={`${size === 'xs' ? 'w-3.5 h-3.5 text-[8px]' : 'w-4 h-4 text-[10px]'} rounded-full flex items-center justify-center font-bold text-white shrink-0 transition-all hover:scale-110`}
         style={{
           background: 'linear-gradient(88.09deg, #5C2ED4 0%, #A614C3 100%)',
           boxShadow: open ? '0 2px 8px rgba(92,46,212,0.4)' : '0 1px 3px rgba(92,46,212,0.25)',
         }}
-        title={typeof title === 'string' ? title : undefined}
         aria-label={`More info: ${typeof title === 'string' ? title : 'details'}`}
       >
         i
@@ -65,11 +103,24 @@ export function InfoTip({ title, children, size = 'sm', label }) {
       {label && <span className="text-[11px] text-gray-500 ml-1 select-none">{label}</span>}
 
       {open && (
-        <div className={`absolute z-50 top-full pt-2 ${alignRight ? 'right-0' : 'left-0'}`}>
+        // The gap between dot and card is padding on this wrapper, so the
+        // pointer never leaves the tip while travelling into it.
+        <div
+          className="fixed z-[9999]"
+          style={{
+            width: TIP_W,
+            left: pos ? pos.left : -9999,
+            top: pos ? pos.top : 0,
+            paddingTop: pos?.below === false ? 0 : TIP_GAP,
+            paddingBottom: pos?.below === false ? TIP_GAP : 0,
+            visibility: pos ? 'visible' : 'hidden',
+          }}
+        >
           <div
+            ref={cardRef}
             role="tooltip"
             className="rounded-xl bg-white"
-            style={{ width: 340, border: '1px solid rgba(92,46,212,0.18)', boxShadow: '0 8px 28px rgba(15,10,40,0.16)' }}
+            style={{ border: '1px solid rgba(92,46,212,0.18)', boxShadow: '0 8px 28px rgba(15,10,40,0.16)' }}
           >
             <div
               className="px-4 py-3 rounded-t-xl"
@@ -726,9 +777,13 @@ export function ToggleQuestion({ label, hint, value, onChange, children }) {
   return (
     <div>
       <div className="flex items-start justify-between gap-6">
-        <p className="text-[14px] font-bold text-navy leading-snug flex items-center gap-1.5 pt-0.5">
-          <span>{label}</span>
-          {hint && <InfoTip title={hint.title}>{hint.body}</InfoTip>}
+        <p className="text-[14px] font-bold text-navy leading-snug pt-0.5">
+          {label}
+          {hint && (
+            <span className="inline-flex align-middle ml-1.5 -mt-px">
+              <InfoTip title={hint.title}>{hint.body}</InfoTip>
+            </span>
+          )}
         </p>
         <Toggle value={value} onChange={onChange} />
       </div>

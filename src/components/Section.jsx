@@ -3,8 +3,10 @@ import { forwardRef } from 'react'
 // One section of the long-scroll application, matching GL-BOP: a titled
 // header rule, then field groups on light cards.
 const Section = forwardRef(function Section({ id, title, subtitle, action, children }, ref) {
+  // No overflow clipping here — the help popovers are absolutely positioned
+  // and would be cut off at the section edge.
   return (
-    <section ref={ref} id={id} className="rounded-2xl overflow-hidden scroll-mt-6">
+    <section ref={ref} id={id} className="rounded-2xl scroll-mt-6">
       <div className="px-4 md:px-10 pt-6 md:pt-8 pb-0">
         <div
           className="flex items-center justify-between gap-4 pb-3 md:pb-4"
