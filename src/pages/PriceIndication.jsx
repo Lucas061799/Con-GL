@@ -194,7 +194,7 @@ export default function PriceIndication({ quotes, terms, onTermsChange, selected
             ))}
           </div>
 
-          <p className="text-[12px] text-gray-400 leading-relaxed text-center max-w-xl mx-auto">
+          <p className="text-[12px] text-gray-400 leading-relaxed max-w-xl">
             Indication only — the final premium is set after underwriting review and may change
             based on the answers in the full application.
           </p>
