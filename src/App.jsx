@@ -8,6 +8,7 @@ import AppShell from './components/AppShell'
 import { todayMDY } from './components/FormField'
 import { rateAll } from './lib/rating'
 import { LIMIT_OPTIONS, DEDUCTIBLE_OPTIONS } from './data/carrierTerms'
+import { rulesForCodes, subKey, needsUnderwriterReview } from './data/conditionalQuestions'
 
 const STEPS = [
   { key: 'applicant',  number: 1, label: 'Applicant' },
@@ -84,6 +85,10 @@ export default function App() {
 
   const splitTotal = (Number(form.newWorkPct) || 0) + (Number(form.remodelPct) || 0)
 
+  const classCodes = classifications.map(r => r.code).filter(Boolean)
+  const conditionalRules = useMemo(() => rulesForCodes(classCodes), [classCodes.join(',')]) // eslint-disable-line react-hooks/exhaustive-deps
+  const underwriterReview = needsUnderwriterReview(conditionalRules, form)
+
   const missingBySection = useMemo(() => {
     const blank = (k) => !String(form[k] ?? '').trim()
 
@@ -96,9 +101,15 @@ export default function App() {
 
     const operations = ['grossReceipts', 'employeePayroll', 'employeeCount', 'activeOwners', 'operationsDescription'].filter(blank)
     if (form.hiresSubs === 'yes') operations.push(...['subContractingCosts', 'subDwellingPct'].filter(blank))
+    // Every trade question that applies has to be answered, and a yes needs
+    // its follow-up too.
+    rulesForCodes(classifications.map(r => r.code).filter(Boolean)).forEach(rule => {
+      if (blank(rule.id)) operations.push(rule.id)
+      else if (form[rule.id] === 'yes' && blank(subKey(rule))) operations.push(subKey(rule))
+    })
 
     return { applicant, business, operations }
-  }, [form])
+  }, [form, classifications])
 
   const classificationsValid =
     classifications.every(r => r.code) &&
@@ -169,7 +180,9 @@ export default function App() {
       if (firstIncomplete) jumpTo(firstIncomplete.key)
       return
     }
-    window.alert('Bind & pay is not built yet.')
+    window.alert(underwriterReview
+      ? 'Submitted for underwriter review — bind & pay is not built yet.'
+      : 'Bind & pay is not built yet.')
   }
 
   /* ── Render ─────────────────────────────────────────────────────── */
@@ -191,6 +204,7 @@ export default function App() {
       selectedCarrier={selectedCarrier}
       onSelectCarrier={(id) => setSelectedCarrier(cur => (cur === id ? null : id))}
       onFormReview={() => window.alert('Application summary download is not wired up yet.')}
+      formComplete={completed.applicant && completed.business && completed.operations}
       scrollRef={scrollRef}
     >
       <ApplicantContact
@@ -205,6 +219,7 @@ export default function App() {
       <BusinessOperations
         ref={sectionRefs.operations}
         form={form} set={set} errorFor={errorFor} splitTotal={splitTotal}
+        classCodes={classCodes}
       />
       <PriceIndication
         ref={sectionRefs.indication}

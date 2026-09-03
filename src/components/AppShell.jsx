@@ -8,7 +8,7 @@ import RightPanel from './RightPanel'
 export default function AppShell({
   productName, submissionNumber,
   steps, activeStep, completed, onStepClick,
-  progress, quotes, stale, onRefresh, selectedCarrier, onSelectCarrier, onFormReview,
+  progress, quotes, stale, onRefresh, selectedCarrier, onSelectCarrier, onFormReview, formComplete,
   scrollRef,
   children,
 }) {
@@ -50,6 +50,7 @@ export default function AppShell({
           selectedCarrier={selectedCarrier}
           onSelectCarrier={onSelectCarrier}
           onFormReview={onFormReview}
+          formComplete={formComplete}
         />
       </div>
     </div>

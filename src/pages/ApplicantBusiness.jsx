@@ -142,7 +142,7 @@ const ApplicantBusiness = forwardRef(function ApplicantBusiness(
                 value={row.percentage}
                 onChange={(v) => updateRow(i, { percentage: v })}
               />
-              <div className={i === 0 ? 'pt-[30px]' : ''}>
+              <div className="self-end">
                 {i === 0 ? (
                   <button
                     type="button"
@@ -150,8 +150,8 @@ const ApplicantBusiness = forwardRef(function ApplicantBusiness(
                     disabled={!canAdd}
                     aria-label="Add classification"
                     title={canAdd ? 'Add classification' : `Up to ${MAX_CLASSIFICATIONS} classifications`}
-                    className={`w-9 h-9 rounded-lg flex items-center justify-center text-xl leading-none font-bold transition ${canAdd ? 'hover:bg-brand-light' : 'cursor-not-allowed opacity-40'}`}
-                    style={{ color: '#A614C3' }}
+                    className={`w-10 h-[42px] rounded-lg border flex items-center justify-center text-xl leading-none font-bold transition ${canAdd ? 'hover:border-gray-300 hover:bg-gray-50' : 'cursor-not-allowed opacity-40'}`}
+                    style={{ color: '#374151', borderColor: '#E5E7EB', background: 'white' }}
                   >
                     +
                   </button>

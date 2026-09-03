@@ -744,49 +744,54 @@ export function Textarea({ label, required, hint, placeholder, rows = 4, value, 
   )
 }
 
-/* ── Toggle switch ────────────────────────────────────────────────── */
+/* ── Yes / No radio pills ─────────────────────────────────────────── */
 
-// Yes/No switch used for the operations questions — reads as a statement
-// with the answer sitting to its right, matching the marketplace flow.
-export function Toggle({ value, onChange, className = '' }) {
-  const on = value === 'yes'
-  return (
-    <div className={`flex items-center gap-2.5 shrink-0 ${className}`}>
-      <span className={`text-[13px] font-bold ${on ? 'text-navy' : 'text-gray-400'}`}>
-        {on ? 'Yes' : 'No'}
-      </span>
+// The house control for a binary question, as used across Builder's Risk:
+// two bordered pills with a radio dot, purple ring and tinted fill when set.
+export function YesNo({ value, onChange, className = '' }) {
+  const pill = (v, labelText) => {
+    const on = value === v
+    return (
       <button
+        key={v}
         type="button"
-        role="switch"
-        aria-checked={on}
-        onClick={() => onChange && onChange(on ? 'no' : 'yes')}
-        className="relative w-[46px] h-[26px] rounded-full transition-colors"
-        style={{ background: on ? BRAND_GRADIENT : '#D1D5DB' }}
+        onClick={() => onChange && onChange(v)}
+        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all text-xs font-medium ${
+          on
+            ? 'border-[#5C2ED4] text-[#5C2ED4]'
+            : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50'
+        }`}
+        style={on ? { background: 'linear-gradient(88.09deg, rgba(92,46,212,0.08) 0%, rgba(166,20,195,0.08) 100%)' } : undefined}
       >
         <span
-          className="absolute top-[3px] w-5 h-5 rounded-full bg-white transition-all"
-          style={{ left: on ? 23 : 3, boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }}
-        />
+          className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+            on ? 'border-[#A614C3]' : 'border-gray-300'
+          }`}
+        >
+          {on && <span className="w-1.5 h-1.5 rounded-full" style={{ background: BRAND_GRADIENT }} />}
+        </span>
+        {labelText}
       </button>
-    </div>
-  )
+    )
+  }
+
+  return <div className={`flex gap-4 ${className}`}>{pill('yes', 'Yes')}{pill('no', 'No')}</div>
 }
 
-// A question row: statement on the left, switch on the right.
+// A question with its answer pills underneath, and whatever the "yes" branch
+// reveals below that.
 export function ToggleQuestion({ label, hint, value, onChange, children }) {
   return (
     <div>
-      <div className="flex items-start justify-between gap-6">
-        <p className="text-[14px] font-bold text-navy leading-snug pt-0.5">
-          {label}
-          {hint && (
-            <span className="inline-flex align-middle ml-1.5 -mt-px">
-              <InfoTip title={hint.title}>{hint.body}</InfoTip>
-            </span>
-          )}
-        </p>
-        <Toggle value={value} onChange={onChange} />
-      </div>
+      <p className="block text-[13px] font-semibold text-gray-600 mb-2.5 tracking-wide">
+        {label}
+        {hint && (
+          <span className="inline-flex align-middle ml-1.5 -mt-px">
+            <InfoTip title={hint.title}>{hint.body}</InfoTip>
+          </span>
+        )}
+      </p>
+      <YesNo value={value} onChange={onChange} />
       {value === 'yes' && children && <div className="mt-4 pl-0.5">{children}</div>}
     </div>
   )
