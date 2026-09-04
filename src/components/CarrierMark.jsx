@@ -10,6 +10,7 @@ const SIZES = {
   sm: { box: 40, pad: 5, name: 'text-[9px]' },
   md: { box: 52, pad: 6, name: 'text-[10px]' },
   lg: { box: 64, pad: 8, name: 'text-[12px]' },
+  xl: { box: 92, pad: 12, name: 'text-[14px]' },
 }
 
 export default function CarrierMark({ carrier, product, logo, size = 'md', className = '' }) {

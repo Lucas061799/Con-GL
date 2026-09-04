@@ -194,7 +194,6 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
         if (steps.findIndex(s => s.key === key) <= index) go(key)
       }}
       progress={progress}
-      amount={['supplemental', 'inland-marine'].includes(step) ? amount : undefined}
       quote={quote}
       quoteAmount={amount}
       title={steps[index]?.label}

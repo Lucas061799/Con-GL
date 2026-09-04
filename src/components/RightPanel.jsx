@@ -163,14 +163,12 @@ export default function RightPanel({
                     </div>
                   )}
 
-                  <CarrierMark carrier={top.carrier} product={top.product} logo={top.logo} size="lg" />
-
-                  {inCompare && (
-                    <>
-                      <p className="text-base font-bold text-gray-900 mt-3">{top.carrier}</p>
-                      <p className="text-[11px] text-gray-400 mt-0.5">{top.product}</p>
-                    </>
-                  )}
+                  {/* The logos are full lockups, so the name would only be
+                      printing what the mark already says. */}
+                  <CarrierMark
+                    carrier={top.carrier} product={top.product} logo={top.logo}
+                    size={inCompare ? 'xl' : 'lg'}
+                  />
 
                   <div className="mt-3">
                     {stale ? (

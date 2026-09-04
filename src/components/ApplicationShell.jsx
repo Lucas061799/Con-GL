@@ -3,14 +3,13 @@ import btisLogo from '../assets/btislogo.png'
 import Sidebar from './Sidebar'
 import RightPanel from './RightPanel'
 import { BRAND_GRADIENT } from './FormField'
-import { formatUSD } from '../lib/rating'
 
 // Phase two runs as a paged wizard rather than one scroll: the steps are long
 // and each has to be saved before the next, so Back / Save & Continue anchor
 // every page.
 export default function ApplicationShell({
   submissionNumber, steps, activeStep, completed, onStepClick,
-  progress, amount, onBack, onContinue, continueLabel = 'Save & Continue',
+  progress, onBack, onContinue, continueLabel = 'Save & Continue',
   continueDisabled = false, hideFooter = false,
   quote, quoteAmount, onFormReview, title,
   children,
@@ -44,19 +43,14 @@ export default function ApplicationShell({
 
         <main className="flex-1 min-w-0 overflow-y-auto custom-scroll">
           <div className="mx-auto px-4 md:px-10 py-6 md:py-8 max-w-4xl">
-            {/* Same header rule the phase-one sections use, with the running
-                amount taking the section's action slot. */}
+            {/* Same header rule the phase-one sections use. The premium is not
+                repeated here — the rail carries it. */}
             {title && (
               <div
-                className="flex items-center justify-between gap-4 pb-3 md:pb-4 mb-6"
+                className="pb-3 md:pb-4 mb-6"
                 style={{ borderBottom: '1px solid #D1D5DB' }}
               >
                 <h2 className="text-base md:text-lg font-bold text-navy">{title}</h2>
-                {amount != null && (
-                  <p className="text-[15px] font-bold text-navy shrink-0">
-                    Amount: <span className="font-extrabold">{formatUSD(amount)}</span>
-                  </p>
-                )}
               </div>
             )}
 
