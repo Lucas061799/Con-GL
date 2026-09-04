@@ -156,8 +156,16 @@ export default function PageZero({ onContinue }) {
                       className="flex items-center justify-between gap-4 py-3"
                       style={{ borderTop: i === 0 ? 'none' : '1px solid #F3F4F6' }}
                     >
-                      <CarrierMark carrier={q.carrier} product={q.product} logo={q.logo} size="md" />
-                      <div className="text-right">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <CarrierMark carrier={q.carrier} product={q.product} logo={q.logo} size="md" />
+                        <div className="min-w-0">
+                          <p className="text-[14px] font-bold text-navy truncate">{q.carrier}</p>
+                          <p className="text-[10px] font-bold tracking-widest uppercase text-gray-400 truncate">
+                            {q.product}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0">
                         <p className="text-[26px] font-extrabold leading-none text-navy tracking-tight">
                           {formatUSD(q.premium)}
                         </p>
