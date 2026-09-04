@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { CurrencyInput, Input, Textarea, PercentInput, ToggleQuestion } from '../components/FormField'
+import { CurrencyInput, Input, Textarea, PercentInput, ToggleQuestion, InfoTip } from '../components/FormField'
 import Section, { FieldGroup, QuestionCard } from '../components/Section'
 import { FIELD_HELP } from '../data/fieldHelp'
 import { rulesForCodes, subKey, needsUnderwriterReview } from '../data/conditionalQuestions'
@@ -79,6 +79,11 @@ const BusinessOperations = forwardRef(function BusinessOperations(
             />
             <p className="text-[13px] text-gray-600 mt-5 mb-3">
               What % of sub-contracted work is done on single family or duplex dwellings?
+              <span className="inline-flex align-middle ml-1.5 -mt-px">
+                <InfoTip title={FIELD_HELP.subDwellingPct.title}>
+                  {FIELD_HELP.subDwellingPct.body}
+                </InfoTip>
+              </span>
             </p>
             <PercentInput
               label="Percentage" required

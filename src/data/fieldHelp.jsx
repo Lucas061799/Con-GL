@@ -29,11 +29,21 @@ export const FIELD_HELP = {
   },
 
   subContractingCosts: {
-    title: 'Sub-Contracting Costs',
+    title: 'Annual Subcontracting Costs',
     body: (
       <p>
         Total amount paid to subcontractors over the course of a year. A
         subcontractor is a contractor paid to help complete a project.
+      </p>
+    ),
+  },
+
+  subDwellingPct: {
+    title: 'Percentage of Subcontracted Work Done On Family Dwellings',
+    body: (
+      <p>
+        Enter the percentage of the total subcontracting costs that applies to
+        work on single family homes or duplexes.
       </p>
     ),
   },

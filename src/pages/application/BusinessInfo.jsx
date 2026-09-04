@@ -1,4 +1,4 @@
-import { Input, CurrencyInput, Select, Textarea, PercentInput, ToggleQuestion } from '../../components/FormField'
+import { Input, CurrencyInput, Select, Textarea, PercentInput, ToggleQuestion, InfoTip } from '../../components/FormField'
 import { FIELD_HELP } from '../../data/fieldHelp'
 import { FieldGroup, QuestionCard } from '../../components/Section'
 import { STRUCTURE_OF_BUSINESS } from '../../data/applicationOptions'
@@ -84,6 +84,11 @@ export default function BusinessInfo({ form, set, errorFor }) {
           <div>
             <p className="text-[13px] font-semibold text-gray-600 mb-1.5 tracking-wide">
               What percentage of subcontracted work is done on single family or duplex dwellings?
+              <span className="inline-flex align-middle ml-1.5 -mt-px">
+                <InfoTip title={FIELD_HELP.subDwellingPct.title}>
+                  {FIELD_HELP.subDwellingPct.body}
+                </InfoTip>
+              </span>
             </p>
             <PercentInput
               value={form.subDwellingPct} onChange={set('subDwellingPct')}

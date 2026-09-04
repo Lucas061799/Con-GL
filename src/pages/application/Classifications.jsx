@@ -15,10 +15,6 @@ export default function Classifications({ rows, setRows }) {
 
   return (
     <FieldGroup label={`Classification — add up to ${MAX}`}>
-      <div className="flex items-end justify-end mb-3">
-        <p className="text-[13px] font-bold text-navy">% of Work</p>
-      </div>
-
       <div className="space-y-3">
         {rows.map((row, i) => (
           <div key={i} className="grid grid-cols-[1fr_140px_40px] gap-3 items-start">
