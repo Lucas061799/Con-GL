@@ -68,7 +68,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
 
   return (
     <div className="space-y-5 md:space-y-6">
-          <div className="rounded-2xl overflow-hidden" style={{ background: 'white', border: '1px solid #F3F4F6' }}>
+          <div id="submission-print-area" className="rounded-2xl overflow-hidden" style={{ background: 'white', border: '1px solid #F3F4F6' }}>
             <div className="h-1" style={{ background: BRAND_GRADIENT }} />
 
             <div className="flex items-start gap-4 px-6 pt-5 pb-4">
@@ -97,7 +97,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                 type="button"
                 title="Print / Save as PDF"
                 onClick={() => setTimeout(() => window.print(), 50)}
-                className="no-print w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all hover:bg-gray-50"
+                className="screen-only w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all hover:bg-gray-50"
                 style={{ border: '1px solid #E5E7EB', background: 'white' }}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24">
@@ -224,7 +224,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
             </div>
           </div>
 
-      <div className="flex justify-center no-print pb-4">
+      <div className="flex justify-center pb-4">
         <button
           type="button"
           onClick={onStartOver}

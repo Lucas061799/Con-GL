@@ -77,3 +77,42 @@ input[type='number'] { -moz-appearance: textfield; }
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* Printing the submission receipt. Everything is hidden and the receipt alone
+   is revealed, the way the other marketplaces do it — otherwise the step rail,
+   the quote rail and the page chrome all come out with it. */
+@media print {
+  @page { size: A4 portrait; margin: 0.35in }
+
+  html, body {
+    background: #fff !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body :not(img):not(svg) {
+    visibility: hidden !important;
+    height: auto !important;
+    max-height: none !important;
+    position: static !important;
+    overflow: visible !important;
+  }
+  body img, body svg { visibility: hidden !important }
+
+  #submission-print-area,
+  #submission-print-area * { visibility: visible !important }
+
+  #submission-print-area {
+    position: fixed !important;
+    inset: 0 0 auto !important;
+    z-index: 99999 !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 18px 22px !important;
+    background: #fff !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  #submission-print-area .screen-only { display: none !important }
+}

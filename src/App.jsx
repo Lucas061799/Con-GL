@@ -272,7 +272,6 @@ export default function App() {
       onRefresh={refreshQuote}
       selectedCarrier={selectedCarrier}
       onSelectCarrier={(id) => setSelectedCarrier(cur => (cur === id ? null : id))}
-      onFormReview={() => window.alert('Application summary download is not wired up yet.')}
       formComplete={summaryReady}
       bare={view === 'indication'}
       inCompare={view === 'indication'}

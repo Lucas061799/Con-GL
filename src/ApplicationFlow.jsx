@@ -180,6 +180,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
         quoteAmount={amount}
         summaryReady
         submitted
+        onFormReview={() => setTimeout(() => window.print(), 50)}
         hideFooter
       >
         <Submitted
@@ -208,7 +209,6 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
       quote={quote}
       quoteAmount={amount}
       title={steps[index]?.label}
-      onFormReview={() => window.alert('Application summary download is not wired up yet.')}
       onBack={back}
       onContinue={advance}
       continueLabel={
