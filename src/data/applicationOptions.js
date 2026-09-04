@@ -68,19 +68,19 @@ export const OPTIONAL_COVERAGES = [
   {
     key: 'blanketAI',
     label: 'Blanket Additional Insured Endorsement',
-    help: 'Provides additional insured status on a blanket basis as required by written contract for the insured\u2019s ongoing operations. Coverage is provided on a primary/non-contributory basis and includes waiver of subrogation when required by written contract.',
+    help: 'Includes primary, non-contributory, waiver of subrogation and ongoing operations',
   },
   {
     key: 'stopGap',
     label: 'Stop Gap \u2013 Employers Liability Coverage Endorsement Insurance',
-    help: 'Coverage protection for the policyholder in the event an employee sues for amounts beyond what is covered by workers compensation.',
+    help: 'Stop Gap / Employers Liability Coverage: Provides up to $1,000,000 in employers liability coverage for work related injuries. Stop Gap is only available in OH, ND, WA and WY where Workers Compensation Programs are administered by the state.',
     // Monopolistic states only.
     states: ['WA', 'ND', 'WY', 'OH'],
   },
   {
     key: 'cyberLiability',
     label: 'Cyber Liability',
-    help: '$50K limit providing comprehensive data security and privacy coverage that addresses both first party losses and third-party liability claims. Includes breach response and cyber expert claim assistance.',
+    help: '$50,000 aggregate limit provided for comprehensive data security and privacy protection.',
   },
   {
     key: 'glEnhancement',
