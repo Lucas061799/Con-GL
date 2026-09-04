@@ -84,7 +84,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
       out.push('toolFloaterLimit')
     }
 
-    if (step === 'inland-marine') {
+    if (step === 'inland-marine' && form.contractorsInstall) {
       out.push(...['imPerJobSite', 'imInstallDeductible'].filter(blank))
       if (form.imTempStructures === 'yes' && blank('imTempStructuresDetail')) out.push('imTempStructuresDetail')
     }

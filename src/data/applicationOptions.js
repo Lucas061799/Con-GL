@@ -97,6 +97,14 @@ export const OPTIONAL_COVERAGES = [
       placeholder: 'Select a limit',
       options: TOOL_FLOATER_LIMITS,
     },
+    // Optional add-ons. Each of the last three opens its own block on the
+    // Inland Marine step; ticking none is fine.
+    options: [
+      { key: 'contractorTools',      label: 'Contractor Tools & Equip' },
+      { key: 'contractorsInstall',   label: 'Contractors Installation' },
+      { key: 'computerEquipment',    label: 'Computer Equipment' },
+      { key: 'businessPersonalProp', label: 'Business Personal Property' },
+    ],
   },
 ]
 

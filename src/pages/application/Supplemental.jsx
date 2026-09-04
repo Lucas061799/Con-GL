@@ -165,6 +165,19 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
                   />
                 </div>
               )}
+
+              {cov.options && form[cov.key] === 'yes' && (
+                <div className="mt-4 flex flex-wrap gap-x-8 gap-y-3">
+                  {cov.options.map(o => (
+                    <Checkbox
+                      key={o.key}
+                      label={o.label}
+                      checked={!!form[o.key]}
+                      onChange={set(o.key)}
+                    />
+                  ))}
+                </div>
+              )}
             </QuestionCard>
           ))}
         </div>
