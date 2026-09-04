@@ -9,7 +9,7 @@ export const FIELD_HELP = {
     title: 'Annual Gross Receipts',
     body: (
       <p>
-        Total amount of invoices submited and paid over the course of a year,
+        Total amount of invoices submitted and paid over the course of a year,
         without subtracting for any costs or expenses.
       </p>
     ),
@@ -19,8 +19,11 @@ export const FIELD_HELP = {
     title: 'Annual Employee Payroll',
     body: (
       <p>
-        Total annual payroll of employees and labor pool personnel active in
-        the field (Do not include Owner Payroll).
+        Total amount paid to all full time and part time employees over the
+        course of a year. Employee payroll should include cleanup workers,
+        casual laborers, leased employees, temporary workers, and labor pool
+        personnel. Employee payroll should not include owners, officers,
+        partners, office/clerical staff, or subcontractors.
       </p>
     ),
   },
@@ -35,12 +38,23 @@ export const FIELD_HELP = {
     ),
   },
 
+  employeeCount: {
+    title: 'Number Of Employees',
+    body: (
+      <p>
+        Include all full time and part time employees working in the field. Do
+        not count owners, officers, partners, office/clerical staff, or
+        subcontractors as employees.
+      </p>
+    ),
+  },
+
   activeOwners: {
-    title: '# of Active Owners',
+    title: 'Active Owners',
     body: (
       <p>
         Includes all proprietors, partners, and officers active in the
-        business—except those that exclusively handle clerical duties.
+        business - except those that exclusively handle clerical duties.
       </p>
     ),
   },
@@ -70,7 +84,7 @@ export const FIELD_HELP = {
   },
 
   entityType: {
-    title: 'Entity Types',
+    title: 'Business Type',
     body: (
       <div className="space-y-2">
         {ENTITY_TYPE_HELP.map(([term, def]) => (

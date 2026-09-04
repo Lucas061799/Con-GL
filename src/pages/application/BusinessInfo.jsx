@@ -53,6 +53,7 @@ export default function BusinessInfo({ form, set, errorFor }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
           <Input
             label="Number of employees" required
+            hint={FIELD_HELP.employeeCount}
             value={form.employeeCount}
             onChange={(v) => set('employeeCount')(v.replace(/\D/g, ''))}
             error={errorFor('employeeCount')}

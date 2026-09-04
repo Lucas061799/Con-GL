@@ -37,6 +37,7 @@ const BusinessOperations = forwardRef(function BusinessOperations(
           />
           <Input
             label="# of Employees" required
+            hint={FIELD_HELP.employeeCount}
             value={form.employeeCount}
             onChange={(v) => set('employeeCount')(v.replace(/\D/g, ''))}
             placeholder="0"
