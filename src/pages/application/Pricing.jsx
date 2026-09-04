@@ -34,7 +34,7 @@ function Term({ label, value, first }) {
 
 // One quote, so it reads as the carrier row the indication page uses rather
 // than a four-column table with a single row in it.
-export default function Pricing({ form, quote, amount, onProceed }) {
+export default function Pricing({ form, quote, amount }) {
   const paper = quote ? CARRIER_TERMS[quote.id]?.paper : null
 
   return (
@@ -52,22 +52,14 @@ export default function Pricing({ form, quote, amount, onProceed }) {
           </div>
         )}
 
-        <div className="flex items-center justify-between gap-3 flex-wrap">
-          <div>
-            <div className="flex items-baseline gap-1">
-              <span className="text-xl font-bold text-gray-800">{formatUSD(amount)}</span>
-              <span className="text-xs text-gray-400">/yr</span>
-            </div>
-            <p className="text-[11px] italic text-gray-400 mt-0.5">(Includes applicable fees)</p>
+        {/* No action in the card — the footer's Proceed with Quote is the one
+            button on this step. */}
+        <div>
+          <div className="flex items-baseline gap-1">
+            <span className="text-xl font-bold text-gray-800">{formatUSD(amount)}</span>
+            <span className="text-xs text-gray-400">/yr</span>
           </div>
-          <button
-            type="button"
-            onClick={onProceed}
-            className="px-6 py-2.5 rounded-xl text-[13px] font-bold text-white transition hover:opacity-90 shrink-0"
-            style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
-          >
-            Proceed with Quote
-          </button>
+          <p className="text-[11px] italic text-gray-400 mt-0.5">(Includes applicable fees)</p>
         </div>
       </div>
 

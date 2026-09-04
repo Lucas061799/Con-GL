@@ -147,7 +147,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
     classes: <Classifications rows={rows} setRows={setRows} />,
     business: <BusinessInfo form={form} set={set} errorFor={errorFor} />,
     history: <InsuranceHistory form={form} set={set} errorFor={errorFor} />,
-    pricing: <Pricing form={form} quote={quote} amount={amount} onProceed={advance} />,
+    pricing: <Pricing form={form} quote={quote} amount={amount} />,
     supplemental: (
       <Supplemental
         form={form} set={set} errorFor={errorFor}
@@ -203,6 +203,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
       onContinue={advance}
       continueLabel={
         step === 'supplemental' || step === 'inland-marine' ? 'Recalculate'
+          : step === 'pricing' ? 'Proceed with Quote'
           : isLast ? 'Submit'
           : 'Save & Continue'
       }
