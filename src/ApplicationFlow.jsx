@@ -11,7 +11,7 @@ import GeneralQuestions from './pages/application/GeneralQuestions'
 import ClassCodeQuestions from './pages/application/ClassCodeQuestions'
 import Submitted from './pages/application/Submitted'
 import { rulesForCodes, subKey } from './data/conditionalQuestions'
-import { STRUCTURE_TYPES, CONSTRUCTION_TYPES } from './data/applicationOptions'
+import { STRUCTURE_TYPES, CONSTRUCTION_TYPES, GENERAL_DISCLOSURES } from './data/applicationOptions'
 
 // Phase two: the full application. Inland Marine only joins the rail once a
 // tool floater cover is picked, which is why the steps are built per render.
@@ -30,7 +30,7 @@ const buildSteps = (form) => {
   return steps.map((s, i) => ({ ...s, number: i + 1 }))
 }
 
-export default function ApplicationFlow({ seed, quote, amount, onExit }) {
+export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOver }) {
   const [form, setForm] = useState(seed)
   const [rows, setRows] = useState(seed.classifications ?? [])
   const [claims, setClaims] = useState([
@@ -50,6 +50,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
   const steps = buildSteps(form)
   const index = Math.max(0, steps.findIndex(s => s.key === step))
   const classCodes = rows.map(r => r.code).filter(Boolean)
+  const anyDisclosure = GENERAL_DISCLOSURES.some(d => !d.isNone && (form.disclosures || {})[d.key])
 
   /* ── Validation ─────────────────────────────────────────────────── */
 
@@ -86,8 +87,13 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
     }
 
     if (step === 'general') {
+      out.push(...['worksOutOfState', 'otherEntity'].filter(blank))
       if (form.worksOutOfState === 'yes' && blank('outOfStateList')) out.push('outOfStateList')
       if (form.otherEntity === 'yes' && blank('otherEntityDetail')) out.push('otherEntityDetail')
+      // The page asks to select one or more, and offers Check if None for the
+      // case where none apply, so leaving every box clear is not an answer.
+      if (!Object.values(form.disclosures || {}).some(Boolean)) out.push('disclosures')
+      if (anyDisclosure && blank('disclosureExplanation')) out.push('disclosureExplanation')
     }
 
     if (step === 'classcode') {
@@ -121,7 +127,8 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
 
   const errorFor = (key) => touched && missing.includes(key)
 
-  const progress = Math.round((index / steps.length) * 100)
+  // Over steps - 1 so the last step reads 100, not one step short of it.
+  const progress = steps.length > 1 ? Math.round((index / (steps.length - 1)) * 100) : 100
 
   const go = (key) => { setTouched(false); setStep(key) }
 
@@ -178,7 +185,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
           submissionNumber={form.applicationNumber}
           quote={quote}
           amount={amount}
-          onStartOver={onExit}
+          onStartOver={onStartOver ?? onExit}
         />
       </ApplicationShell>
     )

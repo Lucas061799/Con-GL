@@ -20,6 +20,7 @@ export default function GeneralQuestions({ form, set, errorFor }) {
         <ToggleQuestion
           label="Does applicant work out of state?"
           value={form.worksOutOfState} onChange={set('worksOutOfState')}
+          error={errorFor('worksOutOfState')}
         >
           <Input
             value={form.outOfStateList} onChange={set('outOfStateList')}
@@ -33,6 +34,7 @@ export default function GeneralQuestions({ form, set, errorFor }) {
         <ToggleQuestion
           label="Does the applicant own or operate any other entity, business or company?"
           value={form.otherEntity} onChange={set('otherEntity')}
+          error={errorFor('otherEntity')}
         >
           <Input
             value={form.otherEntityDetail} onChange={set('otherEntityDetail')}
@@ -53,6 +55,11 @@ export default function GeneralQuestions({ form, set, errorFor }) {
             />
           ))}
         </div>
+        {errorFor('disclosures') && (
+          <p className="text-[10px] text-red-500 mt-3 flex items-center gap-1">
+            <span>⚠</span> Select at least one, or Check if None.
+          </p>
+        )}
         {anyDisclosure && (
           <div className="mt-4">
             <Input

@@ -42,6 +42,8 @@ export default function Pricing({ form, quote, amount }) {
       className="rounded-lg bg-white"
       style={{ border: '1.5px solid #7C3AED', boxShadow: '0 2px 12px rgba(92,46,212,0.12)' }}
     >
+      {/* Identity line then premium line, left aligned — the same two lines
+          the indication page's carrier row uses. */}
       <div className="px-4 py-3.5">
         {quote && (
           <div className="flex items-center gap-2.5 min-w-0 flex-wrap mb-2.5">
@@ -52,15 +54,11 @@ export default function Pricing({ form, quote, amount }) {
           </div>
         )}
 
-        {/* No action in the card — the footer's Proceed with Quote is the one
-            button on this step. */}
-        <div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-xl font-bold text-gray-800">{formatUSD(amount)}</span>
-            <span className="text-xs text-gray-400">/yr</span>
-          </div>
-          <p className="text-[11px] italic text-gray-400 mt-0.5">(Includes applicable fees)</p>
+        <div className="flex items-baseline gap-1">
+          <span className="text-xl font-bold text-gray-800">{formatUSD(amount)}</span>
+          <span className="text-xs text-gray-400">/yr</span>
         </div>
+        <p className="text-[11px] italic text-gray-400 mt-0.5">(Includes applicable fees)</p>
       </div>
 
       <div className="px-4 pb-4 pt-3" style={{ borderTop: '1px solid #F3F4F6' }}>

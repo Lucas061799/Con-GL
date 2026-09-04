@@ -86,6 +86,24 @@ export default function App() {
     setStarted(true)
   }
 
+  // Back to the landing page with nothing carried over — what the button on
+  // the submitted screen says it does.
+  const startOver = () => {
+    setApplication(null)
+    setStarted(false)
+    setSubmissionNumber('')
+    setForm({})
+    setClassifications([{ code: '', percentage: '100' }])
+    setTerms(defaultTerms())
+    setSelectedCarrier(null)
+    setTouched(false)
+    setActiveStep('applicant')
+    setView('form')
+    setHandoff('none')
+    setQuotes([])
+    setRatedAt('')
+  }
+
   const refreshQuote = () => {
     setQuotes(rateAll(form))
     setRatedAt(ratingSnapshot(form))
@@ -231,6 +249,7 @@ export default function App() {
         quote={chosenQuote}
         amount={chosenPremium}
         onExit={() => setApplication(null)}
+        onStartOver={startOver}
       />
     )
   }

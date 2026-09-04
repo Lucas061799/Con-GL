@@ -38,7 +38,6 @@ export default function ApplicationShell({
           activeStep={activeStep}
           completed={completed}
           onStepClick={onStepClick}
-          progress={progress}
         />
 
         <main className="flex-1 min-w-0 overflow-y-auto custom-scroll">

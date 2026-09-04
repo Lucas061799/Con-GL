@@ -782,7 +782,7 @@ export function YesNo({ value, onChange, className = '' }) {
 
 // A question with its answer pills underneath, and whatever the "yes" branch
 // reveals below that.
-export function ToggleQuestion({ label, hint, value, onChange, children }) {
+export function ToggleQuestion({ label, hint, value, onChange, error, children }) {
   return (
     <div>
       <p className="block text-[13px] font-semibold text-gray-600 mb-2.5 tracking-wide">
@@ -794,6 +794,7 @@ export function ToggleQuestion({ label, hint, value, onChange, children }) {
         )}
       </p>
       <YesNo value={value} onChange={onChange} />
+      <FieldError error={error} />
       {value === 'yes' && children && <div className="mt-4 pl-0.5">{children}</div>}
     </div>
   )
