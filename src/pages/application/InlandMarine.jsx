@@ -15,7 +15,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
     <>
       {(
         <FieldGroup label="Contractors Installation">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-5 items-end">
             <Select
               label="Per Job Site" required
               options={PER_JOB_SITE_LIMITS}
@@ -25,7 +25,8 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
             />
             <div>
               <label className="block text-[13px] font-semibold text-gray-600 mb-1.5 tracking-wide">
-                All Job Sites <span className="italic font-normal text-gray-400">(3x of per job site limit)</span>
+                All Job Sites{' '}
+                <span className="italic font-normal text-gray-400 whitespace-nowrap">(3x per job site)</span>
               </label>
               {/* Always three times the per-site limit, so it is shown rather
                   than asked for. */}
