@@ -153,31 +153,16 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
                 </div>
               </div>
 
+              {/* One row of four, as the legacy screen lays them out. */}
               {cov.options && form[cov.key] === 'yes' && (
-                <div className="mt-4 space-y-4">
-                  <div className="flex flex-wrap gap-x-8 gap-y-3">
-                    {cov.options.map(o => (
-                      <Checkbox
-                        key={o.key}
-                        label={o.label}
-                        checked={!!form[o.key]}
-                        onChange={set(o.key)}
-                      />
-                    ))}
-                  </div>
-
-                  {/* An add-on with no block of its own asks for its limit here. */}
-                  {cov.options.filter(o => o.select && form[o.key]).map(o => (
-                    <div key={o.select.key} className="max-w-[420px]">
-                      <Select
-                        label={o.select.label} required
-                        options={o.select.options}
-                        value={form[o.select.key]}
-                        onChange={set(o.select.key)}
-                        placeholder={o.select.placeholder}
-                        error={errorFor(o.select.key)}
-                      />
-                    </div>
+                <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3">
+                  {cov.options.map(o => (
+                    <Checkbox
+                      key={o.key}
+                      label={o.label}
+                      checked={!!form[o.key]}
+                      onChange={set(o.key)}
+                    />
                   ))}
                 </div>
               )}

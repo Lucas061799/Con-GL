@@ -52,6 +52,9 @@ export const SUBCONTRACTOR_COMPLIANCE = [
   { key: 'namedAI',      label: 'Insured will be named as additional insured on all subcontractors general liability policies.' },
 ]
 
+// From the newer carrier spec. Not rendered yet — the legacy screens show the
+// tool floater as a fixed $5,000 limit in its description rather than a
+// choice, so this list is parked here until we know where it belongs.
 export const TOOL_FLOATER_LIMITS = [
   { value: '2500-1000',  label: '$2,500 Blanket Tools Limit w/$1,000 deductible' },
   { value: '5000-1000',  label: '$5,000 Blanket Tools Limit w/$1,000 deductible' },
@@ -61,9 +64,7 @@ export const TOOL_FLOATER_LIMITS = [
   { value: '20000-2500', label: '$20,000 Blanket Tools Limit w/$2,500 deductible' },
 ]
 
-// Optional coverages, with the carrier's own descriptions. `states` limits a
-// cover to the states that offer it; `options` renders a dropdown under the
-// Yes pill.
+// Optional coverages, in the order and wording the legacy screens use.
 export const OPTIONAL_COVERAGES = [
   {
     key: 'blanketAI',
@@ -74,7 +75,7 @@ export const OPTIONAL_COVERAGES = [
     key: 'stopGap',
     label: 'Stop Gap \u2013 Employers Liability Coverage Endorsement Insurance',
     help: 'Stop Gap / Employers Liability Coverage: Provides up to $1,000,000 in employers liability coverage for work related injuries. Stop Gap is only available in OH, ND, WA and WY where Workers Compensation Programs are administered by the state.',
-    // Monopolistic states only.
+    // Kept for eligibility; the description carries the restriction on screen.
     states: ['WA', 'ND', 'WY', 'OH'],
   },
   {
@@ -83,32 +84,23 @@ export const OPTIONAL_COVERAGES = [
     help: '$50,000 aggregate limit provided for comprehensive data security and privacy protection.',
   },
   {
-    key: 'glEnhancement',
-    label: 'GL Enhancement Endorsement',
-    help: 'Provides 16 key coverage enhancements to the base GL policy form. Highlights include: Damage to property in your care custody and control or for costs to repair or restore \u2018your work\u2019 $15K per occurrence / $50K aggregate. Unintentional errors and omissions coverage. $10K Lost key coverage.',
-  },
-  {
     key: 'toolFloater',
     label: 'Inland Marine - Tool Floater',
+    help: '$5,000 Blanket Tools Limit w/$1,000 deductible',
     opens: 'inland-marine',
-    // Optional add-ons, none of them required. The last three each open their
-    // own block on the Inland Marine step; the tools limit is asked for here
-    // because it has no block of its own.
+    // All four optional. The last three each open a block on the Inland
+    // Marine step.
     options: [
-      {
-        key: 'contractorTools',
-        label: 'Contractor Tools & Equip',
-        select: {
-          key: 'toolFloaterLimit',
-          label: 'Blanket Tools Limit',
-          placeholder: 'Select a limit',
-          options: TOOL_FLOATER_LIMITS,
-        },
-      },
+      { key: 'contractorTools',      label: 'Contractor Tools & Equip' },
       { key: 'contractorsInstall',   label: 'Contractors Installation' },
       { key: 'computerEquipment',    label: 'Computer Equipment' },
       { key: 'businessPersonalProp', label: 'Business Personal Property' },
     ],
+  },
+  {
+    key: 'limitedLiabilityEnhancement',
+    label: 'Contractors Limited Liability Enhancement',
+    help: 'General Liability Enhancement endorsement, targeted specifically to contractors. Features include Automatic Additional Insured Status* and Waiver of Subrogation, Loss Key Coverage, Increased Supplemental Payments, Property Damage for Care, Custody or Control and many more!',
   },
 ]
 
