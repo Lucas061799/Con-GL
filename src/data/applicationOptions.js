@@ -91,16 +91,20 @@ export const OPTIONAL_COVERAGES = [
     key: 'toolFloater',
     label: 'Inland Marine - Tool Floater',
     opens: 'inland-marine',
-    select: {
-      key: 'toolFloaterLimit',
-      label: 'Blanket Tools Limit',
-      placeholder: 'Select a limit',
-      options: TOOL_FLOATER_LIMITS,
-    },
-    // Optional add-ons. Each of the last three opens its own block on the
-    // Inland Marine step; ticking none is fine.
+    // Optional add-ons, none of them required. The last three each open their
+    // own block on the Inland Marine step; the tools limit is asked for here
+    // because it has no block of its own.
     options: [
-      { key: 'contractorTools',      label: 'Contractor Tools & Equip' },
+      {
+        key: 'contractorTools',
+        label: 'Contractor Tools & Equip',
+        select: {
+          key: 'toolFloaterLimit',
+          label: 'Blanket Tools Limit',
+          placeholder: 'Select a limit',
+          options: TOOL_FLOATER_LIMITS,
+        },
+      },
       { key: 'contractorsInstall',   label: 'Contractors Installation' },
       { key: 'computerEquipment',    label: 'Computer Equipment' },
       { key: 'businessPersonalProp', label: 'Business Personal Property' },

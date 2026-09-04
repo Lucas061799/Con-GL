@@ -135,9 +135,9 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
           Please select following coverages
         </p>
         <div className="space-y-2">
-          {OPTIONAL_COVERAGES
-            .filter(cov => !cov.states || cov.states.includes(form.state))
-            .map(cov => (
+          {/* Every cover is listed; Stop Gap's own description carries its
+              state restriction, the way the legacy screens do. */}
+          {OPTIONAL_COVERAGES.map(cov => (
             <QuestionCard key={cov.key}>
               <div className="flex items-start justify-between gap-6">
                 <p className="text-[14px] text-navy leading-snug">
@@ -153,28 +153,31 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
                 </div>
               </div>
 
-              {cov.select && form[cov.key] === 'yes' && (
-                <div className="mt-4 max-w-[420px]">
-                  <Select
-                    label={cov.select.label} required
-                    options={cov.select.options}
-                    value={form[cov.select.key]}
-                    onChange={set(cov.select.key)}
-                    placeholder={cov.select.placeholder}
-                    error={errorFor(cov.select.key)}
-                  />
-                </div>
-              )}
-
               {cov.options && form[cov.key] === 'yes' && (
-                <div className="mt-4 flex flex-wrap gap-x-8 gap-y-3">
-                  {cov.options.map(o => (
-                    <Checkbox
-                      key={o.key}
-                      label={o.label}
-                      checked={!!form[o.key]}
-                      onChange={set(o.key)}
-                    />
+                <div className="mt-4 space-y-4">
+                  <div className="flex flex-wrap gap-x-8 gap-y-3">
+                    {cov.options.map(o => (
+                      <Checkbox
+                        key={o.key}
+                        label={o.label}
+                        checked={!!form[o.key]}
+                        onChange={set(o.key)}
+                      />
+                    ))}
+                  </div>
+
+                  {/* An add-on with no block of its own asks for its limit here. */}
+                  {cov.options.filter(o => o.select && form[o.key]).map(o => (
+                    <div key={o.select.key} className="max-w-[420px]">
+                      <Select
+                        label={o.select.label} required
+                        options={o.select.options}
+                        value={form[o.select.key]}
+                        onChange={set(o.select.key)}
+                        placeholder={o.select.placeholder}
+                        error={errorFor(o.select.key)}
+                      />
+                    </div>
                   ))}
                 </div>
               )}

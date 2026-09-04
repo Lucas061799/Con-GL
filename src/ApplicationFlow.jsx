@@ -80,7 +80,8 @@ export default function ApplicationFlow({ seed, quote, amount, onExit }) {
       out.push(...['effectiveDate', 'yearsInBusiness', 'yearsOfExperience'].filter(blank))
     }
 
-    if (step === 'supplemental' && form.toolFloater === 'yes' && blank('toolFloaterLimit')) {
+    if (step === 'supplemental' && form.toolFloater === 'yes' &&
+        form.contractorTools && blank('toolFloaterLimit')) {
       out.push('toolFloaterLimit')
     }
 
