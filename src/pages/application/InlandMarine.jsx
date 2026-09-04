@@ -1,7 +1,6 @@
-import { Input, Select, Textarea, CurrencyInput, YesNo, BRAND_GRADIENT } from '../../components/FormField'
+import { Input, Select, Textarea, YesNo, BRAND_GRADIENT } from '../../components/FormField'
 import { PER_JOB_SITE_LIMITS, IM_DEDUCTIBLES, LOCATION_OPTIONS } from '../../data/applicationOptions'
 import { FieldGroup } from '../../components/Section'
-import { formatUSD } from '../../lib/rating'
 
 // Only the add-ons ticked under the tool floater appear here.
 export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
@@ -9,6 +8,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
   const edp = Number(String(form.imEdpLimit ?? '').replace(/\D/g, '')) || 0
 
   const updateBpp = (i, patch) => setBpp(rs => rs.map((r, idx) => (idx === i ? { ...r, ...patch } : r)))
+  const removeBpp = (i) => setBpp(rs => rs.filter((_, idx) => idx !== i))
   const addBpp = () => setBpp(rs => [...rs, { location: '', bldg: '', deductible: '', office: '', shop: '', yard: '' }])
 
   return (
@@ -32,7 +32,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
                   than asked for. */}
               <div className="w-full rounded-lg px-3.5 py-2.5 text-sm text-gray-500"
                 style={{ background: '#F9FAFB', border: '1px solid #E5E7EB' }}>
-                {perSite ? `$${(perSite * 3).toLocaleString()}` : '—'}
+                {perSite ? perSite * 3 : '—'}
               </div>
             </div>
             <Select
@@ -84,7 +84,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
 
           <div className="grid grid-cols-[1fr_180px_180px] gap-4 items-center py-4">
             <p className="text-[14px] text-navy">Electronic Data Processing Equipment</p>
-            <CurrencyInput value={form.imEdpLimit} onChange={set('imEdpLimit')} />
+            <Input inputMode="numeric" value={form.imEdpLimit} onChange={(v) => set('imEdpLimit')(v.replace(/\D/g, ''))} />
             <Select
               options={IM_DEDUCTIBLES}
               value={form.imEdpDeductible} onChange={set('imEdpDeductible')}
@@ -99,7 +99,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
             {/* Fixed at a quarter of the equipment limit. */}
             <div className="w-full rounded-lg px-3.5 py-2.5 text-sm text-gray-500"
               style={{ background: '#F9FAFB', border: '1px solid #E5E7EB' }}>
-              {edp ? Math.round(edp * 0.25).toLocaleString() : '—'}
+              {edp ? Math.round(edp * 0.25) : '—'}
             </div>
             <p className="text-[13px] text-gray-500">@25% of EDP</p>
           </div>
@@ -119,17 +119,31 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
               <Select options={LOCATION_OPTIONS} value={row.location} onChange={(v) => updateBpp(i, { location: v })} placeholder="Select" />
               <Select options={LOCATION_OPTIONS} value={row.bldg} onChange={(v) => updateBpp(i, { bldg: v })} placeholder="Select" />
               <Select options={IM_DEDUCTIBLES} value={row.deductible} onChange={(v) => updateBpp(i, { deductible: v })} placeholder="Select" />
-              <CurrencyInput value={row.office} onChange={(v) => updateBpp(i, { office: v })} />
-              <CurrencyInput value={row.shop} onChange={(v) => updateBpp(i, { shop: v })} />
-              <CurrencyInput value={row.yard} onChange={(v) => updateBpp(i, { yard: v })} />
-              <button
-                type="button"
-                onClick={addBpp}
-                className="h-[42px] px-5 rounded-lg text-[13px] font-bold text-white transition hover:opacity-90"
-                style={{ background: BRAND_GRADIENT }}
-              >
-                add
-              </button>
+              <Input inputMode="numeric" value={row.office} onChange={(v) => updateBpp(i, { office: v.replace(/\D/g, '') })} />
+              <Input inputMode="numeric" value={row.shop} onChange={(v) => updateBpp(i, { shop: v.replace(/\D/g, '') })} />
+              <Input inputMode="numeric" value={row.yard} onChange={(v) => updateBpp(i, { yard: v.replace(/\D/g, '') })} />
+              {i === 0 ? (
+                <button
+                  type="button"
+                  onClick={addBpp}
+                  disabled={bpp.length > 1}
+                  className="h-[42px] px-5 rounded-lg text-[13px] font-bold text-white transition enabled:hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                  style={{ background: BRAND_GRADIENT }}
+                >
+                  add
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => removeBpp(i)}
+                  aria-label="Remove row"
+                  className="w-9 h-[42px] rounded-lg flex items-center justify-center transition hover:bg-red-50"
+                >
+                  <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.87 12.14A2 2 0 0116.14 21H7.86a2 2 0 01-1.99-1.86L5 7m5 4v6m4-6v6M4 7h16M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
+                  </svg>
+                </button>
+              )}
             </div>
           ))}
         </FieldGroup>
@@ -137,8 +151,8 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
 
       {!form.contractorsInstall && !form.computerEquipment && !form.businessPersonalProp && (
         <p className="text-[13px] text-gray-500 py-8 text-center">
-          Tick Contractors Installation, Computer Equipment or Business Personal Property
-          under the tool floater and they'll appear here.
+          Nothing more to fill in. Contractor Tools &amp; Equipment needs no extra detail —
+          the other three add-ons open their own sections here when you tick them.
         </p>
       )}
     </>
