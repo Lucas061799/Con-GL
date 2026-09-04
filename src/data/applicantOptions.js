@@ -28,5 +28,7 @@ export const AVAILABLE_STATES = [
   'UT','VA','VT','WA','WI','WV','WY',
 ]
 
-// Up to four trades can be split by percentage of work; they must total 100.
-export const MAX_CLASSIFICATIONS = 4
+// Up to three trades can be split by percentage of work; they must total
+// 100. The legacy Classifications step says "add up to three", and phase two
+// reads this same number so the two can't drift apart.
+export const MAX_CLASSIFICATIONS = 3

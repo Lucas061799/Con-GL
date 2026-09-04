@@ -11,7 +11,7 @@ export const STRUCTURE_OF_BUSINESS = [
 ]
 
 // Phase two allows three trades, not the four the indication took.
-export const MAX_APPLICATION_CLASSIFICATIONS = 3
+export { MAX_CLASSIFICATIONS as MAX_APPLICATION_CLASSIFICATIONS } from './applicantOptions'
 
 export const APP_DEDUCTIBLES = [
   { value: '1000', label: '$1,000' },
