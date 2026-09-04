@@ -150,7 +150,7 @@ export default function RightPanel({
                     className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider text-white"
                     style={{ background: BRAND_GRADIENT }}
                   >
-                    {inCompare && isSelected ? 'SELECTED' : 'BEST'}
+                    {isSelected ? 'SELECTED' : 'BEST'}
                   </div>
                   {isSelected && (
                     <div
@@ -167,7 +167,7 @@ export default function RightPanel({
                       printing what the mark already says. */}
                   <CarrierMark
                     carrier={top.carrier} product={top.product} logo={top.logo}
-                    size={inCompare ? 'xl' : 'lg'}
+                    size="xl"
                   />
 
                   <div className="mt-3">
