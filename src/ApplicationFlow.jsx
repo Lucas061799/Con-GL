@@ -169,17 +169,27 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
   const isLast = index === steps.length - 1
 
   if (submitted) {
-    // Builder's Risk drops the rails on its submission page; this is a receipt,
-    // not another step.
     return (
-      <Submitted
+      <ApplicationShell
         submissionNumber={form.applicationNumber}
+        steps={steps}
+        activeStep={null}
+        completed={Object.fromEntries(steps.map(s => [s.key, true]))}
+        progress={100}
         quote={quote}
-        amount={amount}
-        form={form}
-        rows={rows}
-        onStartOver={onStartOver ?? onExit}
-      />
+        quoteAmount={amount}
+        summaryReady
+        hideFooter
+      >
+        <Submitted
+          submissionNumber={form.applicationNumber}
+          quote={quote}
+          amount={amount}
+          form={form}
+          rows={rows}
+          onStartOver={onStartOver ?? onExit}
+        />
+      </ApplicationShell>
     )
   }
 

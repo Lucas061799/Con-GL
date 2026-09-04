@@ -1,5 +1,3 @@
-import norbielinkLogo from '../../assets/norbielink-logo.png'
-import btisLogo from '../../assets/btislogo.png'
 import { BRAND_GRADIENT } from '../../components/FormField'
 import CarrierMark from '../../components/CarrierMark'
 import { formatUSD } from '../../lib/rating'
@@ -67,21 +65,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
   const picked = OPTIONAL_COVERAGES.filter(c => form[c.key] === 'yes')
 
   return (
-    <div className="h-screen flex flex-col bg-white font-montserrat overflow-hidden">
-      <header
-        className="flex items-center justify-between bg-white border-b border-gray-100 px-6 md:px-8 shrink-0 no-print"
-        style={{ height: 56 }}
-      >
-        <img src={norbielinkLogo} alt="NorbieLink" className="h-8" />
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-gray-400 tracking-wide font-semibold">POWERED BY</span>
-          <img src={btisLogo} alt="btis" className="h-6" />
-        </div>
-      </header>
-
-      <div className="flex-1 overflow-y-auto custom-scroll">
-        <div className="w-full max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4 sm:px-6 md:px-10 py-6 md:py-10 space-y-5 md:space-y-6">
-
+    <div className="space-y-5 md:space-y-6">
           <div className="rounded-2xl overflow-hidden" style={{ background: 'white', border: '1px solid #F3F4F6' }}>
             <div className="h-1" style={{ background: BRAND_GRADIENT }} />
 
@@ -238,17 +222,15 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
             </div>
           </div>
 
-          <div className="flex justify-center no-print">
-            <button
-              type="button"
-              onClick={onStartOver}
-              className="px-8 py-2.5 rounded-xl text-[13.5px] font-bold text-white transition hover:opacity-90"
-              style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
-            >
-              Start a New Quote
-            </button>
-          </div>
-        </div>
+      <div className="flex justify-center no-print pb-4">
+        <button
+          type="button"
+          onClick={onStartOver}
+          className="px-8 py-2.5 rounded-xl text-[13.5px] font-bold text-white transition hover:opacity-90"
+          style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
+        >
+          Start a New Quote
+        </button>
       </div>
     </div>
   )
