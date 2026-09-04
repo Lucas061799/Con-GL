@@ -31,6 +31,42 @@ function AutoSaveIcon() {
   )
 }
 
+// The three lines GL-BOP, Commercial Auto and Builder's Risk all show once a
+// submission is in.
+const WHATS_NEXT = [
+  { n: 1, title: 'Review & Processing', desc: 'Your application will be reviewed as soon as possible.' },
+  { n: 2, title: 'Email Confirmation', desc: "You'll receive detailed policy confirmation via email." },
+  { n: 3, title: 'Policy in Force', desc: 'Coverage starts on the effective date you selected.' },
+]
+
+function WhatsNext() {
+  return (
+    <div className="mb-6">
+      <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-400 mb-4 pl-0.5">
+        What's Next?
+      </div>
+      <div className="space-y-5">
+        {WHATS_NEXT.map(s => (
+          <div key={s.n} className="flex gap-3">
+            <span
+              className="w-9 h-9 rounded-full text-sm font-bold flex items-center justify-center shrink-0"
+              style={{ background: 'linear-gradient(88.09deg, rgba(92,46,212,0.25) 0%, rgba(166,20,195,0.25) 100%)' }}
+            >
+              <span style={{ background: BRAND_GRADIENT, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                {s.n}
+              </span>
+            </span>
+            <div className="min-w-0">
+              <p className="text-[13px] font-semibold leading-tight text-gray-900">{s.title}</p>
+              <p className="text-[11px] mt-1 leading-relaxed" style={{ color: '#9CA3AF' }}>{s.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 const COMPARE_STEPS = [
   { n: 1, label: 'Select Carrier' },
   { n: 2, label: 'Complete Application' },
@@ -82,7 +118,7 @@ export default function RightPanel({
   progress, quotes = [], stale, onRefresh,
   selectedCarrier, onSelectCarrier,
   onFormReview, formComplete = false,
-  inCompare = false, compareStep,
+  inCompare = false, compareStep, submitted = false,
 }) {
   const hasQuotes = quotes.length > 0
   const chosen = quotes.find(q => q.id === selectedCarrier)
@@ -96,26 +132,28 @@ export default function RightPanel({
     >
       <div className="p-5 flex-1 overflow-y-auto custom-scroll">
 
-        <h2 className="text-lg font-bold text-navy mb-3">Quote in Progress</h2>
+        <h2 className="text-lg font-bold text-navy mb-3">{submitted ? 'Application Received' : 'Quote in Progress'}</h2>
 
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5">
             <AutoSaveIcon />
             <span className="text-xs font-medium text-gradient">All progress auto-saved</span>
           </div>
-          <span className="text-xs font-bold text-gradient">{progress}%</span>
+          <span className="text-xs font-bold text-gradient">{submitted ? 100 : progress}%</span>
         </div>
 
         <div className="w-full h-1.5 rounded-full overflow-hidden mb-4" style={{ background: '#F3F4F6' }}>
           <div
             className="h-full rounded-full transition-all duration-500"
-            style={{ width: `${progress}%`, background: BRAND_GRADIENT }}
+            style={{ width: `${submitted ? 100 : progress}%`, background: BRAND_GRADIENT }}
           />
         </div>
 
         <div className="mb-5" style={{ borderTop: '1px solid #F3F4F6' }} />
 
-        {!hasQuotes ? (
+        {submitted ? (
+          <WhatsNext />
+        ) : !hasQuotes ? (
           <>
             <p className="text-[11px] text-gray-400 mb-3 leading-snug">
               Finish the quick quote to see live carrier prices.
@@ -133,11 +171,16 @@ export default function RightPanel({
               // highlight as the standing recommendation; once the applicant
               // chooses, the ring follows their choice instead.
               const isHighlighted = isSelected || !selectedCarrier
+              // Once the carrier can no longer be changed there is no handler,
+              // and a card that hovers and lifts is claiming otherwise.
+              const pickable = typeof onSelectCarrier === 'function'
+              const Tag = pickable ? 'button' : 'div'
               return (
-                <button
-                  type="button"
-                  onClick={() => onSelectCarrier?.(top.id)}
-                  className="w-full rounded-2xl px-5 py-5 mb-3 flex flex-col items-center text-center relative overflow-hidden transition cursor-pointer hover:-translate-y-px"
+                <Tag
+                  {...(pickable ? { type: 'button', onClick: () => onSelectCarrier(top.id) } : {})}
+                  className={`w-full rounded-2xl px-5 py-5 mb-3 flex flex-col items-center text-center relative overflow-hidden transition ${
+                    pickable ? 'cursor-pointer hover:-translate-y-px' : ''
+                  }`}
                   style={{
                     background: 'white',
                     border: `1.5px solid ${isHighlighted ? (isSelected ? '#5C2ED4' : '#7C3AED') : '#E5E7EB'}`,
@@ -192,9 +235,9 @@ export default function RightPanel({
                     className="text-[10px] font-semibold mt-2"
                     style={{ color: isSelected ? '#5C2ED4' : '#9CA3AF' }}
                   >
-                    {isSelected ? '✓ Selected' : 'Tap to select'}
+                    {isSelected ? '✓ Selected' : pickable ? 'Tap to select' : ''}
                   </p>
-                </button>
+                </Tag>
               )
             })()}
 

@@ -11,7 +11,7 @@ export default function ApplicationShell({
   submissionNumber, steps, activeStep, completed, onStepClick,
   progress, onBack, onContinue, continueLabel = 'Save & Continue',
   continueDisabled = false, hideFooter = false,
-  quote, quoteAmount, onFormReview, title, summaryReady = false,
+  quote, quoteAmount, onFormReview, title, summaryReady = false, submitted = false,
   children,
 }) {
   // The rail follows the applicant across the hand-off — same quote, same
@@ -89,6 +89,7 @@ export default function ApplicationShell({
           selectedCarrier={quote?.id}
           onFormReview={onFormReview}
           formComplete={summaryReady}
+          submitted={submitted}
           inCompare
           compareStep={1}
         />

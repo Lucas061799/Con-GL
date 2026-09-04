@@ -179,6 +179,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
         quote={quote}
         quoteAmount={amount}
         summaryReady
+        submitted
         hideFooter
       >
         <Submitted

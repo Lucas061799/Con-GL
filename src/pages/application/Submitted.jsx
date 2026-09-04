@@ -29,7 +29,7 @@ function Panel({ title, icon = 'shield', children }) {
       <div className="flex items-center gap-2 mb-3">
         <div
           className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
-          style={{ background: 'rgba(92,46,212,0.10)' }}
+          style={{ background: 'rgba(92,46,212,0.12)' }}
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="#5C2ED4" strokeWidth="1.5" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d={ICONS[icon] || ICONS.shield} />
