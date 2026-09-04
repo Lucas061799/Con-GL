@@ -20,9 +20,12 @@ function PaperPill({ paper }) {
   )
 }
 
-function Term({ label, value }) {
+function Term({ label, value, first }) {
   return (
-    <div className="flex items-center justify-between py-2" style={{ borderTop: '1px solid #EAEAEA' }}>
+    <div
+      className="flex items-center justify-between py-2.5"
+      style={first ? undefined : { borderTop: '1px solid #EAEAEA' }}
+    >
       <span className="text-[13px] text-gray-500">{label}</span>
       <span className="text-[13px] font-bold text-navy">{value}</span>
     </div>
@@ -69,11 +72,11 @@ export default function Pricing({ form, quote, amount, onProceed }) {
       </div>
 
       <div className="px-4 pb-4 pt-3" style={{ borderTop: '1px solid #F3F4F6' }}>
-        <div className="rounded-xl p-4" style={{ background: '#F9FAFB', border: '1px solid #EAEAEA' }}>
-          <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-1">
+        <div className="rounded-xl px-4 pt-4 pb-2.5" style={{ background: '#F9FAFB', border: '1px solid #EAEAEA' }}>
+          <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-2.5">
             Coverage Terms
           </div>
-          <Term label="Limits" value={labelOf(APP_LIMITS, form.appLimit)} />
+          <Term first label="Limits" value={labelOf(APP_LIMITS, form.appLimit)} />
           <Term label="Deductible" value={labelOf(APP_DEDUCTIBLES, form.appDeductible)} />
         </div>
       </div>
