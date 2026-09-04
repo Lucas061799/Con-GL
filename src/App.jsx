@@ -88,6 +88,10 @@ export default function App() {
 
   // Back to the landing page with nothing carried over — what the button on
   // the submitted screen says it does.
+  // The summary is of the application, which does not exist until it is
+  // submitted in phase two, so the rail's download stays disabled here.
+  const summaryReady = false
+
   const startOver = () => {
     setApplication(null)
     setStarted(false)
@@ -269,7 +273,7 @@ export default function App() {
       selectedCarrier={selectedCarrier}
       onSelectCarrier={(id) => setSelectedCarrier(cur => (cur === id ? null : id))}
       onFormReview={() => window.alert('Application summary download is not wired up yet.')}
-      formComplete={completed.applicant && completed.business && completed.operations}
+      formComplete={summaryReady}
       bare={view === 'indication'}
       inCompare={view === 'indication'}
       scrollRef={scrollRef}
