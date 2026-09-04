@@ -27,11 +27,13 @@ function Panel({ title, icon = 'shield', children }) {
   return (
     <div className="rounded-xl p-4" style={{ background: 'white', border: '1px solid #E5E7EB' }}>
       <div className="flex items-center gap-2 mb-3">
+        {/* The teal chip all three products use on these summary panels — the
+            one place they step outside the purple. */}
         <div
           className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
-          style={{ background: 'rgba(92,46,212,0.12)' }}
+          style={{ background: 'rgba(115,201,183,0.12)' }}
         >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="#5C2ED4" strokeWidth="1.5" viewBox="0 0 24 24">
+          <svg className="w-3.5 h-3.5" fill="none" stroke="#73C9B7" strokeWidth="1.5" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d={ICONS[icon] || ICONS.shield} />
           </svg>
         </div>
