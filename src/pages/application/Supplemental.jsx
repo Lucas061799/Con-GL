@@ -153,15 +153,17 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
                 </div>
               </div>
 
-              {/* One row of four, as the legacy screen lays them out. */}
+              {/* One row of four on a single line each, as the legacy screen
+                  lays them out. */}
               {cov.options && form[cov.key] === 'yes' && (
-                <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3">
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-3 [&_label>span:last-child]:text-[12px]">
                   {cov.options.map(o => (
                     <Checkbox
                       key={o.key}
                       label={o.label}
                       checked={!!form[o.key]}
                       onChange={set(o.key)}
+                      className="whitespace-nowrap"
                     />
                   ))}
                 </div>
