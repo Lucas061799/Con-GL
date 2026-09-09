@@ -2,16 +2,14 @@ import norbielinkLogo from '../assets/norbielink-logo.png'
 import btisLogo from '../assets/btislogo.png'
 import Sidebar from './Sidebar'
 import RightPanel from './RightPanel'
-import { BRAND_GRADIENT } from './FormField'
 
-// Phase two runs as a paged wizard rather than one scroll: the steps are long
-// and each has to be saved before the next, so Back / Save & Continue anchor
-// every page.
+// Phase two is one long scroll like phase one: every step is on the page and
+// the rail is scroll navigation, not paging.
 export default function ApplicationShell({
   submissionNumber, steps, activeStep, completed, onStepClick,
-  progress, onBack, onContinue, continueLabel = 'Save & Continue',
-  continueDisabled = false, hideFooter = false,
-  quote, quoteAmount, onFormReview, title, summaryReady = false, submitted = false,
+  progress,
+  quote, quoteAmount, onFormReview, summaryReady = false, submitted = false,
+  bare = false, scrollRef,
   children,
 }) {
   // The rail follows the applicant across the hand-off — same quote, same
@@ -40,46 +38,11 @@ export default function ApplicationShell({
           onStepClick={onStepClick}
         />
 
-        <main className="flex-1 min-w-0 overflow-y-auto custom-scroll">
-          <div className="mx-auto px-4 md:px-10 py-6 md:py-8 max-w-4xl">
-            {/* Same header rule the phase-one sections use. The premium is not
-                repeated here — the rail carries it. */}
-            {title && (
-              <div
-                className="pb-3 md:pb-4 mb-6"
-                style={{ borderBottom: '1px solid #D1D5DB' }}
-              >
-                <h2 className="text-base md:text-lg font-bold text-navy">{title}</h2>
-              </div>
-            )}
-
-            <div className="space-y-6">{children}</div>
-
-            {!hideFooter && (
-            <div className="flex items-center justify-between gap-4 mt-10 pb-10">
-              {onBack ? (
-                <button
-                  type="button"
-                  onClick={onBack}
-                  className="px-7 py-2.5 rounded-xl text-[13.5px] font-bold text-gray-600 bg-white transition hover:bg-gray-50"
-                  style={{ border: '1px solid #E5E7EB' }}
-                >
-                  Back
-                </button>
-              ) : <span />}
-              <button
-                type="button"
-                onClick={onContinue}
-                disabled={continueDisabled}
-                className="px-8 py-2.5 rounded-xl text-[13.5px] font-bold text-white transition disabled:cursor-not-allowed enabled:hover:opacity-90"
-                style={continueDisabled
-                  ? { background: '#E5E7EB', color: '#9CA3AF' }
-                  : { background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
-              >
-                {continueLabel}
-              </button>
-            </div>
-            )}
+        <main ref={scrollRef} className="flex-1 min-w-0 overflow-y-auto custom-scroll">
+          <div className={`mx-auto max-w-5xl 2xl:max-w-6xl ${
+            bare ? '' : 'px-4 md:px-10 py-6 md:py-8 space-y-6 md:space-y-8'
+          }`}>
+            {children}
           </div>
         </main>
 
