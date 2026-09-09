@@ -13,6 +13,8 @@ import { todayMDY, BRAND_GRADIENT } from './components/FormField'
 import { rateAll } from './lib/rating'
 import { defaultTermsFor } from './data/carrierTerms'
 import { rulesForCodes, subKey } from './data/conditionalQuestions'
+import DemoBar from './demo/DemoBar'
+import { DEMO_INTAKE, demoPhaseOne, demoPhaseTwo } from './demo/demoData'
 
 const STEPS = [
   { key: 'applicant',  number: 1, label: 'Applicant' },
@@ -39,7 +41,12 @@ const newApplicationNumber = () =>
 
 const defaultTerms = () => ({ rli: defaultTermsFor('rli'), bravado: defaultTermsFor('bravado') })
 
+// ?demo turns on the shortcut bar and pre-answers every form. No validation is
+// skipped — the steps pass because the answers are already there.
+const demoOn = () => new URLSearchParams(window.location.search).has('demo')
+
 export default function App() {
+  const [demo] = useState(demoOn)
   const [started, setStarted] = useState(false)
   const [submissionNumber, setSubmissionNumber] = useState('')
   const [form, setForm] = useState({})
@@ -68,7 +75,7 @@ export default function App() {
   const stale = quotes.length > 0 && ratedAt !== ratingSnapshot(form)
   const set = useCallback((key) => (value) => setForm(f => ({ ...f, [key]: value })), [])
 
-  const startApplication = ({ form: intake, quotes: intakeQuotes }) => {
+  const startApplication = ({ form: intake, quotes: intakeQuotes }, prefill = false) => {
     const seeded = {
       ...intake,
       effectiveDate: todayMDY(),
@@ -77,6 +84,8 @@ export default function App() {
       hiresSubs: Number(intake.subContractingCosts) > 0 ? 'yes' : 'no',
       newWorkPct: intake.newResidential === 'yes' ? '100' : '',
       remodelPct: intake.newResidential === 'yes' ? '0' : '',
+      // Last, so the demo answers win over the blanks seeded above.
+      ...(prefill ? demoPhaseOne() : {}),
     }
     setForm(seeded)
     setClassifications([{ code: intake.mainClassCode, percentage: '100' }])
@@ -229,6 +238,50 @@ export default function App() {
     setHandoff('none')
   }
 
+  /* ── Demo shortcuts ─────────────────────────────────────────────── */
+
+  // Every jump lays the demo answers over whatever is already there, so it
+  // does not matter how the form got into its current state.
+  const demoStart = () => {
+    startApplication({ form: DEMO_INTAKE, quotes: rateAll(DEMO_INTAKE) }, true)
+  }
+
+  const demoIndication = () => {
+    demoStart()
+    setApplication(null)
+    setHandoff('none')
+    setActiveStep('indication')
+    setView('indication')
+  }
+
+  const demoApplication = () => {
+    demoStart()
+    setSelectedCarrier('bravado')
+    setHandoff('none')
+    setApplication({
+      ...DEMO_INTAKE,
+      effectiveDate: todayMDY(),
+      ...demoPhaseOne(),
+      ...demoPhaseTwo(),
+      applicationNumber: newApplicationNumber(),
+      classifications: [{ code: DEMO_INTAKE.mainClassCode, percentage: '100' }],
+      appLimit: APP_LIMITS[APP_LIMITS.length - 1].value,
+      appDeductible: APP_DEDUCTIBLES[0].value,
+    })
+  }
+
+  const demoJumps = [
+    { key: 'landing', label: 'Landing', go: startOver },
+    { key: 'form', label: 'Form', go: demoStart },
+    { key: 'indication', label: 'Indication', go: demoIndication },
+    { key: 'application', label: 'Application', go: demoApplication },
+  ]
+
+  const demoActive = application ? 'application'
+    : !started ? 'landing'
+    : view === 'indication' ? 'indication'
+    : 'form'
+
   const updateTerms = (carrierId, patch) =>
     setTerms(t => ({ ...t, [carrierId]: { ...t[carrierId], ...patch } }))
 
@@ -244,17 +297,28 @@ export default function App() {
 
   /* ── Render ─────────────────────────────────────────────────────── */
 
-  if (!started) return <PageZero onContinue={startApplication} />
+  const demoBar = demo ? <DemoBar jumps={demoJumps} active={demoActive} /> : null
+
+  if (!started) return <>
+    <PageZero onContinue={startApplication} />
+    {demoBar}
+  </>
 
   if (application) {
     return (
+      <>
       <ApplicationFlow
+        // The flow holds its own copy of the seed, so a fresh application has
+        // to remount rather than hand the old one a new prop.
+        key={application.applicationNumber}
         seed={application}
         quote={chosenQuote}
         amount={chosenPremium}
         onExit={() => setApplication(null)}
         onStartOver={startOver}
       />
+      {demoBar}
+      </>
     )
   }
 
@@ -331,6 +395,7 @@ export default function App() {
           onCancel={() => setHandoff('none')}
         />
       )}
+      {demoBar}
     </AppShell>
   )
 }
