@@ -43,13 +43,13 @@ function UploadCopy() {
 
 // The indication sits where Norbie was, so the questions stay on the left and
 // stay editable — change an answer and the price follows.
-function IndicationCard({ loading, quotes }) {
+function IndicationCard({ loading, quotes, onShop }) {
   return (
     <div
-      className="rounded-2xl bg-white p-6 w-[420px] max-w-full quote-in"
+      className="rounded-2xl bg-white p-7 w-[480px] max-w-full quote-in"
       style={{ boxShadow: '0 18px 48px rgba(27,7,80,0.14), 0 0 0 1px rgba(27,7,80,0.05)' }}
     >
-      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gray-400 mb-3">
+      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400 mb-4">
         Price indication
       </p>
 
@@ -70,28 +70,41 @@ function IndicationCard({ loading, quotes }) {
           {quotes.map((q, i) => (
             <div
               key={q.id}
-              className="flex items-center justify-between gap-4 py-3"
+              className="flex items-center justify-between gap-4 py-4"
               style={{ borderTop: i === 0 ? 'none' : '1px solid #F3F4F6' }}
             >
-              <div className="flex items-center gap-3 min-w-0">
-                <CarrierMark carrier={q.carrier} product={q.product} logo={q.logo} size="md" />
+              <div className="flex items-center gap-3.5 min-w-0">
+                <CarrierMark carrier={q.carrier} product={q.product} logo={q.logo} size="lg" />
                 <div className="min-w-0">
-                  <p className="text-[14px] font-bold text-navy truncate">{q.carrier}</p>
+                  <p className="text-[15px] font-bold text-navy truncate">{q.carrier}</p>
                   <p className="text-[10px] font-bold tracking-widest uppercase text-gray-400 truncate">
                     {q.product}
                   </p>
                 </div>
               </div>
               <div className="text-right shrink-0">
-                <p className="text-[26px] font-extrabold leading-none text-navy tracking-tight">
+                <p className="text-[32px] font-extrabold leading-none text-navy tracking-tight">
                   {formatUSD(q.premium)}
                 </p>
-                <p className="text-[9.5px] text-gray-400 font-semibold mt-1">starting at</p>
+                <p className="text-[10px] text-gray-400 font-semibold mt-1.5">starting at</p>
               </div>
             </div>
           ))}
 
-          <p className="text-[10px] text-gray-400 leading-relaxed text-center mt-4">
+          <button
+            type="button"
+            onClick={onShop}
+            className="w-full mt-5 flex items-center justify-center gap-2 rounded-xl text-sm font-bold text-white transition hover:opacity-90"
+            style={{ height: 46, background: BRAND_GRADIENT, boxShadow: '0 6px 18px rgba(92,46,212,0.22)' }}
+          >
+            Shop the Marketplace
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+            </svg>
+          </button>
+
+          <p className="text-[10px] text-gray-400 leading-relaxed text-center mt-3">
             Indication only — final premium is set after underwriting review.
           </p>
         </>
@@ -105,6 +118,9 @@ export default function PageZero({ onContinue }) {
   const [touched, setTouched] = useState(false)
   const [loading, setLoading] = useState(false)
   const [placement] = useState(uploadPlacement)
+  // The price waits for the first press so the form's own button has a job;
+  // after that it tracks the answers live.
+  const [revealed, setRevealed] = useState(false)
 
   const set = (key) => (value) => setForm(f => ({ ...f, [key]: value }))
 
@@ -122,6 +138,7 @@ export default function PageZero({ onContinue }) {
 
   const quotes = useMemo(() => (ready ? rateAll(form) : []), [ready, form])
   const showQuotes = ready && !loading
+  const showCard = revealed && (loading || showQuotes)
 
   const errorFor = (key) => {
     if (!touched) return false
@@ -247,27 +264,7 @@ export default function PageZero({ onContinue }) {
                 />
               </div>
 
-              <button
-                type="button"
-                onClick={submit}
-                disabled={!ready}
-                title={ready ? undefined : 'Answer every question to shop the marketplace'}
-                className={`w-full mt-8 flex items-center justify-center gap-2 rounded-xl text-sm font-bold transition ${
-                  ready ? 'text-white hover:opacity-90' : 'cursor-not-allowed'
-                }`}
-                style={{
-                  height: 44,
-                  background: ready ? BRAND_GRADIENT : '#E5E7EB',
-                  color: ready ? 'white' : '#9CA3AF',
-                  boxShadow: ready ? '0 6px 18px rgba(92,46,212,0.22)' : 'none',
-                }}
-              >
-                Shop the Marketplace
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                </svg>
-              </button>
+
 
               {/* Option A — a quiet row under the primary CTA. */}
               {placement === 'inline' && (
@@ -299,6 +296,27 @@ export default function PageZero({ onContinue }) {
                 </button>
               </div>
               )}
+
+              <button
+                type="button"
+                onClick={() => { setTouched(true); if (ready) setRevealed(true) }}
+                disabled={!ready}
+                title={ready ? undefined : 'Answer every question to see your price'}
+                className={`w-full mt-8 flex items-center justify-center gap-2 rounded-xl text-sm font-bold transition ${
+                  ready ? 'text-white hover:opacity-90' : 'cursor-not-allowed'
+                }`}
+                style={{
+                  height: 44,
+                  background: ready ? BRAND_GRADIENT : '#E5E7EB',
+                  color: ready ? 'white' : '#9CA3AF',
+                  boxShadow: ready ? '0 6px 18px rgba(92,46,212,0.22)' : 'none',
+                }}
+              >
+                See Price Indication
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
             </>
 
           </div>
@@ -316,8 +334,8 @@ export default function PageZero({ onContinue }) {
           />
 
           <div className="relative z-10">
-            {loading || showQuotes ? (
-              <IndicationCard loading={loading} quotes={quotes} />
+            {showCard ? (
+              <IndicationCard loading={loading} quotes={quotes} onShop={submit} />
             ) : (
             <>
             <img
