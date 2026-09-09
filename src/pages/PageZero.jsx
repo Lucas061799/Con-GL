@@ -309,18 +309,23 @@ export default function PageZero({ onContinue }) {
                 onClick={() => { setTouched(true); if (ready) { setRevealed(true); refresh() } }}
                 disabled={!ready}
                 title={ready ? undefined : 'Answer every question to see your price'}
-                className={`w-full mt-8 flex items-center justify-center gap-2 rounded-xl text-sm font-bold transition ${
-                  !ready ? 'cursor-not-allowed' : revealed ? 'hover:bg-gray-50' : 'text-white hover:opacity-90'
-                }`}
+                className={
+                  revealed
+                    // Same button the rail carries.
+                    ? 'w-full mt-8 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition hover:bg-gray-50'
+                    : `w-full mt-8 flex items-center justify-center gap-2 rounded-xl text-sm font-bold transition ${
+                        ready ? 'text-white hover:opacity-90' : 'cursor-not-allowed'
+                      }`
+                }
                 style={
-                  !ready ? { height: 44, background: '#E5E7EB', color: '#9CA3AF' }
-                  : revealed ? { height: 44, background: 'white', color: '#4B5563', border: '1.5px solid #E5E7EB' }
+                  revealed ? { background: '#FAFAFB', color: '#9CA3AF', border: '1px solid #E5E7EB' }
+                  : !ready ? { height: 44, background: '#E5E7EB', color: '#9CA3AF' }
                   : { height: 44, background: BRAND_GRADIENT, color: 'white', boxShadow: '0 6px 18px rgba(92,46,212,0.22)' }
                 }
               >
                 {revealed ? (
                   <>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 12a9 9 0 1 1-2.64-6.36" /><path d="M21 3v6h-6" />
                     </svg>
                     Refresh My Quote
