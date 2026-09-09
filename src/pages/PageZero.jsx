@@ -41,14 +41,69 @@ function UploadCopy() {
   )
 }
 
+// The indication sits where Norbie was, so the questions stay on the left and
+// stay editable — change an answer and the price follows.
+function IndicationCard({ loading, quotes }) {
+  return (
+    <div
+      className="rounded-2xl bg-white p-6 w-[420px] max-w-full quote-in"
+      style={{ boxShadow: '0 18px 48px rgba(27,7,80,0.14), 0 0 0 1px rgba(27,7,80,0.05)' }}
+    >
+      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gray-400 mb-3">
+        Price indication
+      </p>
+
+      {loading ? (
+        <div className="space-y-3">
+          {[0, 1].map(i => (
+            <div key={i} className="flex items-center justify-between gap-4 py-2">
+              <div className="space-y-2">
+                <div className="skel h-3 w-20 rounded" />
+                <div className="skel h-2 w-24 rounded" />
+              </div>
+              <div className="skel h-6 w-20 rounded" />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <>
+          {quotes.map((q, i) => (
+            <div
+              key={q.id}
+              className="flex items-center justify-between gap-4 py-3"
+              style={{ borderTop: i === 0 ? 'none' : '1px solid #F3F4F6' }}
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <CarrierMark carrier={q.carrier} product={q.product} logo={q.logo} size="md" />
+                <div className="min-w-0">
+                  <p className="text-[14px] font-bold text-navy truncate">{q.carrier}</p>
+                  <p className="text-[10px] font-bold tracking-widest uppercase text-gray-400 truncate">
+                    {q.product}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right shrink-0">
+                <p className="text-[26px] font-extrabold leading-none text-navy tracking-tight">
+                  {formatUSD(q.premium)}
+                </p>
+                <p className="text-[9.5px] text-gray-400 font-semibold mt-1">starting at</p>
+              </div>
+            </div>
+          ))}
+
+          <p className="text-[10px] text-gray-400 leading-relaxed text-center mt-4">
+            Indication only — final premium is set after underwriting review.
+          </p>
+        </>
+      )}
+    </div>
+  )
+}
+
 export default function PageZero({ onContinue }) {
   const [form, setForm] = useState(EMPTY)
   const [touched, setTouched] = useState(false)
   const [loading, setLoading] = useState(false)
-  // 'Edit answers' puts the indication overlay away so the form underneath is
-  // reachable again. It re-arms once the form goes incomplete and is filled
-  // back in, so a changed answer still surfaces its new price.
-  const [dismissed, setDismissed] = useState(false)
   const [placement] = useState(uploadPlacement)
 
   const set = (key) => (value) => setForm(f => ({ ...f, [key]: value }))
@@ -64,8 +119,6 @@ export default function PageZero({ onContinue }) {
     const t = setTimeout(() => setLoading(false), 700)
     return () => clearTimeout(t)
   }, [ready, form])
-
-  useEffect(() => { if (!ready) setDismissed(false) }, [ready])
 
   const quotes = useMemo(() => (ready ? rateAll(form) : []), [ready, form])
   const showQuotes = ready && !loading
@@ -124,89 +177,7 @@ export default function PageZero({ onContinue }) {
               </p>
             </div>
 
-            {/* Once every answer is in, the indication takes the place of the
-                questions rather than floating over them — the column stays
-                centred instead of leaving a tall empty gap below the card. */}
-            {!dismissed && (loading || showQuotes) ? (
-            <div
-              className="rounded-2xl bg-white p-6 w-full quote-in"
-              style={{ boxShadow: '0 18px 48px rgba(27,7,80,0.14), 0 0 0 1px rgba(27,7,80,0.05)' }}
-            >
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gray-400 mb-3">
-                Price indication
-              </p>
-
-              {loading ? (
-                <div className="space-y-3">
-                  {[0, 1].map(i => (
-                    <div key={i} className="flex items-center justify-between gap-4 py-2">
-                      <div className="space-y-2">
-                        <div className="skel h-3 w-20 rounded" />
-                        <div className="skel h-2 w-24 rounded" />
-                      </div>
-                      <div className="skel h-6 w-20 rounded" />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <>
-                  {quotes.map((q, i) => (
-                    <div
-                      key={q.id}
-                      className="flex items-center justify-between gap-4 py-3"
-                      style={{ borderTop: i === 0 ? 'none' : '1px solid #F3F4F6' }}
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <CarrierMark carrier={q.carrier} product={q.product} logo={q.logo} size="md" />
-                        <div className="min-w-0">
-                          <p className="text-[14px] font-bold text-navy truncate">{q.carrier}</p>
-                          <p className="text-[10px] font-bold tracking-widest uppercase text-gray-400 truncate">
-                            {q.product}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <p className="text-[26px] font-extrabold leading-none text-navy tracking-tight">
-                          {formatUSD(q.premium)}
-                        </p>
-                        <p className="text-[9.5px] text-gray-400 font-semibold mt-1">starting at</p>
-                      </div>
-                    </div>
-                  ))}
-
-                  <button
-                    type="button"
-                    onClick={submit}
-                    className="w-full mt-5 flex items-center justify-center gap-2 rounded-xl text-sm font-bold text-white transition hover:opacity-90"
-                    style={{ height: 44, background: BRAND_GRADIENT, boxShadow: '0 6px 18px rgba(92,46,212,0.22)' }}
-                  >
-                    Shop the Marketplace
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
-                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                    </svg>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setDismissed(true)}
-                    className="w-full mt-2.5 inline-flex items-center justify-center gap-1.5 text-[12.5px] font-semibold transition hover:opacity-70"
-                    style={{ color: '#5C2ED4' }}
-                  >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M19 12H5M12 19l-7-7 7-7" />
-                    </svg>
-                    Edit answers
-                  </button>
-
-                  <p className="text-[10px] text-gray-400 leading-relaxed text-center mt-3">
-                    Indication only — final premium is set after underwriting review.
-                  </p>
-                </>
-              )}
-            </div>
-            ) : (
-              <>
+            <>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-5">
                 <Input
                   label="DBA" required
@@ -328,8 +299,7 @@ export default function PageZero({ onContinue }) {
                 </button>
               </div>
               )}
-              </>
-            )}
+            </>
 
           </div>
           </div>
@@ -346,6 +316,10 @@ export default function PageZero({ onContinue }) {
           />
 
           <div className="relative z-10">
+            {loading || showQuotes ? (
+              <IndicationCard loading={loading} quotes={quotes} />
+            ) : (
+            <>
             <img
               src={norbieContractor}
               alt="Norbie"
@@ -377,6 +351,8 @@ export default function PageZero({ onContinue }) {
                   Upload Here
                 </button>
               </div>
+            )}
+            </>
             )}
           </div>
         </div>
