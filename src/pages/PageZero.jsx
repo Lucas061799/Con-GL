@@ -312,13 +312,14 @@ export default function PageZero({ onContinue }) {
                 className={
                   revealed
                     // Same button the rail carries.
-                    ? 'w-full mt-8 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition hover:bg-gray-50'
+                    ? 'w-full mt-8 inline-flex items-center justify-center gap-1.5 rounded-xl text-xs font-bold transition hover:bg-gray-50'
                     : `w-full mt-8 flex items-center justify-center gap-2 rounded-xl text-sm font-bold transition ${
                         ready ? 'text-white hover:opacity-90' : 'cursor-not-allowed'
                       }`
                 }
                 style={
-                  revealed ? { background: '#FAFAFB', color: '#9CA3AF', border: '1px solid #E5E7EB' }
+                  // Same height as the card's Shop the Marketplace across the split.
+                  revealed ? { height: 46, background: '#FAFAFB', color: '#9CA3AF', border: '1px solid #E5E7EB' }
                   : !ready ? { height: 44, background: '#E5E7EB', color: '#9CA3AF' }
                   : { height: 44, background: BRAND_GRADIENT, color: 'white', boxShadow: '0 6px 18px rgba(92,46,212,0.22)' }
                 }
