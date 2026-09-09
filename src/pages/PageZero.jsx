@@ -121,6 +121,9 @@ export default function PageZero({ onContinue }) {
   // The price waits for the first press so the form's own button has a job;
   // after that it tracks the answers live.
   const [revealed, setRevealed] = useState(false)
+  // Bumping this re-runs the rater even when no answer changed.
+  const [rateNonce, setRateNonce] = useState(0)
+  const refresh = () => setRateNonce(n => n + 1)
 
   const set = (key) => (value) => setForm(f => ({ ...f, [key]: value }))
 
@@ -136,7 +139,8 @@ export default function PageZero({ onContinue }) {
     return () => clearTimeout(t)
   }, [ready, form])
 
-  const quotes = useMemo(() => (ready ? rateAll(form) : []), [ready, form])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const quotes = useMemo(() => (ready ? rateAll(form) : []), [ready, form, rateNonce])
   const showQuotes = ready && !loading
   const showCard = revealed && (loading || showQuotes)
 
@@ -297,25 +301,38 @@ export default function PageZero({ onContinue }) {
               </div>
               )}
 
+              {/* Primary until the price is up; once the card has its own
+                  Shop the Marketplace this steps down, so only one gradient
+                  button is lit at a time. */}
               <button
                 type="button"
-                onClick={() => { setTouched(true); if (ready) setRevealed(true) }}
+                onClick={() => { setTouched(true); if (ready) { setRevealed(true); refresh() } }}
                 disabled={!ready}
                 title={ready ? undefined : 'Answer every question to see your price'}
                 className={`w-full mt-8 flex items-center justify-center gap-2 rounded-xl text-sm font-bold transition ${
-                  ready ? 'text-white hover:opacity-90' : 'cursor-not-allowed'
+                  !ready ? 'cursor-not-allowed' : revealed ? 'hover:bg-gray-50' : 'text-white hover:opacity-90'
                 }`}
-                style={{
-                  height: 44,
-                  background: ready ? BRAND_GRADIENT : '#E5E7EB',
-                  color: ready ? 'white' : '#9CA3AF',
-                  boxShadow: ready ? '0 6px 18px rgba(92,46,212,0.22)' : 'none',
-                }}
+                style={
+                  !ready ? { height: 44, background: '#E5E7EB', color: '#9CA3AF' }
+                  : revealed ? { height: 44, background: 'white', color: '#4B5563', border: '1.5px solid #E5E7EB' }
+                  : { height: 44, background: BRAND_GRADIENT, color: 'white', boxShadow: '0 6px 18px rgba(92,46,212,0.22)' }
+                }
               >
-                See Price Indication
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
+                {revealed ? (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 12a9 9 0 1 1-2.64-6.36" /><path d="M21 3v6h-6" />
+                    </svg>
+                    Refresh My Quote
+                  </>
+                ) : (
+                  <>
+                    See Price Indication
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </>
+                )}
               </button>
             </>
 
