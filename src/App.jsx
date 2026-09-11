@@ -48,9 +48,9 @@ const demoOn = () => new URLSearchParams(window.location.search).has('demo')
 
 export default function App() {
   const [demo] = useState(demoOn)
-  const [dark, setDark] = useDarkMode()
-  const toggleDark = () => setDark(d => !d)
   const [started, setStarted] = useState(false)
+  const [dark, setDark] = useDarkMode(started)
+  const toggleDark = () => setDark(d => !d)
   const [submissionNumber, setSubmissionNumber] = useState('')
   const [form, setForm] = useState({})
   const [classifications, setClassifications] = useState([{ code: '', percentage: '100' }])
