@@ -6,7 +6,7 @@ function SkeletonRow() {
   return (
     <div
       className="rounded-xl px-3 py-3 flex items-center gap-3"
-      style={{ background: '#FAFAFB', border: '1px solid #F3F4F6' }}
+      style={{ background: 'var(--surface-softer)', border: '1px solid var(--line-soft)' }}
     >
       <div className="skel w-9 h-9 rounded-xl shrink-0" />
       <div className="flex-1 flex items-center justify-between gap-2">
@@ -100,7 +100,7 @@ function WhereYouAre({ activeIndex }) {
               </span>
               <span
                 className="text-sm leading-tight"
-                style={{ fontWeight: active ? 700 : 500, color: active ? '#111827' : '#9CA3AF' }}
+                style={{ fontWeight: active ? 700 : 500, color: active ? 'var(--ink)' : '#9CA3AF' }}
               >
                 {s.label}
               </span>
@@ -128,7 +128,7 @@ export default function RightPanel({
   return (
     <aside
       className="w-80 2xl:w-96 hidden xl:flex flex-col h-full shrink-0"
-      style={{ background: 'white', borderLeft: '1px solid #F3F4F6' }}
+      style={{ background: 'var(--surface-card)', borderLeft: '1px solid var(--line-soft)' }}
     >
       <div className="p-5 flex-1 overflow-y-auto custom-scroll">
 
@@ -142,14 +142,14 @@ export default function RightPanel({
           <span className="text-xs font-bold text-gradient">{submitted ? 100 : progress}%</span>
         </div>
 
-        <div className="w-full h-1.5 rounded-full overflow-hidden mb-4" style={{ background: '#F3F4F6' }}>
+        <div className="w-full h-1.5 rounded-full overflow-hidden mb-4" style={{ background: 'var(--fill-subtle)' }}>
           <div
             className="h-full rounded-full transition-all duration-500"
             style={{ width: `${submitted ? 100 : progress}%`, background: BRAND_GRADIENT }}
           />
         </div>
 
-        <div className="mb-5" style={{ borderTop: '1px solid #F3F4F6' }} />
+        <div className="mb-5" style={{ borderTop: '1px solid var(--line-soft)' }} />
 
         {submitted ? (
           <WhatsNext />
@@ -182,8 +182,8 @@ export default function RightPanel({
                     pickable ? 'cursor-pointer hover:-translate-y-px' : ''
                   }`}
                   style={{
-                    background: 'white',
-                    border: `1.5px solid ${isHighlighted ? (isSelected ? '#5C2ED4' : '#7C3AED') : '#E5E7EB'}`,
+                    background: 'var(--surface-card)',
+                    border: `1.5px solid ${isHighlighted ? (isSelected ? '#5C2ED4' : '#7C3AED') : 'var(--line)'}`,
                     boxShadow: isSelected
                       ? '0 6px 24px rgba(92,46,212,0.22)'
                       : isHighlighted ? '0 4px 20px rgba(92,46,212,0.10)' : 'none',
@@ -251,8 +251,8 @@ export default function RightPanel({
                     onClick={() => onSelectCarrier?.(q.id)}
                     className="w-full rounded-xl px-3 py-3 flex items-center gap-3 transition text-left cursor-pointer"
                     style={{
-                      background: isSelected ? 'rgba(124,58,237,0.06)' : 'white',
-                      border: `1.5px solid ${isSelected ? '#7C3AED' : '#E5E7EB'}`,
+                      background: isSelected ? 'rgba(124,58,237,0.06)' : 'var(--surface-card)',
+                      border: `1.5px solid ${isSelected ? '#7C3AED' : 'var(--line)'}`,
                       boxShadow: isSelected ? '0 4px 14px rgba(92,46,212,0.10)' : 'none',
                     }}
                   >
@@ -299,7 +299,7 @@ export default function RightPanel({
               className="w-full inline-flex items-center justify-center gap-1.5 mt-4 py-2.5 rounded-xl text-xs font-bold transition disabled:cursor-not-allowed"
               style={stale
                 ? { background: BRAND_GRADIENT, color: 'white', boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }
-                : { background: '#FAFAFB', color: '#9CA3AF', border: '1px solid #E5E7EB' }}
+                : { background: 'var(--surface-softer)', color: '#9CA3AF', border: '1px solid var(--line)' }}
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 12a9 9 0 1 1-2.64-6.36" /><path d="M21 3v6h-6" />
@@ -309,7 +309,7 @@ export default function RightPanel({
           </>
         )}
 
-        <div className="my-5" style={{ borderTop: '1px solid #F3F4F6' }} />
+        <div className="my-5" style={{ borderTop: '1px solid var(--line-soft)' }} />
 
         {/* No point handing over a half-filled application, so this only
             lights up once every section is answered. */}
@@ -321,7 +321,7 @@ export default function RightPanel({
           className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition disabled:cursor-not-allowed enabled:hover:opacity-90"
           style={formComplete
             ? { background: BRAND_GRADIENT, color: 'white', boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }
-            : { background: '#FAFAFB', color: '#9CA3AF', border: '1px solid #E5E7EB' }}
+            : { background: 'var(--surface-softer)', color: '#9CA3AF', border: '1px solid var(--line)' }}
         >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />

@@ -1,5 +1,7 @@
 import norbielinkLogo from '../assets/norbielink-logo.png'
 import btisLogo from '../assets/btislogo.png'
+import norbielinkLogoDark from '../assets/norbielink-logo-dark.png'
+import btisLogoDark from '../assets/btislogo-dark.png'
 import Sidebar from './Sidebar'
 import RightPanel from './RightPanel'
 
@@ -9,7 +11,7 @@ export default function AppShell({
   productName, submissionNumber,
   steps, activeStep, completed, onStepClick,
   progress, quotes, stale, onRefresh, selectedCarrier, onSelectCarrier, onFormReview, formComplete,
-  bare = false, inCompare = false,
+  bare = false, railExtras, inCompare = false,
   scrollRef,
   children,
 }) {
@@ -19,10 +21,12 @@ export default function AppShell({
         className="flex items-center justify-between bg-white border-b border-gray-100 px-6 md:px-8 shrink-0"
         style={{ height: 56 }}
       >
-        <img src={norbielinkLogo} alt="NorbieLink" className="h-8" />
+        <img src={norbielinkLogo} alt="NorbieLink" className="h-8 logo-light" />
+        <img src={norbielinkLogoDark} alt="NorbieLink" className="h-8 logo-dark" />
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-gray-400 tracking-wide font-semibold">POWERED BY</span>
-          <img src={btisLogo} alt="btis" className="h-6" />
+          <img src={btisLogo} alt="btis" className="h-6 logo-light" />
+          <img src={btisLogoDark} alt="btis" className="h-6 logo-dark" />
         </div>
       </header>
 
@@ -34,6 +38,7 @@ export default function AppShell({
           activeStep={activeStep}
           completed={completed}
           onStepClick={onStepClick}
+          {...railExtras}
         />
 
         <main ref={scrollRef} className="flex-1 min-w-0 overflow-y-auto custom-scroll relative">

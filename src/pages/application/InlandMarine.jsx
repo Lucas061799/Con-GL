@@ -31,7 +31,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
               {/* Always three times the per-site limit, so it is shown rather
                   than asked for. */}
               <div className="w-full rounded-lg px-3.5 py-2.5 text-sm text-gray-500"
-                style={{ background: '#F9FAFB', border: '1px solid #E5E7EB' }}>
+                style={{ background: 'var(--surface-soft)', border: '1px solid var(--line)' }}>
                 {perSite ? perSite * 3 : '—'}
               </div>
             </div>
@@ -76,7 +76,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
 
       {form.computerEquipment && (
         <FieldGroup label="Computer Equipment">
-          <div className="grid grid-cols-[1fr_180px_180px] gap-4 pb-2" style={{ borderBottom: '1px solid #F3F4F6' }}>
+          <div className="grid grid-cols-[1fr_180px_180px] gap-4 pb-2" style={{ borderBottom: '1px solid var(--line-soft)' }}>
             {['Equipement Description', 'Limits', 'Deductible'].map(h => (
               <p key={h} className="text-[13px] font-bold text-navy">{h}</p>
             ))}
@@ -98,7 +98,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
             </p>
             {/* Fixed at a quarter of the equipment limit. */}
             <div className="w-full rounded-lg px-3.5 py-2.5 text-sm text-gray-500"
-              style={{ background: '#F9FAFB', border: '1px solid #E5E7EB' }}>
+              style={{ background: 'var(--surface-soft)', border: '1px solid var(--line)' }}>
               {edp ? Math.round(edp * 0.25) : '—'}
             </div>
             <p className="text-[13px] text-gray-500">@25% of EDP</p>
@@ -108,7 +108,7 @@ export default function InlandMarine({ form, set, errorFor, bpp, setBpp }) {
 
       {form.businessPersonalProp && (
         <FieldGroup label="Business Personal Property">
-          <div className="grid grid-cols-[110px_110px_150px_1fr_1fr_1fr_auto] gap-3 pb-2" style={{ borderBottom: '1px solid #F3F4F6' }}>
+          <div className="grid grid-cols-[110px_110px_150px_1fr_1fr_1fr_auto] gap-3 pb-2" style={{ borderBottom: '1px solid var(--line-soft)' }}>
             {['Location', 'Bldg', 'Deductible', 'Office Contents', 'Shop Contents', 'Yard Contents', ''].map((h, i) => (
               <p key={i} className="text-[13px] font-bold text-navy leading-snug">{h}</p>
             ))}

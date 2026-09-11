@@ -17,7 +17,7 @@ export default function Modal({ title, onDismiss, children, footer, width = 420 
         {title && (
           <div className="px-7 pt-6 pb-4">
             <h3 className="text-[17px] font-bold text-navy tracking-wide">{title}</h3>
-            <div className="mt-4" style={{ borderBottom: '1px solid #F3F4F6' }} />
+            <div className="mt-4" style={{ borderBottom: '1px solid var(--line-soft)' }} />
           </div>
         )}
         <div className="px-7 pb-7">{children}</div>
@@ -42,7 +42,7 @@ export function ModalButton({ children, onClick, variant = 'primary' }) {
         : 'px-5 py-2 rounded-xl text-sm font-semibold text-gray-700 bg-white transition hover:bg-gray-50'}
       style={primary
         ? { background: BRAND_GRADIENT, boxShadow: '0 4px 18px rgba(92,46,212,0.30)' }
-        : { border: '1.5px solid #E5E7EB' }}
+        : { border: '1.5px solid var(--line)' }}
     >
       {children}
     </button>

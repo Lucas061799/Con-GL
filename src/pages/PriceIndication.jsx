@@ -39,7 +39,7 @@ function PaperPill({ paper }) {
 
 function Panel({ title, children }) {
   return (
-    <div className="rounded-xl p-4" style={{ background: '#F9FAFB', border: '1px solid #EAEAEA' }}>
+    <div className="rounded-xl p-4" style={{ background: 'var(--surface-soft)', border: '1px solid var(--line-panel)' }}>
       <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-2.5">{title}</div>
       {children}
     </div>
@@ -57,8 +57,8 @@ function CarrierRow({ quote, terms, onTermsChange, selected, best, onSelect }) {
     <div
       className="rounded-lg overflow-hidden transition"
       style={{
-        background: 'white',
-        border: `1.5px solid ${selected || best ? '#7C3AED' : '#E5E7EB'}`,
+        background: 'var(--surface-card)',
+        border: `1.5px solid ${selected || best ? '#7C3AED' : 'var(--line)'}`,
         boxShadow: selected || best ? '0 2px 12px rgba(92,46,212,0.12)' : 'none',
       }}
     >
@@ -98,7 +98,7 @@ function CarrierRow({ quote, terms, onTermsChange, selected, best, onSelect }) {
             className="px-4 py-2 rounded-lg text-xs font-bold transition shrink-0"
             style={selected
               ? { background: BRAND_GRADIENT, color: '#fff' }
-              : { background: '#F3F4F6', color: '#374151' }}
+              : { background: 'var(--fill-subtle)', color: 'var(--ink-2)' }}
           >
             {selected ? '✓ Selected' : 'Select'}
           </button>
@@ -106,7 +106,7 @@ function CarrierRow({ quote, terms, onTermsChange, selected, best, onSelect }) {
       </div>
 
       {open && (
-        <div className="px-4 pb-4 pt-3" style={{ borderTop: '1px solid #F3F4F6' }}>
+        <div className="px-4 pb-4 pt-3" style={{ borderTop: '1px solid var(--line-soft)' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <Panel title="Coverage Terms">
               <div className="space-y-3" onClick={e => e.stopPropagation()}>
@@ -163,7 +163,7 @@ export default function PriceIndication({ quotes, terms, onTermsChange, selected
         >
           Compare &amp; Select
         </p>
-        <h1 className="text-2xl md:text-3xl font-bold mb-1.5" style={{ color: '#1F1B47' }}>
+        <h1 className="text-2xl md:text-3xl font-bold mb-1.5" style={{ color: 'var(--ink)' }}>
           Price Indication
         </h1>
         <p className="text-sm text-gray-500">

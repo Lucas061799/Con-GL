@@ -25,7 +25,7 @@ const ICONS = {
 
 function Panel({ title, icon = 'shield', children }) {
   return (
-    <div className="rounded-xl p-4" style={{ background: 'white', border: '1px solid #E5E7EB' }}>
+    <div className="rounded-xl p-4" style={{ background: 'var(--surface-card)', border: '1px solid var(--line)' }}>
       <div className="flex items-center gap-2 mb-3">
         {/* The teal chip all three products use on these summary panels — the
             one place they step outside the purple. */}
@@ -37,7 +37,7 @@ function Panel({ title, icon = 'shield', children }) {
             <path strokeLinecap="round" strokeLinejoin="round" d={ICONS[icon] || ICONS.shield} />
           </svg>
         </div>
-        <h3 className="text-xs font-bold" style={{ color: '#111827' }}>{title}</h3>
+        <h3 className="text-xs font-bold" style={{ color: 'var(--ink)' }}>{title}</h3>
       </div>
       <div>{children}</div>
     </div>
@@ -47,9 +47,9 @@ function Panel({ title, icon = 'shield', children }) {
 function Row({ label, value }) {
   if (value === '' || value == null) return null
   return (
-    <div className="flex items-center justify-between gap-4 py-1.5" style={{ borderBottom: '1px solid #F3F4F6' }}>
+    <div className="flex items-center justify-between gap-4 py-1.5" style={{ borderBottom: '1px solid var(--line-soft)' }}>
       <span className="text-[10px] shrink-0" style={{ color: '#9CA3AF' }}>{label}</span>
-      <span className="text-[10px] font-semibold text-right" style={{ color: '#111827' }}>{value}</span>
+      <span className="text-[10px] font-semibold text-right" style={{ color: 'var(--ink)' }}>{value}</span>
     </div>
   )
 }
@@ -68,7 +68,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
 
   return (
     <div className="space-y-5 md:space-y-6">
-          <div id="submission-print-area" className="rounded-2xl overflow-hidden" style={{ background: 'white', border: '1px solid #F3F4F6' }}>
+          <div id="submission-print-area" className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface-card)', border: '1px solid var(--line-soft)' }}>
             <div className="h-1" style={{ background: BRAND_GRADIENT }} />
 
             <div className="flex items-start gap-4 px-6 pt-5 pb-4">
@@ -87,7 +87,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
               </div>
 
               <div className="flex-1 min-w-0">
-                <h1 className="text-xl font-bold mb-1" style={{ color: '#1F1B47' }}>Application submitted!</h1>
+                <h1 className="text-xl font-bold mb-1" style={{ color: 'var(--ink)' }}>Application submitted!</h1>
                 <p className="text-xs text-gray-400 leading-relaxed">
                   {quote?.carrier ?? 'The carrier'} has the submission.
                 </p>
@@ -98,7 +98,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                 title="Print / Save as PDF"
                 onClick={() => setTimeout(() => window.print(), 50)}
                 className="screen-only w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all hover:bg-gray-50"
-                style={{ border: '1px solid #E5E7EB', background: 'white' }}
+                style={{ border: '1px solid var(--line)', background: 'var(--surface-card)' }}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24">
                   <defs>
@@ -114,7 +114,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
               </button>
             </div>
 
-            <div className="grid grid-cols-3 divide-x divide-gray-100" style={{ borderTop: '1px solid #F3F4F6' }}>
+            <div className="grid grid-cols-3 divide-x divide-gray-100" style={{ borderTop: '1px solid var(--line-soft)' }}>
               <div className="px-6 py-4">
                 <p className="text-[10px] font-bold tracking-widest uppercase mb-1" style={{ color: '#9CA3AF' }}>
                   Submission Number
@@ -125,7 +125,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                 <p className="text-[10px] font-bold tracking-widest uppercase mb-1" style={{ color: '#9CA3AF' }}>
                   Effective Date
                 </p>
-                <p className="text-sm font-bold" style={{ color: '#1F1B47' }}>{form.effectiveDate || '—'}</p>
+                <p className="text-sm font-bold" style={{ color: 'var(--ink)' }}>{form.effectiveDate || '—'}</p>
               </div>
               <div className="px-6 py-4">
                 <p className="text-[10px] font-bold tracking-widest uppercase mb-1" style={{ color: '#9CA3AF' }}>
@@ -138,7 +138,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
               </div>
             </div>
 
-            <div style={{ borderTop: '1px solid #F3F4F6' }}>
+            <div style={{ borderTop: '1px solid var(--line-soft)' }}>
               <div className="px-5 py-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 

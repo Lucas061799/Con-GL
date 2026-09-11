@@ -123,7 +123,7 @@ export default function BusinessInfo({ form, set, errorFor }) {
             error={errorFor('remodelPct') && 'Remodeling percentage of work is required.'}
           />
         </div>
-        <div className="flex items-center justify-between mt-5 pt-3" style={{ borderTop: '1px solid #F3F4F6' }}>
+        <div className="flex items-center justify-between mt-5 pt-3" style={{ borderTop: '1px solid var(--line-soft)' }}>
           <span className="text-[14px] font-bold text-navy">Total</span>
           <span className={`text-[14px] font-bold ${occupancyTotal === 100 ? 'text-navy' : 'text-red-500'}`}>
             {occupancyTotal}

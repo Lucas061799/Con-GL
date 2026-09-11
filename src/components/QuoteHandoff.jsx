@@ -31,7 +31,7 @@ export function QuoteReady({ quote, onGo, onCancel }) {
           footer with the rest of the dialogs, not floating in the body. */}
       <div
         className="flex items-center gap-3 rounded-xl p-3 mb-4"
-        style={{ background: '#F9FAFB', border: '1px solid #EAEAEA' }}
+        style={{ background: 'var(--surface-soft)', border: '1px solid var(--line-panel)' }}
       >
         <CarrierMark carrier={quote.carrier} product={quote.product} logo={quote.logo} size="sm" />
         <div className="min-w-0">

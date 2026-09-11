@@ -9,7 +9,7 @@ function PercentColumn({ title, rows, values, onChange }) {
   const total = rows.reduce((sum, r) => sum + (Number(values[r.key]) || 0), 0)
   return (
     <div>
-      <div className="flex items-baseline gap-2 pb-3" style={{ borderBottom: '1px solid #D1D5DB' }}>
+      <div className="flex items-baseline gap-2 pb-3" style={{ borderBottom: '1px solid var(--line-strong)' }}>
         <p className="text-[14px] font-bold text-navy">{title}</p>
         <span className={`text-[13px] font-bold ${total === 100 ? 'text-navy' : 'text-red-500'}`}>{total}%</span>
         <span className="text-[12px] text-gray-400">(Must equal 100%)</span>
@@ -17,7 +17,7 @@ function PercentColumn({ title, rows, values, onChange }) {
       {rows.map(r => {
         const used = Number(values[r.key]) > 0
         return (
-          <div key={r.key} className="py-3" style={{ borderBottom: '1px solid #F3F4F6' }}>
+          <div key={r.key} className="py-3" style={{ borderBottom: '1px solid var(--line-soft)' }}>
             <div className="flex items-center justify-between gap-4">
               <span className="text-[14px] text-navy">{r.label}</span>
               <PercentInput
@@ -115,13 +115,13 @@ export default function Supplemental({ form, set, errorFor, setWorkPct, claims, 
           label="Has the applicant had any prior claims?"
           value={form.priorClaims} onChange={set('priorClaims')}
         >
-          <div className="grid grid-cols-[140px_1fr_200px] gap-4 pb-2" style={{ borderBottom: '1px solid #D1D5DB' }}>
+          <div className="grid grid-cols-[140px_1fr_200px] gap-4 pb-2" style={{ borderBottom: '1px solid var(--line-strong)' }}>
             {['Year', 'Nature of Loss or Claim', 'Amount'].map(h => (
               <p key={h} className="text-[13px] font-bold text-navy">{h}</p>
             ))}
           </div>
           {claims.map((c, i) => (
-            <div key={i} className="grid grid-cols-[140px_1fr_200px] gap-4 py-3" style={{ borderBottom: '1px solid #F3F4F6' }}>
+            <div key={i} className="grid grid-cols-[140px_1fr_200px] gap-4 py-3" style={{ borderBottom: '1px solid var(--line-soft)' }}>
               <Input value={c.year} onChange={(v) => updateClaim(i, { year: v.replace(/\D/g, '').slice(0, 4) })} />
               <Input value={c.nature} onChange={(v) => updateClaim(i, { nature: v })} />
               <CurrencyInput value={c.amount} onChange={(v) => updateClaim(i, { amount: v })} />

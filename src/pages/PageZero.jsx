@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import norbielinkLogo from '../assets/norbielink-logo.png'
 import btisLogo from '../assets/btislogo.png'
+import norbielinkLogoDark from '../assets/norbielink-logo-dark.png'
+import btisLogoDark from '../assets/btislogo-dark.png'
 import jungleImg from '../assets/jungle.png'
 import norbieContractor from '../assets/norbie-contractor.png'
 import { Input, CurrencyInput, Select, SearchableSelect, TreeSelect, InfoTip, BRAND_GRADIENT } from '../components/FormField'
@@ -71,7 +73,7 @@ function IndicationCard({ loading, quotes, onShop }) {
             <div
               key={q.id}
               className="flex items-center justify-between gap-4 py-4"
-              style={{ borderTop: i === 0 ? 'none' : '1px solid #F3F4F6' }}
+              style={{ borderTop: i === 0 ? 'none' : '1px solid var(--line-soft)' }}
             >
               <div className="flex items-center gap-3.5 min-w-0">
                 <CarrierMark carrier={q.carrier} product={q.product} logo={q.logo} size="lg" />
@@ -165,10 +167,12 @@ export default function PageZero({ onContinue }) {
         className="flex items-center justify-between bg-white border-b border-gray-100 px-6 md:px-8 shrink-0"
         style={{ height: 56 }}
       >
-        <img src={norbielinkLogo} alt="NorbieLink" className="h-8" />
+        <img src={norbielinkLogo} alt="NorbieLink" className="h-8 logo-light" />
+        <img src={norbielinkLogoDark} alt="NorbieLink" className="h-8 logo-dark" />
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-gray-400 tracking-wide font-semibold">POWERED BY</span>
-          <img src={btisLogo} alt="btis" className="h-6" />
+          <img src={btisLogo} alt="btis" className="h-6 logo-light" />
+          <img src={btisLogoDark} alt="btis" className="h-6 logo-dark" />
         </div>
       </header>
 
@@ -176,7 +180,7 @@ export default function PageZero({ onContinue }) {
 
         {/* Left — intake */}
         <div className="flex-1 lg:w-1/2 lg:flex-none overflow-y-auto custom-scroll relative"
-          style={{ borderRight: '1px solid #F3F4F6' }}>
+          style={{ borderRight: '1px solid var(--line-soft)' }}>
           <img
             src={jungleImg} alt=""
             className="lg:hidden absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
@@ -274,7 +278,7 @@ export default function PageZero({ onContinue }) {
               {placement === 'inline' && (
               <div
                 className="mt-5 pt-5 flex items-center justify-between gap-4"
-                style={{ borderTop: '1px solid #F3F4F6' }}
+                style={{ borderTop: '1px solid var(--line-soft)' }}
               >
                 <p className="inline-flex items-center gap-1.5 text-[12.5px] text-gray-500">
                   Have a competitor quote or ACORD form?
@@ -319,8 +323,8 @@ export default function PageZero({ onContinue }) {
                 }
                 style={
                   // Same height as the card's Shop the Marketplace across the split.
-                  revealed ? { height: 46, background: '#FAFAFB', color: '#9CA3AF', border: '1px solid #E5E7EB' }
-                  : !ready ? { height: 44, background: '#E5E7EB', color: '#9CA3AF' }
+                  revealed ? { height: 46, background: 'var(--surface-softer)', color: '#9CA3AF', border: '1px solid var(--line)' }
+                  : !ready ? { height: 44, background: 'var(--line)', color: '#9CA3AF' }
                   : { height: 44, background: BRAND_GRADIENT, color: 'white', boxShadow: '0 6px 18px rgba(92,46,212,0.22)' }
                 }
               >

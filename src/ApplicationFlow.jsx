@@ -32,7 +32,7 @@ const buildSteps = (form) => {
   return steps.map((s, i) => ({ ...s, number: i + 1 }))
 }
 
-export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOver }) {
+export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOver, railExtras }) {
   const [form, setForm] = useState(seed)
   const [rows, setRows] = useState(seed.classifications ?? [])
   const [claims, setClaims] = useState([
@@ -191,6 +191,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
   if (submitted) {
     return (
       <ApplicationShell
+        railExtras={railExtras}
         submissionNumber={form.applicationNumber}
         steps={steps}
         activeStep={null}
@@ -216,6 +217,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
 
   return (
     <ApplicationShell
+      railExtras={railExtras}
       submissionNumber={form.applicationNumber}
       steps={steps}
       activeStep={activeStep}

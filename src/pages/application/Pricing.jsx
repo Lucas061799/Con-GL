@@ -24,7 +24,7 @@ function Term({ label, value, first }) {
   return (
     <div
       className="flex items-center justify-between py-2.5"
-      style={first ? undefined : { borderTop: '1px solid #EAEAEA' }}
+      style={first ? undefined : { borderTop: '1px solid var(--line-panel)' }}
     >
       <span className="text-[13px] text-gray-500">{label}</span>
       <span className="text-[13px] font-bold text-navy">{value}</span>
@@ -61,8 +61,8 @@ export default function Pricing({ form, quote, amount }) {
         <p className="text-[11px] italic text-gray-400 mt-0.5">(Includes applicable fees)</p>
       </div>
 
-      <div className="px-4 pb-4 pt-3" style={{ borderTop: '1px solid #F3F4F6' }}>
-        <div className="rounded-xl px-4 pt-4 pb-2.5" style={{ background: '#F9FAFB', border: '1px solid #EAEAEA' }}>
+      <div className="px-4 pb-4 pt-3" style={{ borderTop: '1px solid var(--line-soft)' }}>
+        <div className="rounded-xl px-4 pt-4 pb-2.5" style={{ background: 'var(--surface-soft)', border: '1px solid var(--line-panel)' }}>
           <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-2.5">
             Coverage Terms
           </div>

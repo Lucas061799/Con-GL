@@ -10,7 +10,7 @@ const Section = forwardRef(function Section({ id, title, subtitle, action, child
       <div className="px-4 md:px-10 pt-6 md:pt-8 pb-0">
         <div
           className="flex items-center justify-between gap-4 pb-3 md:pb-4"
-          style={{ borderBottom: '1px solid #D1D5DB' }}
+          style={{ borderBottom: '1px solid var(--line-strong)' }}
         >
           <h2 className="text-base md:text-lg font-bold text-navy">{title}</h2>
           {action}
@@ -40,7 +40,7 @@ export function FieldGroup({ label, children, className = '' }) {
       )}
       <div
         className="rounded-xl p-5 sm:p-6"
-        style={{ background: '#F9FAFB', border: '1px solid #E5E7EB' }}
+        style={{ background: 'var(--surface-soft)', border: '1px solid var(--line)' }}
       >
         {children}
       </div>
@@ -53,7 +53,7 @@ export function QuestionCard({ children, className = '' }) {
   return (
     <div
       className={`rounded-xl p-4 ${className}`}
-      style={{ background: '#F9FAFB', border: '1px solid #E5E7EB' }}
+      style={{ background: 'var(--surface-soft)', border: '1px solid var(--line)' }}
     >
       {children}
     </div>

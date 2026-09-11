@@ -107,3 +107,70 @@ input[type='number'] { -moz-appearance: textfield; }
   #submission-print-area .screen-only,
   .no-print { display: none !important }
 }
+
+/* ── Theme ─────────────────────────────────────────────────────────
+   The other marketplaces flip a data-dark attribute on <html> and give every
+   neutral a dark counterpart. These tokens hold those pairs; the light values
+   are the ones the components already used, so light mode is unchanged. */
+:root {
+  --surface: #ffffff;
+  --surface-rail: #ffffff;
+  --surface-card: #ffffff;
+  --surface-soft: #F9FAFB;
+  --surface-softer: #FAFAFB;
+  --fill-subtle: #F3F4F6;
+  --line: #E5E7EB;
+  --line-soft: #F3F4F6;
+  --line-strong: #D1D5DB;
+  --line-panel: #EAEAEA;
+  --ink: #1F1B47;
+  --ink-2: #374151;
+  --glass: rgba(255,255,255,0.55);
+}
+
+html[data-dark="true"] {
+  --surface: #131629;
+  --surface-rail: #191D35;
+  --surface-card: #1A1E38;
+  --surface-soft: rgba(255,255,255,0.03);
+  --surface-softer: rgba(255,255,255,0.03);
+  --fill-subtle: rgba(255,255,255,0.06);
+  --line: rgba(255,255,255,0.10);
+  --line-soft: rgba(255,255,255,0.06);
+  --line-strong: rgba(255,255,255,0.14);
+  --line-panel: rgba(255,255,255,0.06);
+  --ink: #F9FAFB;
+  --ink-2: #D1D5DB;
+  --glass: rgba(255,255,255,0.06);
+  color-scheme: dark;
+}
+
+html[data-dark="true"] body { background-color: #131629 }
+
+/* Tailwind neutrals, mapped to the same pairs. */
+html[data-dark="true"] .bg-white { background-color: var(--surface) !important }
+html[data-dark="true"] .bg-gray-50 { background-color: rgba(255,255,255,0.04) !important }
+html[data-dark="true"] .bg-gray-100 { background-color: rgba(255,255,255,0.06) !important }
+html[data-dark="true"] .hover\:bg-gray-50:hover { background-color: rgba(255,255,255,0.06) !important }
+html[data-dark="true"] .hover\:bg-gray-100:hover { background-color: rgba(255,255,255,0.08) !important }
+html[data-dark="true"] .text-navy,
+html[data-dark="true"] .text-gray-900,
+html[data-dark="true"] .text-gray-800 { color: #F9FAFB !important }
+html[data-dark="true"] .text-gray-700,
+html[data-dark="true"] .text-gray-600 { color: #D1D5DB !important }
+html[data-dark="true"] .text-gray-500 { color: #9CA3AF !important }
+html[data-dark="true"] .border-gray-100 { border-color: rgba(255,255,255,0.06) !important }
+html[data-dark="true"] .border-gray-200,
+html[data-dark="true"] .border-gray-300 { border-color: rgba(255,255,255,0.10) !important }
+html[data-dark="true"] .divide-gray-100 > * + * { border-color: rgba(255,255,255,0.06) !important }
+html[data-dark="true"] .placeholder-gray-300::placeholder { color: #4B5563 !important }
+html[data-dark="true"] input,
+html[data-dark="true"] textarea { color: #F9FAFB }
+html[data-dark="true"] .custom-scroll { scrollbar-color: rgba(255,255,255,0.12) transparent }
+html[data-dark="true"] .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12) }
+
+/* Header lockups: both are rendered and the theme picks one, so the three
+   headers need no dark prop of their own. */
+.logo-dark { display: none }
+html[data-dark="true"] .logo-light { display: none }
+html[data-dark="true"] .logo-dark { display: inline-block }

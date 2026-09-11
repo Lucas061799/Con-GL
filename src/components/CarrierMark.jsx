@@ -23,7 +23,7 @@ export default function CarrierMark({ carrier, product, logo, size = 'md', class
         height: s.box,
         padding: s.pad,
         background: 'white',
-        border: '1px solid #E5E7EB',
+        border: '1px solid var(--line)',
       }}
     >
       {logo ? (

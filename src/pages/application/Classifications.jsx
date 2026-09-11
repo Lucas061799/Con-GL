@@ -42,7 +42,7 @@ export default function Classifications({ rows, setRows }) {
                   aria-label="Add classification"
                   title={canAdd ? 'Add classification' : `Up to ${MAX} classifications`}
                   className={`w-10 h-[42px] rounded-lg border flex items-center justify-center text-xl leading-none font-bold transition ${canAdd ? 'hover:border-gray-300 hover:bg-gray-50' : 'cursor-not-allowed opacity-40'}`}
-                  style={{ color: '#374151', borderColor: '#E5E7EB', background: 'white' }}
+                  style={{ color: 'var(--ink-2)', borderColor: 'var(--line)', background: 'var(--surface-card)' }}
                 >
                   +
                 </button>
@@ -68,8 +68,8 @@ export default function Classifications({ rows, setRows }) {
         <div
           className="w-[140px] rounded-lg px-3.5 py-2.5 text-sm font-bold flex items-center justify-between bg-white"
           style={{
-            boxShadow: total === 100 ? '0 0 0 1px #E5E7EB' : '0 0 0 1.5px #FCA5A5',
-            color: total === 100 ? '#1F2937' : '#EF4444',
+            boxShadow: total === 100 ? '0 0 0 1px var(--line)' : '0 0 0 1.5px #FCA5A5',
+            color: total === 100 ? 'var(--ink)' : '#EF4444',
           }}
         >
           <span>{total}</span>

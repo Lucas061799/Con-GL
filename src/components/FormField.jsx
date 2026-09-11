@@ -126,7 +126,7 @@ export function InfoTip({ title, children, size = 'sm', label }) {
               className="px-4 py-3 rounded-t-xl"
               style={{ background: 'linear-gradient(88deg, rgba(92,46,212,0.06), rgba(166,20,195,0.06))' }}
             >
-              <h4 className="text-[13px] font-bold" style={{ color: '#1F1B47' }}>{title}</h4>
+              <h4 className="text-[13px] font-bold" style={{ color: 'var(--ink)' }}>{title}</h4>
             </div>
             <div className="px-4 py-3 text-[12px] text-gray-600 leading-relaxed max-h-80 overflow-y-auto custom-scroll">
               {children}
@@ -221,21 +221,21 @@ function CheckMark({ id }) {
 const triggerCls = 'w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg border text-sm text-left transition-all'
 
 const triggerStyle = (open, error, hasValue) => ({
-  background: 'white',
-  borderColor: error ? '#FCA5A5' : open ? '#7C3AED' : '#E5E7EB',
+  background: 'var(--surface-card)',
+  borderColor: error ? '#FCA5A5' : open ? '#7C3AED' : 'var(--line)',
   boxShadow: error ? '0 0 0 2px rgba(252,165,165,0.3)' : open ? '0 0 0 2px rgba(124,58,237,0.1)' : 'none',
-  color: hasValue ? '#1F2937' : '#9CA3AF',
+  color: hasValue ? 'var(--ink)' : '#9CA3AF',
 })
 
-const panelStyle = { background: 'white', border: '1px solid #E5E7EB', boxShadow: '0 12px 32px rgba(27,7,80,0.14)' }
+const panelStyle = { background: 'var(--surface-card)', border: '1px solid var(--line)', boxShadow: '0 12px 32px rgba(27,7,80,0.14)' }
 
 const optionStyle = (selected) => ({
   background: selected ? 'linear-gradient(88.09deg, rgba(92,46,212,0.07) 0%, rgba(166,20,195,0.07) 100%)' : 'transparent',
-  color: selected ? '#A614C3' : '#374151',
+  color: selected ? '#A614C3' : 'var(--ink-2)',
   fontWeight: selected ? 600 : 400,
 })
 
-const hoverOn = (selected) => (e) => { if (!selected) e.currentTarget.style.background = '#F9FAFB' }
+const hoverOn = (selected) => (e) => { if (!selected) e.currentTarget.style.background = 'var(--surface-soft)' }
 const hoverOff = (selected) => (e) => { if (!selected) e.currentTarget.style.background = 'transparent' }
 
 /* ── Text input ───────────────────────────────────────────────────── */
@@ -374,7 +374,7 @@ export function SearchableSelect({ label, required, hint, options = [], value, o
 
       {open && (
         <div className="rounded-xl overflow-hidden" style={{ ...dropdownStyle, ...panelStyle }}>
-          <div className="p-2 border-b" style={{ borderColor: '#F3F4F6' }}>
+          <div className="p-2 border-b" style={{ borderColor: 'var(--line-soft)' }}>
             <div className="relative">
               <svg className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
@@ -460,7 +460,7 @@ export function TreeSelect({ label, required, hint, tree = [], leafLabels = {}, 
             onClick={() => toggle(node.id)}
             className="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 text-sm font-bold text-gray-800 transition-all"
             style={{ paddingLeft: 14 + depth * 14 }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#F9FAFB' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface-soft)' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
           >
             <span className="text-left leading-snug">{node.label}</span>
@@ -713,8 +713,8 @@ export function Checkbox({ label, checked, onChange, className = '' }) {
       <span
         className="w-[18px] h-[18px] rounded-[5px] flex items-center justify-center shrink-0 transition-all"
         style={{
-          background: checked ? BRAND_GRADIENT : 'white',
-          border: checked ? 'none' : '1.5px solid #D1D5DB',
+          background: checked ? BRAND_GRADIENT : 'var(--surface-card)',
+          border: checked ? 'none' : '1.5px solid var(--line-strong)',
         }}
       >
         {checked && (

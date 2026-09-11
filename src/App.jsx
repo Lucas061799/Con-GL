@@ -14,6 +14,7 @@ import { rateAll } from './lib/rating'
 import { defaultTermsFor } from './data/carrierTerms'
 import { rulesForCodes, subKey } from './data/conditionalQuestions'
 import DemoBar from './demo/DemoBar'
+import { useDarkMode } from './theme'
 import { DEMO_INTAKE, demoPhaseOne, demoPhaseTwo } from './demo/demoData'
 
 const STEPS = [
@@ -47,6 +48,8 @@ const demoOn = () => new URLSearchParams(window.location.search).has('demo')
 
 export default function App() {
   const [demo] = useState(demoOn)
+  const [dark, setDark] = useDarkMode()
+  const toggleDark = () => setDark(d => !d)
   const [started, setStarted] = useState(false)
   const [submissionNumber, setSubmissionNumber] = useState('')
   const [form, setForm] = useState({})
@@ -297,7 +300,15 @@ export default function App() {
 
   /* ── Render ─────────────────────────────────────────────────────── */
 
+  // The landing page has no rail, so it keeps the floating bar; everywhere
+  // else the jump lives in the rail beside the dark toggle.
   const demoBar = demo ? <DemoBar jumps={demoJumps} active={demoActive} /> : null
+  const railExtras = {
+    dark,
+    onToggleDark: toggleDark,
+    demoJumps: demo ? demoJumps : null,
+    demoActive,
+  }
 
   if (!started) return <>
     <PageZero onContinue={startApplication} />
@@ -316,8 +327,8 @@ export default function App() {
         amount={chosenPremium}
         onExit={() => setApplication(null)}
         onStartOver={startOver}
+        railExtras={railExtras}
       />
-      {demoBar}
       </>
     )
   }
@@ -340,6 +351,7 @@ export default function App() {
       bare={view === 'indication'}
       inCompare={view === 'indication'}
       scrollRef={scrollRef}
+      railExtras={railExtras}
     >
       {view === 'form' ? (
         <>
@@ -395,7 +407,6 @@ export default function App() {
           onCancel={() => setHandoff('none')}
         />
       )}
-      {demoBar}
     </AppShell>
   )
 }
