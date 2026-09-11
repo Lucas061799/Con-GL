@@ -1,4 +1,4 @@
-// Sample answers for the demo shortcut. Nothing here changes how the app
+// Sample answers for the Quick Jump shortcut. Nothing here changes how the app
 // validates — every field is simply already answered, so each step passes on
 // its own rules.
 import { todayMDY } from '../components/FormField'

@@ -42,12 +42,8 @@ const newApplicationNumber = () =>
 
 const defaultTerms = () => ({ rli: defaultTermsFor('rli'), bravado: defaultTermsFor('bravado') })
 
-// ?demo turns on the shortcut bar and pre-answers every form. No validation is
-// skipped — the steps pass because the answers are already there.
-const demoOn = () => new URLSearchParams(window.location.search).has('demo')
 
 export default function App() {
-  const [demo] = useState(demoOn)
   const [started, setStarted] = useState(false)
   const [dark, setDark] = useDarkMode(started)
   const toggleDark = () => setDark(d => !d)
@@ -300,13 +296,13 @@ export default function App() {
 
   /* ── Render ─────────────────────────────────────────────────────── */
 
-  // The landing page has no rail, so it keeps the floating bar; everywhere
-  // else the jump lives in the rail beside the dark toggle.
-  const demoBar = demo ? <DemoBar jumps={demoJumps} active={demoActive} /> : null
+  // The landing page has no rail, so the jump sits in its corner; everywhere
+  // else it lives in the rail beside the dark toggle.
+  const demoBar = <DemoBar jumps={demoJumps} active={demoActive} />
   const railExtras = {
     dark,
     onToggleDark: toggleDark,
-    demoJumps: demo ? demoJumps : null,
+    demoJumps,
     demoActive,
   }
 
