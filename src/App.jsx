@@ -245,6 +245,15 @@ export default function App() {
     startApplication({ form: DEMO_INTAKE, quotes: rateAll(DEMO_INTAKE) }, true)
   }
 
+  // Leaves the application too, or a jump from phase two lands nowhere.
+  const demoForm = () => {
+    demoStart()
+    setApplication(null)
+    setHandoff('none')
+    setActiveStep('applicant')
+    setView('form')
+  }
+
   const demoIndication = () => {
     demoStart()
     setApplication(null)
@@ -271,7 +280,7 @@ export default function App() {
 
   const demoJumps = [
     { key: 'landing', label: 'Landing', go: startOver },
-    { key: 'form', label: 'Form', go: demoStart },
+    { key: 'form', label: 'Form', go: demoForm },
     { key: 'indication', label: 'Indication', go: demoIndication },
     { key: 'application', label: 'Application', go: demoApplication },
   ]

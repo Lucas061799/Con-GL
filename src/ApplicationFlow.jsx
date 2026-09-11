@@ -210,6 +210,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
           form={form}
           rows={rows}
           onStartOver={onStartOver ?? onExit}
+          dark={railExtras?.dark}
         />
       </ApplicationShell>
     )

@@ -7,13 +7,6 @@ import {
   APP_LIMITS, APP_DEDUCTIBLES, OPTIONAL_COVERAGES,
 } from '../../data/applicationOptions'
 
-const GRAD_TEXT = {
-  background: BRAND_GRADIENT,
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-  backgroundClip: 'text',
-}
-
 const ICONS = {
   user: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
   building: 'M3 21h18M5 21V7l7-4 7 4v14M9 9h1m4 0h1M9 13h1m4 0h1M9 17h1m4 0h1',
@@ -61,7 +54,10 @@ const money = (v) => (String(v ?? '').trim() ? `$${Number(String(v).replace(/\D/
 
 // The submission receipt, laid out the way Builder's Risk does it: no rails,
 // one headed card, then the application read back in panels.
-export default function Submitted({ submissionNumber, quote, amount, form = {}, rows = [], onStartOver }) {
+export default function Submitted({ submissionNumber, quote, amount, form = {}, rows = [], onStartOver, dark = false }) {
+  const printIdle = dark
+    ? { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }
+    : { background: 'white', border: '1px solid #E5E7EB' }
   const pct = form.workPct || {}
   const trades = form.subTrades || []
   const picked = OPTIONAL_COVERAGES.filter(c => form[c.key] === 'yes')
@@ -79,7 +75,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24">
                   <defs>
                     <linearGradient id="subCheckG" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#5C2ED4" /><stop offset="100%" stopColor="#A614C3" />
+                      <stop offset="0%" stopColor={dark ? '#A78BFA' : '#5C2ED4'} /><stop offset="100%" stopColor={dark ? '#E879F9' : '#A614C3'} />
                     </linearGradient>
                   </defs>
                   <path d="M5 13l4 4L19 7" stroke="url(#subCheckG)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -97,13 +93,15 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                 type="button"
                 title="Print / Save as PDF"
                 onClick={() => setTimeout(() => window.print(), 50)}
-                className="screen-only w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all hover:bg-gray-50"
-                style={{ border: '1px solid var(--line)', background: 'var(--surface-card)' }}
+                className="screen-only w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all"
+                style={printIdle}
+                onMouseEnter={e => Object.assign(e.currentTarget.style, { background: dark ? 'rgba(167,139,250,0.15)' : 'rgba(92,46,212,0.06)', borderColor: 'rgba(92,46,212,0.3)' })}
+                onMouseLeave={e => Object.assign(e.currentTarget.style, printIdle)}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24">
                   <defs>
                     <linearGradient id="hdrPrintG" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#5C2ED4" /><stop offset="100%" stopColor="#A614C3" />
+                      <stop offset="0%" stopColor={dark ? '#A78BFA' : '#5C2ED4'} /><stop offset="100%" stopColor={dark ? '#E879F9' : '#A614C3'} />
                     </linearGradient>
                   </defs>
                   <path
@@ -119,7 +117,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                 <p className="text-[10px] font-bold tracking-widest uppercase mb-1" style={{ color: '#9CA3AF' }}>
                   Submission Number
                 </p>
-                <p className="text-sm font-bold" style={GRAD_TEXT}>{submissionNumber}</p>
+                <p className="text-sm font-bold text-gradient">{submissionNumber}</p>
               </div>
               <div className="px-6 py-4">
                 <p className="text-[10px] font-bold tracking-widest uppercase mb-1" style={{ color: '#9CA3AF' }}>
@@ -133,7 +131,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                 </p>
                 <span className="inline-flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full" style={{ background: BRAND_GRADIENT }} />
-                  <span className="text-sm font-bold" style={GRAD_TEXT}>Submitted</span>
+                  <span className="text-sm font-bold text-gradient">Submitted</span>
                 </span>
               </div>
             </div>

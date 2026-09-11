@@ -211,7 +211,7 @@ function CheckMark({ id }) {
       <path d="M5 13l4 4L19 7" stroke={`url(#${id})`} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
       <defs>
         <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#5C2ED4" /><stop offset="100%" stopColor="#A614C3" />
+          <stop offset="0%" stopColor="#5C2ED4" className="grad-stop-0" /><stop offset="100%" stopColor="#A614C3" className="grad-stop-1" />
         </linearGradient>
       </defs>
     </svg>

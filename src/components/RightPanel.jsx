@@ -52,9 +52,7 @@ function WhatsNext() {
               className="w-9 h-9 rounded-full text-sm font-bold flex items-center justify-center shrink-0"
               style={{ background: 'linear-gradient(88.09deg, rgba(92,46,212,0.25) 0%, rgba(166,20,195,0.25) 100%)' }}
             >
-              <span style={{ background: BRAND_GRADIENT, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                {s.n}
-              </span>
+              <span className="text-gradient">{s.n}</span>
             </span>
             <div className="min-w-0">
               <p className="text-[13px] font-semibold leading-tight text-gray-900">{s.title}</p>
@@ -94,9 +92,7 @@ function WhereYouAre({ activeIndex }) {
                   opacity: active ? 1 : 0.55,
                 }}
               >
-                <span style={{ background: BRAND_GRADIENT, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                  {s.n}
-                </span>
+                <span className="text-gradient">{s.n}</span>
               </span>
               <span
                 className="text-sm leading-tight"
@@ -225,17 +221,7 @@ export default function RightPanel({
                     {stale ? (
                       <span className="text-3xl font-bold text-gray-300 tracking-[0.08em]">---</span>
                     ) : (
-                      <span
-                        className="text-3xl font-bold"
-                        style={{
-                          background: BRAND_GRADIENT,
-                          WebkitBackgroundClip: 'text',
-                          WebkitTextFillColor: 'transparent',
-                          backgroundClip: 'text',
-                        }}
-                      >
-                        {formatUSD(top.premium)}
-                      </span>
+                      <span className="text-3xl font-bold text-gradient">{formatUSD(top.premium)}</span>
                     )}
                   </div>
                   <p className="text-[11px] text-gray-500 mt-0.5">Annual Premium</p>
@@ -268,17 +254,7 @@ export default function RightPanel({
                     <div className="flex-1 min-w-0">
                       <p className="text-[11px] font-semibold truncate" style={{ color: dark ? '#F9FAFB' : '#374151' }}>{q.carrier}</p>
                       {isSelected && (
-                        <p
-                          className="text-[9px] font-semibold mt-0.5"
-                          style={{
-                            background: BRAND_GRADIENT,
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            backgroundClip: 'text',
-                          }}
-                        >
-                          ✓ Selected
-                        </p>
+                        <p className="text-[9px] font-semibold mt-0.5 text-gradient">✓ Selected</p>
                       )}
                     </div>
                     <div className="text-right shrink-0">

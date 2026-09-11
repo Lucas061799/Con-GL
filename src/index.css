@@ -31,6 +31,16 @@ input, select, textarea, button {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+/* The house dark gradient: the brand purples are too deep to read on navy. */
+html[data-dark="true"] .text-gradient {
+  background: linear-gradient(88.09deg, #A78BFA 0.11%, #E879F9 63.8%) !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+/* Same swap for SVG gradients drawn by components that don't know the theme. */
+html[data-dark="true"] .grad-stop-0 { stop-color: #A78BFA; }
+html[data-dark="true"] .grad-stop-1 { stop-color: #E879F9; }
 
 .btn-gradient {
   background: linear-gradient(88.09deg, #5C2ED4 0.11%, #A614C3 63.8%);

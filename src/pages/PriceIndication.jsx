@@ -9,7 +9,7 @@ function Tick({ ok }) {
       <path d="M5 13l4 4L19 7" stroke="url(#featOk)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
       <defs>
         <linearGradient id="featOk" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#5C2ED4" /><stop offset="100%" stopColor="#A614C3" />
+          <stop offset="0%" stopColor="#5C2ED4" className="grad-stop-0" /><stop offset="100%" stopColor="#A614C3" className="grad-stop-1" />
         </linearGradient>
       </defs>
     </svg>
@@ -157,10 +157,7 @@ export default function PriceIndication({ quotes, terms, onTermsChange, selected
       {/* Page header, not a form-section header — this is a destination, so it
           takes the eyebrow / title / submission line Compare Your Quotes uses. */}
       <div className="pb-1">
-        <p
-          className="text-[11px] font-bold tracking-widest uppercase mb-1.5"
-          style={{ background: BRAND_GRADIENT, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
-        >
+        <p className="text-[11px] font-bold tracking-widest uppercase mb-1.5 text-gradient">
           Compare &amp; Select
         </p>
         <h1 className="text-2xl md:text-3xl font-bold mb-1.5" style={{ color: 'var(--ink)' }}>
