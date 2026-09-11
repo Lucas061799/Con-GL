@@ -6,7 +6,9 @@ import norbieface from '../assets/norbieface.png'
 // panel, numbered steps, Norbie chat card pinned at the bottom over the
 // palm-leaf watermark.
 // Quick jump for demos: one button that opens the list of places to go.
-export function DemoJump({ jumps, active }) {
+export function DemoJump({ jumps, active, dark = false }) {
+  // #7C3AED disappears on navy; dark mode takes the house light purple.
+  const accent = dark ? '#A78BFA' : '#7C3AED'
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   useEffect(() => {
@@ -32,7 +34,11 @@ export function DemoJump({ jumps, active }) {
                 onClick={() => { setOpen(false); j.go() }}
                 className="w-full text-left px-3 py-2 rounded-lg text-[13px] transition hover:bg-gray-50"
                 style={on
-                  ? { background: 'linear-gradient(88.09deg, rgba(92,46,212,0.12) 0%, rgba(166,20,195,0.12) 100%)', color: '#7C3AED', fontWeight: 600 }
+                  ? {
+                      background: dark ? 'rgba(167,139,250,0.15)' : 'linear-gradient(88.09deg, rgba(92,46,212,0.12) 0%, rgba(166,20,195,0.12) 100%)',
+                      color: accent,
+                      fontWeight: 600,
+                    }
                   : { color: 'var(--ink-2)' }}
               >
                 {j.label}
@@ -49,9 +55,9 @@ export function DemoJump({ jumps, active }) {
       >
         <span
           className="w-10 h-5 rounded-full flex items-center justify-center shrink-0"
-          style={{ background: 'linear-gradient(88.09deg, rgba(92,46,212,0.14) 0%, rgba(166,20,195,0.14) 100%)' }}
+          style={{ background: dark ? 'rgba(167,139,250,0.18)' : 'linear-gradient(88.09deg, rgba(92,46,212,0.14) 0%, rgba(166,20,195,0.14) 100%)' }}
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
             <path d="M13 17l5-5-5-5M6 17l5-5-5-5" />
           </svg>
         </span>
@@ -178,7 +184,7 @@ export default function Sidebar({
 
       {demoJumps && (
         <div className="px-3 pb-2 relative z-20">
-          <DemoJump jumps={demoJumps} active={demoActive} />
+          <DemoJump jumps={demoJumps} active={demoActive} dark={dark} />
         </div>
       )}
 
