@@ -102,7 +102,7 @@ export default function Sidebar({
   return (
     <aside
       className="w-64 2xl:w-72 hidden lg:flex flex-col h-full shrink-0 relative overflow-hidden"
-      style={{ background: 'var(--surface-rail)', borderRight: '1px solid var(--line-soft)' }}
+      style={{ background: 'var(--surface-rail)', borderRight: dark ? '1px solid rgba(255,255,255,0.12)' : '1px solid #F3F4F6' }}
     >
       <div className="px-5 pt-5 pb-3 relative z-10">
         <h2 className="text-base font-bold leading-tight text-navy">{productName}</h2>
@@ -120,7 +120,7 @@ export default function Sidebar({
           </div>
         )}
 
-        <div className="mt-3" style={{ borderBottom: '1px solid var(--line-soft)' }} />
+        <div className="mt-3" style={{ borderBottom: dark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #F3F4F6' }} />
       </div>
 
       <nav className="flex-1 py-1 px-3 overflow-y-auto custom-scroll relative z-10">
@@ -140,27 +140,33 @@ export default function Sidebar({
                 onClick={() => onStepClick?.(step.key)}
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-150"
                 style={isActive
-                  ? { background: 'var(--surface-card)', border: '1.5px solid #7C3AED', boxShadow: '0 2px 12px rgba(92,46,212,0.12)' }
+                  ? dark
+                    ? { background: 'linear-gradient(180deg, rgba(42,28,70,0.28) 0%, rgba(166,20,195,0.68) 100%)', border: '1.5px solid rgba(166,20,195,0.65)', boxShadow: '0 4px 24px rgba(166,20,195,0.25)' }
+                    : { background: '#ffffff', border: '1.5px solid #7C3AED', boxShadow: '0 2px 12px rgba(92,46,212,0.12)' }
                   : { border: '1.5px solid transparent', background: 'transparent' }}
               >
                 <span
                   className="w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-bold shrink-0"
-                  style={isActive || isDone
-                    ? { background: 'linear-gradient(88.09deg, rgba(92,46,212,0.12) 0%, rgba(166,20,195,0.12) 100%)', color: '#5C2ED4' }
-                    : { background: 'var(--fill-subtle)', color: '#9CA3AF' }}
+                  style={isActive
+                    ? dark ? { background: 'rgba(255,255,255,0.2)', color: '#FFFFFF' } : { background: 'linear-gradient(88.09deg, rgba(92,46,212,0.12) 0%, rgba(166,20,195,0.12) 100%)', color: '#5C2ED4' }
+                    : isDone
+                      ? dark
+                        ? { background: 'linear-gradient(88.09deg, rgba(92,46,212,0.7) 0%, rgba(166,20,195,0.7) 100%)', color: '#ffffff' }
+                        : { background: 'linear-gradient(88.09deg, rgba(92,46,212,0.12) 0%, rgba(166,20,195,0.12) 100%)', color: '#5C2ED4' }
+                      : { background: dark ? 'rgba(255,255,255,0.08)' : '#F3F4F6', color: dark ? '#6B7280' : '#9CA3AF' }}
                 >
                   {isDone ? '✓' : step.number}
                 </span>
                 <span
                   className={`text-xs truncate ${isActive ? 'font-semibold' : isDone ? 'font-medium' : ''}`}
-                  style={isActive
+                  style={isActive && dark ? { color: '#FFFFFF' } : isActive
                     ? {
                         background: 'linear-gradient(88.09deg, #5C2ED4 0.11%, #A614C3 63.8%)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                         backgroundClip: 'text',
                       }
-                    : { color: isDone ? 'var(--ink-2)' : '#9CA3AF' }}
+                    : { color: dark ? (isDone ? '#D1D5DB' : '#8B8FA8') : (isDone ? '#4B5563' : '#9CA3AF') }}
                 >
                   {step.label}
                 </span>
@@ -199,7 +205,7 @@ export default function Sidebar({
         <img
           src={sidebarBg} alt=""
           className="absolute bottom-0 left-0 w-full h-full object-cover object-bottom"
-          style={{ opacity: dark ? 0.12 : 0.58, clipPath: 'inset(0 1px 0 0)' }}
+          style={{ opacity: dark ? 0.6 : 0.58, clipPath: 'inset(0 1px 0 0)' }}
         />
       </div>
     </aside>

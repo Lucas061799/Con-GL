@@ -20,8 +20,8 @@ export default function ApplicationShell({
   return (
     <div className="h-screen flex flex-col bg-white font-montserrat overflow-hidden">
       <header
-        className="flex items-center justify-between bg-white border-b border-gray-100 px-6 md:px-8 shrink-0"
-        style={{ height: 56 }}
+        className="flex items-center justify-between border-b border-gray-100 px-6 md:px-8 shrink-0"
+        style={{ height: 56, background: 'var(--surface-rail)' }}
       >
         <img src={norbielinkLogo} alt="NorbieLink" className="h-8 logo-light" />
         <img src={norbielinkLogoDark} alt="NorbieLink" className="h-8 logo-dark" />
@@ -52,6 +52,7 @@ export default function ApplicationShell({
         </main>
 
         <RightPanel
+          dark={railExtras?.dark}
           progress={progress}
           quotes={railQuotes}
           selectedCarrier={quote?.id}

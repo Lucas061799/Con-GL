@@ -17,12 +17,12 @@ function SkeletonRow() {
   )
 }
 
-function AutoSaveIcon() {
+function AutoSaveIcon({ dark }) {
   return (
     <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none">
       <defs>
         <linearGradient id="autoGradRP" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#5C2ED4" /><stop offset="100%" stopColor="#A614C3" />
+          <stop offset="0%" stopColor={dark ? '#A78BFA' : '#5C2ED4'} /><stop offset="100%" stopColor={dark ? '#E879F9' : '#A614C3'} />
         </linearGradient>
       </defs>
       <path d="M12 16V9m0 0l-3 3m3-3l3 3" stroke="url(#autoGradRP)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -118,8 +118,14 @@ export default function RightPanel({
   progress, quotes = [], stale, onRefresh,
   selectedCarrier, onSelectCarrier,
   onFormReview, formComplete = false,
-  inCompare = false, compareStep, submitted = false,
+  inCompare = false, compareStep, submitted = false, dark = false,
 }) {
+  // GL-BOP's rail values for dark: faint white fills, 0.08 lines.
+  const idleFill = dark ? 'rgba(255,255,255,0.04)' : 'white'
+  const idleLine = dark ? 'rgba(255,255,255,0.08)' : '#E5E7EB'
+  const disabledBtn = dark
+    ? { background: 'rgba(255,255,255,0.04)', color: '#6B7280', border: '1px solid rgba(255,255,255,0.08)' }
+    : { background: '#FAFAFB', color: '#9CA3AF', border: '1px solid #E5E7EB' }
   const hasQuotes = quotes.length > 0
   const chosen = quotes.find(q => q.id === selectedCarrier)
   const top = inCompare ? (chosen ?? quotes[0]) : quotes[0]
@@ -128,7 +134,7 @@ export default function RightPanel({
   return (
     <aside
       className="w-80 2xl:w-96 hidden xl:flex flex-col h-full shrink-0"
-      style={{ background: 'var(--surface-card)', borderLeft: '1px solid var(--line-soft)' }}
+      style={{ background: 'var(--surface-rail)', borderLeft: '1px solid var(--line-soft)' }}
     >
       <div className="p-5 flex-1 overflow-y-auto custom-scroll">
 
@@ -136,20 +142,20 @@ export default function RightPanel({
 
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5">
-            <AutoSaveIcon />
+            <AutoSaveIcon dark={dark} />
             <span className="text-xs font-medium text-gradient">All progress auto-saved</span>
           </div>
           <span className="text-xs font-bold text-gradient">{submitted ? 100 : progress}%</span>
         </div>
 
-        <div className="w-full h-1.5 rounded-full overflow-hidden mb-4" style={{ background: 'var(--fill-subtle)' }}>
+        <div className="w-full h-1.5 rounded-full overflow-hidden mb-4" style={{ background: dark ? 'rgba(255,255,255,0.08)' : '#F3F4F6' }}>
           <div
             className="h-full rounded-full transition-all duration-500"
             style={{ width: `${submitted ? 100 : progress}%`, background: BRAND_GRADIENT }}
           />
         </div>
 
-        <div className="mb-5" style={{ borderTop: '1px solid var(--line-soft)' }} />
+        <div className="mb-5" style={{ borderTop: `1px solid ${dark ? 'rgba(255,255,255,0.08)' : '#F3F4F6'}` }} />
 
         {submitted ? (
           <WhatsNext />
@@ -182,8 +188,10 @@ export default function RightPanel({
                     pickable ? 'cursor-pointer hover:-translate-y-px' : ''
                   }`}
                   style={{
-                    background: 'var(--surface-card)',
-                    border: `1.5px solid ${isHighlighted ? (isSelected ? '#5C2ED4' : '#7C3AED') : 'var(--line)'}`,
+                    background: idleFill,
+                    border: `1.5px solid ${isHighlighted
+                      ? (dark ? 'rgba(124,58,237,0.55)' : isSelected ? '#5C2ED4' : '#7C3AED')
+                      : idleLine}`,
                     boxShadow: isSelected
                       ? '0 6px 24px rgba(92,46,212,0.22)'
                       : isHighlighted ? '0 4px 20px rgba(92,46,212,0.10)' : 'none',
@@ -233,7 +241,7 @@ export default function RightPanel({
                   <p className="text-[11px] text-gray-500 mt-0.5">Annual Premium</p>
                   <p
                     className="text-[10px] font-semibold mt-2"
-                    style={{ color: isSelected ? '#5C2ED4' : '#9CA3AF' }}
+                    style={{ color: isSelected ? (dark ? '#A78BFA' : '#5C2ED4') : '#9CA3AF' }}
                   >
                     {isSelected ? '✓ Selected' : pickable ? 'Tap to select' : ''}
                   </p>
@@ -251,14 +259,14 @@ export default function RightPanel({
                     onClick={() => onSelectCarrier?.(q.id)}
                     className="w-full rounded-xl px-3 py-3 flex items-center gap-3 transition text-left cursor-pointer"
                     style={{
-                      background: isSelected ? 'rgba(124,58,237,0.06)' : 'var(--surface-card)',
-                      border: `1.5px solid ${isSelected ? '#7C3AED' : 'var(--line)'}`,
+                      background: isSelected ? (dark ? 'rgba(124,58,237,0.18)' : 'rgba(124,58,237,0.06)') : idleFill,
+                      border: `1.5px solid ${isSelected ? '#7C3AED' : idleLine}`,
                       boxShadow: isSelected ? '0 4px 14px rgba(92,46,212,0.10)' : 'none',
                     }}
                   >
                     <CarrierMark carrier={q.carrier} product={q.product} logo={q.logo} size="sm" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-[11px] font-semibold truncate text-gray-700">{q.carrier}</p>
+                      <p className="text-[11px] font-semibold truncate" style={{ color: dark ? '#F9FAFB' : '#374151' }}>{q.carrier}</p>
                       {isSelected && (
                         <p
                           className="text-[9px] font-semibold mt-0.5"
@@ -299,7 +307,7 @@ export default function RightPanel({
               className="w-full inline-flex items-center justify-center gap-1.5 mt-4 py-2.5 rounded-xl text-xs font-bold transition disabled:cursor-not-allowed"
               style={stale
                 ? { background: BRAND_GRADIENT, color: 'white', boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }
-                : { background: 'var(--surface-softer)', color: '#9CA3AF', border: '1px solid var(--line)' }}
+                : disabledBtn}
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 12a9 9 0 1 1-2.64-6.36" /><path d="M21 3v6h-6" />
@@ -309,7 +317,7 @@ export default function RightPanel({
           </>
         )}
 
-        <div className="my-5" style={{ borderTop: '1px solid var(--line-soft)' }} />
+        <div className="my-5" style={{ borderTop: `1px solid ${dark ? 'rgba(255,255,255,0.08)' : '#F3F4F6'}` }} />
 
         {/* No point handing over a half-filled application, so this only
             lights up once every section is answered. */}
@@ -321,7 +329,7 @@ export default function RightPanel({
           className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition disabled:cursor-not-allowed enabled:hover:opacity-90"
           style={formComplete
             ? { background: BRAND_GRADIENT, color: 'white', boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }
-            : { background: 'var(--surface-softer)', color: '#9CA3AF', border: '1px solid var(--line)' }}
+            : disabledBtn}
         >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
