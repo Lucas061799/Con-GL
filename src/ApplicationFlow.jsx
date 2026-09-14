@@ -147,21 +147,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
 
   const pages = {
     eligibility: <EligibilityStatements form={form} set={set} errorFor={errorFor} rows={rows} />,
-    coverage: (
-      <>
-        <CoverageCustomization form={form} set={set} errorFor={errorFor} />
-        <div className="flex justify-end mt-6">
-          <button
-            type="button"
-            onClick={submitCoverage}
-            className="px-8 py-2.5 rounded-xl text-[13px] font-bold text-white transition hover:opacity-90"
-            style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
-          >
-            Submit
-          </button>
-        </div>
-      </>
-    ),
+    coverage: <CoverageCustomization form={form} set={set} errorFor={errorFor} />,
     review: (
       <ReviewSelectPayment
         form={form} set={set} errorFor={errorFor}
@@ -211,7 +197,12 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
       progress={progress}
       quote={quote}
       quoteAmount={amount}
-      premium={{ form, amount, quote, onBrokerFee: set('brokerFee') }}
+      premium={{
+        form, amount, quote,
+        onBrokerFee: set('brokerFee'),
+        // Legacy submits from under the breakdown, and only on the first page.
+        onSubmit: stage === 'form' ? submitCoverage : null,
+      }}
       summaryReady
       onFormReview={() => setTimeout(() => window.print(), 50)}
       scrollRef={scrollRef}

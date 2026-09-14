@@ -21,14 +21,11 @@ function Heading({ children }) {
 
 function Radio({ checked, onChange, label, note }) {
   return (
-    // A single-line option centres on its label; one with a note underneath
-    // lines the circle up with the first line instead.
-    <label
-      onClick={onChange}
-      className={`flex ${note ? 'items-start' : 'items-center'} gap-2.5 cursor-pointer select-none py-1.5`}
-    >
+    // The label's first line is set to the circle's own height, so the two line
+    // up exactly whether or not there is a note underneath.
+    <label onClick={onChange} className="flex items-start gap-2.5 cursor-pointer select-none py-1.5">
       <span
-        className={`w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0 ${note ? 'mt-[1px]' : ''}`}
+        className="w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0"
         style={{
           border: checked ? 'none' : '1.5px solid var(--line-strong)',
           background: checked ? BRAND_GRADIENT : 'var(--surface-card)',
@@ -36,9 +33,9 @@ function Radio({ checked, onChange, label, note }) {
       >
         {checked && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
       </span>
-      <span>
-        <span className="text-[13px]" style={{ color: 'var(--ink)' }}>{label}</span>
-        {note && <span className="block text-[12px] text-gray-400 mt-0.5">{note}</span>}
+      <span className="min-w-0">
+        <span className="block text-[13px] leading-[18px]" style={{ color: 'var(--ink)' }}>{label}</span>
+        {note && <span className="block text-[12px] leading-snug text-gray-400 mt-0.5">{note}</span>}
       </span>
     </label>
   )
