@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Select, Checkbox, InfoTip, YesNo } from '../../components/FormField'
 import {
   CC_DEDUCTIBLES, CC_GL_LIMITS, CC_DAMAGES_TO_PREMISES, CC_MEDICAL_LIMITS, CC_LIMIT_HELP,
@@ -15,7 +16,7 @@ function Heading({ children }) {
 
 // One coverage line: label on the left, help bubble, then either a price-bearing
 // checkbox or a read-only status, the way the legacy rows read.
-function CoverageRow({ label, help, status, price, included, checked, onChange, children }) {
+function CoverageRow({ label, help, status, price, included, checked, pricing, onChange, children }) {
   return (
     <div className="py-2.5" style={{ borderBottom: '1px solid var(--line-soft)' }}>
       <div className="flex items-start gap-3">
@@ -32,11 +33,12 @@ function CoverageRow({ label, help, status, price, included, checked, onChange, 
           ) : (
             <>
               <Checkbox checked={!!checked} onChange={onChange} />
-              {/* A ticked row prints its price, or "Included" where the legacy
-                  screen shows that instead. The rest just show the tick. */}
+              {/* A ticked row reads "Included" until its price is back, then
+                  prints the figure. Covers with no price stay on "Included",
+                  and the rest just show the tick. */}
               {checked && (price != null || included) && (
                 <span className="text-[12.5px] font-bold" style={{ color: 'var(--ink)' }}>
-                  {price != null ? `$${price}` : 'Included'}
+                  {price != null && !pricing ? `$${price}` : 'Included'}
                 </span>
               )}
             </>
@@ -51,6 +53,20 @@ function CoverageRow({ label, help, status, price, included, checked, onChange, 
 // The premium breakdown that sits beside this step on the legacy screen lives
 // in the right rail here, so this page is just the coverage choices.
 export default function CoverageCustomization({ form, set, errorFor }) {
+  // Ticking a cover shows it as Included straight away; the figure lands once
+  // the premium comes back, which is how the legacy screen behaves.
+  const [pricing, setPricing] = useState(() => new Set())
+  const toggle = (o) => (v) => {
+    set(o.key)(v)
+    if (!v || o.price == null) return
+    setPricing(keys => new Set(keys).add(o.key))
+    setTimeout(() => setPricing(keys => {
+      const next = new Set(keys)
+      next.delete(o.key)
+      return next
+    }), 700)
+  }
+
   const toolsPicked = !!form.toolsEquipment
   const toolsDeclined = toolsPicked && form.imClaims === 'yes'
 
@@ -96,7 +112,7 @@ export default function CoverageCustomization({ form, set, errorFor }) {
           <CoverageRow
             key={o.key}
             label={o.label} help={o.help} price={o.price}
-            checked={form[o.key]} onChange={set(o.key)}
+            checked={form[o.key]} pricing={pricing.has(o.key)} onChange={toggle(o)}
           >
             {o.key === 'toolsEquipment' && toolsPicked && (
               <div className="mt-3 pl-1 space-y-3">
@@ -138,7 +154,7 @@ export default function CoverageCustomization({ form, set, errorFor }) {
           <CoverageRow
             key={o.key}
             label={o.label} help={o.help} status={o.status} price={o.price}
-            checked={form[o.key]} onChange={set(o.key)}
+            checked={form[o.key]} pricing={pricing.has(o.key)} onChange={toggle(o)}
           />
         ))}
       </div>
@@ -149,7 +165,7 @@ export default function CoverageCustomization({ form, set, errorFor }) {
           <CoverageRow
             key={o.key}
             label={o.label} help={o.help} price={o.price} included={o.included}
-            checked={form[o.key]} onChange={set(o.key)}
+            checked={form[o.key]} pricing={pricing.has(o.key)} onChange={toggle(o)}
           >
             {o.subOptions && form[o.key] && (
               <div className="mt-3 flex items-center gap-4 flex-wrap">
