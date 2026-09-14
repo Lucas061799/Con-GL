@@ -2,8 +2,10 @@ import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
 import ApplicationShell from './components/ApplicationShell'
 import Section from './components/Section'
 import { BRAND_GRADIENT } from './components/FormField'
+import { QuoteApproved } from './components/QuoteHandoff'
 import EligibilityStatements from './pages/application/EligibilityStatements'
 import CoverageCustomization from './pages/application/CoverageCustomization'
+import ReviewSelectPayment from './pages/application/ReviewSelectPayment'
 import Submitted from './pages/application/Submitted'
 
 // Phase two picks the legacy flow up where Price Indication leaves off.
@@ -29,6 +31,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
   const [rows] = useState(seed.classifications ?? [])
   const [activeStep, setActiveStep] = useState('eligibility')
   const [submitted, setSubmitted] = useState(false)
+  const [approved, setApproved] = useState(false)
   const [touched, setTouched] = useState(false)
   const scrollRef = useRef(null)
   const sectionRefs = useRef({})
@@ -58,14 +61,16 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
     }
     if (form.employeeBenefits && blank('employeeBenefitsLimit')) out.coverage.push('employeeBenefitsLimit')
 
+    out.review.push(...['effectiveDate', 'paymentMethod'].filter(blank))
+
     return out
   }, [form])
 
   const completed = {
     eligibility: missingBySection.eligibility.length === 0,
     coverage: missingBySection.coverage.length === 0,
-    // Nothing to complete on these two until their screens are supplied.
-    review: true,
+    review: missingBySection.review.length === 0,
+    // Nothing to complete here until the screen is supplied.
     bind: true,
   }
 
@@ -109,7 +114,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
       if (first) jumpTo(first.key)
       return
     }
-    setSubmitted(true)
+    setApproved(true)
   }
 
   /* ── Render ─────────────────────────────────────────────────────── */
@@ -117,7 +122,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
   const pages = {
     eligibility: <EligibilityStatements form={form} set={set} errorFor={errorFor} rows={rows} />,
     coverage: <CoverageCustomization form={form} set={set} errorFor={errorFor} />,
-    review: <PendingStep name="Review & Select Payment" />,
+    review: <ReviewSelectPayment form={form} set={set} errorFor={errorFor} />,
     bind: <PendingStep name="Sign and Request to Bind" />,
   }
 
@@ -188,6 +193,16 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
           </svg>
         </button>
       </div>
+
+      {/* Continue would land on Review & Select Payment once that screen
+          exists; for now it carries on to the submitted receipt. */}
+      {approved && (
+        <QuoteApproved
+          quote={quote}
+          onContinue={() => { setApproved(false); setSubmitted(true) }}
+          onDismiss={() => setApproved(false)}
+        />
+      )}
     </ApplicationShell>
   )
 }

@@ -53,6 +53,7 @@ export const demoPhaseTwo = () => ({
   ccDamagesToPremises: '100000',
   ccMedicalLimit: '5000',
   brokerFee: '100',
+  paymentMethod: 'direct-bill',
   workPct: { residential: '100', newConstruction: '100' },
   subTrades: ['Framing', 'Drywall'],
   subTradesOther: '',

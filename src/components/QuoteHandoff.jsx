@@ -19,6 +19,23 @@ export function TurnaroundNotice({ onContinue, onCancel }) {
   )
 }
 
+// Submitting the coverage step clears the quote, and the legacy screen says so
+// before moving on to payment.
+export function QuoteApproved({ quote, onContinue, onDismiss }) {
+  return (
+    <Modal title="YOUR QUOTE HAS BEEN APPROVED!" onDismiss={onDismiss} footer={
+      <ModalButton onClick={onContinue}>Continue</ModalButton>
+    }>
+      <div className="flex items-center gap-3">
+        <CarrierMark carrier={quote?.carrier} product={quote?.product} logo={quote?.logo} size="sm" />
+        <p className="text-[14px] text-gray-600 leading-relaxed">
+          Click Continue to review the submission information and select the method of payment.
+        </p>
+      </div>
+    </Modal>
+  )
+}
+
 export function QuoteReady({ quote, onGo, onCancel }) {
   return (
     <Modal title="YOUR QUOTE IS READY" onDismiss={onCancel} footer={

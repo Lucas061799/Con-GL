@@ -148,3 +148,25 @@ export const CC_OPTIONAL = [
 
 // The fee the legacy premium breakdown adds to every quote.
 export const BTIS_POLICY_FEE = 150
+
+/* ── Review & Select Payment ─────────────────────────────────────── */
+
+export const PAYMENT_METHODS = [
+  {
+    key: 'direct-bill',
+    label: 'Direct Bill',
+    by: 'by BTIS DirectPay',
+    desc: 'Automatic renewals with 1 pay or 10 pay options.',
+    recommended: true,
+  },
+  {
+    key: 'premium-financing',
+    label: 'Paperless Premium Financing',
+    desc: 'Down payment with 10 monthly installments.',
+  },
+  {
+    key: 'agency-bill',
+    label: 'Agency Bill',
+    desc: 'The agency bills the insured and collects premium.',
+  },
+]
