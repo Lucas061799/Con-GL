@@ -19,12 +19,13 @@ function CoverageRow({ label, help, status, price, included, checked, onChange, 
   return (
     <div className="py-2.5" style={{ borderBottom: '1px solid var(--line-soft)' }}>
       <div className="flex items-start gap-3">
+        {/* The bubble sits at the end of the label, as it does everywhere else. */}
         <p className="flex-1 text-[12.5px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
           {label}
+          <span className="inline-flex align-middle ml-1.5 -mt-px">
+            <InfoTip title={label}>{help}</InfoTip>
+          </span>
         </p>
-        <span className="shrink-0 mt-0.5">
-          <InfoTip title={label}>{help}</InfoTip>
-        </span>
         <div className="shrink-0 w-[150px] flex items-center gap-2 justify-start">
           {status ? (
             <span className="text-[12.5px] font-bold" style={{ color: 'var(--ink)' }}>{status}</span>
