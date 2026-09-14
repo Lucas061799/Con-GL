@@ -275,7 +275,9 @@ export default function RightPanel({
               })}
             </div>}
 
-            {inCompare && <WhereYouAre activeIndex={compareStep ?? (selectedCarrier ? 1 : 0)} />}
+            {/* The application's own rail already lists the steps, so the
+                two-step summary only belongs on the indication page. */}
+            {inCompare && !premium && <WhereYouAre activeIndex={compareStep ?? (selectedCarrier ? 1 : 0)} />}
 
             {/* Answers that move the price were edited — prices stay blank
                 until the applicant asks for a fresh set. */}

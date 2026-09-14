@@ -6,6 +6,7 @@ import { QuoteApproved } from './components/QuoteHandoff'
 import EligibilityStatements from './pages/application/EligibilityStatements'
 import CoverageCustomization from './pages/application/CoverageCustomization'
 import ReviewSelectPayment from './pages/application/ReviewSelectPayment'
+import ApplicationSummary from './pages/application/ApplicationSummary'
 import Submitted from './pages/application/Submitted'
 
 // Phase two picks the legacy flow up where Price Indication leaves off.
@@ -15,6 +16,15 @@ const STEPS = [
   { key: 'review',      label: 'Review & Select Payment' },
   { key: 'bind',        label: 'Sign and Request to Bind' },
 ].map((s, i) => ({ ...s, number: i + 1 }))
+
+// The first two steps share a page; submitting the coverage moves on to the
+// second page, where the application is paid for and signed.
+const STAGE_OF = {
+  eligibility: 'form',
+  coverage: 'form',
+  review: 'bind',
+  bind: 'bind',
+}
 
 // The legacy screens for the last two steps have not been supplied yet, so
 // they say so rather than carry invented fields.
@@ -30,6 +40,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
   const [form, setForm] = useState(seed)
   const [rows] = useState(seed.classifications ?? [])
   const [activeStep, setActiveStep] = useState('eligibility')
+  const [stage, setStage] = useState('form')
   const [submitted, setSubmitted] = useState(false)
   const [approved, setApproved] = useState(false)
   const [touched, setTouched] = useState(false)
@@ -90,8 +101,10 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
 
   const jumpTo = (key) => {
     setActiveStep(key)
-    requestAnimationFrame(() =>
-      sectionRefs.current[key]?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+    setStage(STAGE_OF[key] ?? 'form')
+    // Two frames: the other page has to mount before it can be scrolled to.
+    requestAnimationFrame(() => requestAnimationFrame(() =>
+      sectionRefs.current[key]?.scrollIntoView({ behavior: 'smooth', block: 'start' })))
   }
 
   useEffect(() => {
@@ -109,7 +122,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
     )
     Object.values(sectionRefs.current).forEach(el => el && observer.observe(el))
     return () => observer.disconnect()
-  }, [steps.length, submitted])
+  }, [steps.length, submitted, stage])
 
   const submit = () => {
     setTouched(true)
@@ -121,15 +134,39 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
     setApproved(true)
   }
 
+  // Legacy submits at the end of Coverage Customization: the quote clears, and
+  // the applicant carries on to payment.
+  const submitCoverage = () => {
+    setTouched(true)
+    const blocked = ['eligibility', 'coverage'].find(k => missingBySection[k].length)
+    if (blocked) { jumpTo(blocked); return }
+    setApproved(true)
+  }
+
   /* ── Render ─────────────────────────────────────────────────────── */
 
   const pages = {
     eligibility: <EligibilityStatements form={form} set={set} errorFor={errorFor} rows={rows} />,
-    coverage: <CoverageCustomization form={form} set={set} errorFor={errorFor} />,
+    coverage: (
+      <>
+        <CoverageCustomization form={form} set={set} errorFor={errorFor} />
+        <div className="flex justify-end mt-6">
+          <button
+            type="button"
+            onClick={submitCoverage}
+            className="px-8 py-2.5 rounded-xl text-[13px] font-bold text-white transition hover:opacity-90"
+            style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
+          >
+            Submit
+          </button>
+        </div>
+      </>
+    ),
     review: (
       <ReviewSelectPayment
         form={form} set={set} errorFor={errorFor}
-        amount={amount} onContinue={() => jumpTo('bind')}
+        amount={amount} rows={rows}
+        onContinue={() => jumpTo('bind')} onEdit={jumpTo}
       />
     ),
     bind: <PendingStep name="Sign and Request to Bind" />,
@@ -175,10 +212,12 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
       quote={quote}
       quoteAmount={amount}
       premium={{ form, amount, quote, onBrokerFee: set('brokerFee') }}
+      summaryReady
+      onFormReview={() => setTimeout(() => window.print(), 50)}
       scrollRef={scrollRef}
       bare
     >
-      {steps.map(s => (
+      {steps.filter(s => STAGE_OF[s.key] === stage).map(s => (
         <Section
           key={s.key}
           id={s.key}
@@ -189,6 +228,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
         </Section>
       ))}
 
+      {stage === 'bind' && (
       <div className="px-4 md:px-10 pb-10 flex justify-end">
         <button
           type="button"
@@ -202,13 +242,17 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
           </svg>
         </button>
       </div>
+      )}
 
-      {/* Continue would land on Review & Select Payment once that screen
-          exists; for now it carries on to the submitted receipt. */}
+      {/* Print target for the rail's download while the application is open. */}
+      <div id="submission-print-area" className="print-summary">
+        <ApplicationSummary form={form} rows={rows} />
+      </div>
+
       {approved && (
         <QuoteApproved
           quote={quote}
-          onContinue={() => { setApproved(false); setSubmitted(true) }}
+          onContinue={() => { setApproved(false); jumpTo('review') }}
           onDismiss={() => setApproved(false)}
         />
       )}

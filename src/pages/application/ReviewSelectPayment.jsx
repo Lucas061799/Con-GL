@@ -1,5 +1,6 @@
 import { DateInput, YesNo, BRAND_GRADIENT } from '../../components/FormField'
 import { computeBreakdown } from '../../components/PremiumBreakdown'
+import ApplicationSummary from './ApplicationSummary'
 import {
   PAYMENT_METHODS, DIRECT_BILL_NOTE, INSTALLMENT_FEE, INSTALLMENT_SHARE,
   PAY_OPTIONS, SIGN_OPTIONS,
@@ -20,9 +21,14 @@ function Heading({ children }) {
 
 function Radio({ checked, onChange, label, note }) {
   return (
-    <label onClick={onChange} className="flex items-start gap-2.5 cursor-pointer select-none py-1.5">
+    // A single-line option centres on its label; one with a note underneath
+    // lines the circle up with the first line instead.
+    <label
+      onClick={onChange}
+      className={`flex ${note ? 'items-start' : 'items-center'} gap-2.5 cursor-pointer select-none py-1.5`}
+    >
       <span
-        className="w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0 mt-0.5"
+        className={`w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0 ${note ? 'mt-[1px]' : ''}`}
         style={{
           border: checked ? 'none' : '1.5px solid var(--line-strong)',
           background: checked ? BRAND_GRADIENT : 'var(--surface-card)',
@@ -50,7 +56,7 @@ function Group({ title, children }) {
 // The legacy step is two numbered parts: check the application over, then pick
 // how the premium gets paid. Choosing a method swaps the three cards for that
 // method's own questions.
-export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, onContinue }) {
+export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, rows = [], onContinue, onEdit }) {
   const picked = PAYMENT_METHODS.find(m => m.key === form.paymentMethod)
   const { totalDue } = computeBreakdown(form, amount)
 
@@ -78,6 +84,13 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, o
             <YesNo value={form.reviewApplication} onChange={set('reviewApplication')} />
           </div>
         </div>
+
+        {/* Saying yes reads the whole application back, as the legacy step does. */}
+        {form.reviewApplication === 'yes' && (
+          <div className="mt-5">
+            <ApplicationSummary form={form} rows={rows} onEdit={onEdit} />
+          </div>
+        )}
       </div>
 
       <div>

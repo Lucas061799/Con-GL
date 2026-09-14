@@ -42,6 +42,10 @@ html[data-dark="true"] .text-gradient {
 html[data-dark="true"] .grad-stop-0 { stop-color: #A78BFA; }
 html[data-dark="true"] .grad-stop-1 { stop-color: #E879F9; }
 
+/* The application's download target: off screen, printed on demand. */
+.print-summary { display: none; }
+@media print { .print-summary { display: block !important; } }
+
 .btn-gradient {
   background: linear-gradient(88.09deg, #5C2ED4 0.11%, #A614C3 63.8%);
   color: white;
