@@ -42,6 +42,33 @@ html[data-dark="true"] .text-gradient {
 html[data-dark="true"] .grad-stop-0 { stop-color: #A78BFA; }
 html[data-dark="true"] .grad-stop-1 { stop-color: #E879F9; }
 
+/* Inland Marine's bind card: a purple→magenta stroke around a faintly tinted
+   card, with a brand-tinted rule, drop zone and file rows to match. */
+.cb-choice-on {
+  border: 1.5px solid transparent;
+  background-image:
+    linear-gradient(#FBF7FF, #FBF7FF),
+    linear-gradient(88.09deg, #5C2ED4 0%, #A614C3 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+html[data-dark="true"] .cb-choice-on {
+  background-image:
+    linear-gradient(#2E2A52, #2E2A52),
+    linear-gradient(88.09deg, #A78BFA 0%, #E879F9 100%) !important;
+}
+.cb-rule-brand { border-top: 1px solid rgba(92,46,212,0.16); }
+html[data-dark="true"] .cb-rule-brand { border-top-color: rgba(167,139,250,0.30) !important; }
+.cb-drop { border-color: rgba(92,46,212,0.2); background: rgba(248,246,255,0.6); }
+.cb-drop:hover, .cb-drop-on { border-color: #5C2ED4; background: rgba(92,46,212,0.04); }
+html[data-dark="true"] .cb-drop { border-color: rgba(167,139,250,0.35) !important; background: rgba(167,139,250,0.06) !important; }
+html[data-dark="true"] .cb-drop:hover,
+html[data-dark="true"] .cb-drop-on { border-color: #A78BFA !important; background: rgba(167,139,250,0.12) !important; }
+.cb-icon-tile { background: rgba(92,46,212,0.09); }
+html[data-dark="true"] .cb-icon-tile { background: rgba(167,139,250,0.14) !important; }
+.cb-file-row { background: rgba(248,246,255,0.7); border: 1px solid rgba(92,46,212,0.12); }
+html[data-dark="true"] .cb-file-row { background: rgba(167,139,250,0.08) !important; border-color: rgba(167,139,250,0.22) !important; }
+
 /* The application's download target: off screen, printed on demand. */
 .print-summary { display: none; }
 @media print { .print-summary { display: block !important; } }

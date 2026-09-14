@@ -35,9 +35,11 @@ export function Panel({ title, icon = 'shield', action, children }) {
 export function Row({ label, value }) {
   if (value === '' || value == null) return null
   return (
-    <div className="flex items-center justify-between gap-4 py-1.5" style={{ borderBottom: '1px solid var(--line-soft)' }}>
-      <span className="text-[10px] shrink-0" style={{ color: '#9CA3AF' }}>{label}</span>
-      <span className="text-[10px] font-semibold text-right" style={{ color: 'var(--ink)' }}>{value}</span>
+    // The label gives up width before the value does, so a long label wraps
+    // instead of squeezing the answer into a column one word wide.
+    <div className="flex items-start justify-between gap-4 py-1.5" style={{ borderBottom: '1px solid var(--line-soft)' }}>
+      <span className="text-[10px] leading-snug flex-1 min-w-0" style={{ color: '#9CA3AF' }}>{label}</span>
+      <span className="text-[10px] font-semibold text-right leading-snug max-w-[55%]" style={{ color: 'var(--ink)' }}>{value}</span>
     </div>
   )
 }

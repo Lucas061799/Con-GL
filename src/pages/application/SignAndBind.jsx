@@ -15,12 +15,10 @@ function Heading({ children }) {
 function ChoiceCard({ selected, label, detail, onSelect, children }) {
   return (
     <div
-      className="rounded-xl transition-all"
-      style={{
-        background: 'var(--surface-card)',
-        border: `1.5px solid ${selected ? '#7C3AED' : 'var(--line)'}`,
-        boxShadow: selected ? '0 6px 20px rgba(92,46,212,0.12)' : 'none',
-      }}
+      className={`rounded-xl transition-all ${selected ? 'cb-choice-on' : ''}`}
+      style={selected
+        ? { boxShadow: '0 6px 20px rgba(92,46,212,0.12)' }
+        : { background: 'var(--surface-card)', border: '1.5px solid var(--line)' }}
     >
       <button type="button" onClick={onSelect} className="w-full text-left px-4 py-3.5 flex items-start gap-3">
         <span
@@ -40,7 +38,7 @@ function ChoiceCard({ selected, label, detail, onSelect, children }) {
       {/* The revealed field lines up with the label, not the card edge. */}
       {selected && children && (
         <div className="pl-11 pr-4 pb-4">
-          <div className="pt-4" style={{ borderTop: '1px solid var(--line)' }}>{children}</div>
+          <div className="pt-4 cb-rule-brand">{children}</div>
         </div>
       )}
     </div>
@@ -147,7 +145,7 @@ export default function SignAndBind({ form, set, errorFor, files = [], setFiles,
                     </svg>
                   </button>
 
-                  <div className="pt-4 mt-4" style={{ borderTop: '1px solid var(--line)' }}>
+                  <div className="pt-4 mt-4 cb-rule-brand">
                     <StepMark
                       n={2}
                       done={uploaded}
@@ -157,7 +155,7 @@ export default function SignAndBind({ form, set, errorFor, files = [], setFiles,
                     />
                   </div>
 
-                  <div className="pt-4 mt-4" style={{ borderTop: '1px solid var(--line)' }}>
+                  <div className="pt-4 mt-4 cb-rule-brand">
                     <StepMark
                       n={3}
                       done={uploaded}
@@ -169,11 +167,7 @@ export default function SignAndBind({ form, set, errorFor, files = [], setFiles,
                       onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
                       onDragLeave={() => setDragging(false)}
                       onDrop={(e) => { e.preventDefault(); setDragging(false); addFiles(e.dataTransfer.files) }}
-                      className={`cursor-pointer rounded-xl border-2 border-dashed flex flex-col items-center gap-2 transition-all ${uploaded ? 'py-3.5' : 'py-7'}`}
-                      style={{
-                        borderColor: dragging ? '#7C3AED' : 'rgba(166,20,195,0.3)',
-                        background: dragging ? 'rgba(124,58,237,0.04)' : 'transparent',
-                      }}
+                      className={`cb-drop ${dragging ? 'cb-drop-on' : ''} cursor-pointer rounded-xl border-2 border-dashed flex flex-col items-center gap-2 transition-all ${uploaded ? 'py-3.5' : 'py-7'}`}
                     >
                       <input
                         type="file"
@@ -182,10 +176,7 @@ export default function SignAndBind({ form, set, errorFor, files = [], setFiles,
                         className="hidden"
                         onChange={(e) => { addFiles(e.target.files); e.target.value = '' }}
                       />
-                      <span
-                        className="w-11 h-11 rounded-xl flex items-center justify-center"
-                        style={{ background: 'linear-gradient(88.09deg, rgba(92,46,212,0.10) 0%, rgba(166,20,195,0.10) 100%)' }}
-                      >
+                      <span className="cb-icon-tile w-11 h-11 rounded-xl flex items-center justify-center">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24">
                           <defs>
                             <linearGradient id="signClipG" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -211,8 +202,7 @@ export default function SignAndBind({ form, set, errorFor, files = [], setFiles,
                         {files.map(f => (
                           <div
                             key={f.name}
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl"
-                            style={{ background: 'var(--surface-soft)', border: '1px solid var(--line)' }}
+                            className="cb-file-row flex items-center gap-3 px-3 py-2.5 rounded-xl"
                           >
                             <span className="flex-1 min-w-0">
                               <span className="block text-xs font-semibold truncate" style={{ color: 'var(--ink)' }}>{f.name}</span>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Select, Checkbox, InfoTip, YesNo } from '../../components/FormField'
+import { FieldGroup } from '../../components/Section'
 import {
   CC_DEDUCTIBLES, CC_GL_LIMITS, CC_DAMAGES_TO_PREMISES, CC_MEDICAL_LIMITS, CC_LIMIT_HELP,
   CC_RECOMMENDED, CC_IM_CLAIMS_QUESTION, CC_IM_LIMITS, CC_IM_DECLINED,
@@ -74,8 +75,8 @@ export default function CoverageCustomization({ form, set, errorFor }) {
 
   return (
     <div className="space-y-6">
-      <div>
-        <Heading>Limits and Recommended Options</Heading>
+      {/* An input cluster, so it takes the house box. */}
+      <FieldGroup label="Limits and Recommended Options">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
           <Select
             label="Deductible" required hint={CC_LIMIT_HELP.deductible}
@@ -106,7 +107,7 @@ export default function CoverageCustomization({ form, set, errorFor }) {
             error={errorFor('ccMedicalLimit')}
           />
         </div>
-      </div>
+      </FieldGroup>
 
       <div>
         <Heading>Recommended Options</Heading>

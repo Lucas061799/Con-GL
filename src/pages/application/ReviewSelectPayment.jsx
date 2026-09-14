@@ -1,5 +1,6 @@
 import { DateInput, YesNo, BRAND_GRADIENT } from '../../components/FormField'
 import { computeBreakdown } from '../../components/PremiumBreakdown'
+import { FieldGroup } from '../../components/Section'
 import ApplicationSummary from './ApplicationSummary'
 import {
   PAYMENT_METHODS, DIRECT_BILL_NOTE, INSTALLMENT_FEE, INSTALLMENT_SHARE,
@@ -69,7 +70,8 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
     <div className="space-y-6">
       <div>
         <Heading>Step 1: Review / Edit the Application</Heading>
-        <div className="flex flex-wrap items-start gap-x-10 gap-y-5">
+        <FieldGroup>
+          <div className="flex flex-wrap items-start gap-x-10 gap-y-5">
           <DateInput
             label="Effective Date" required
             value={form.effectiveDate} onChange={set('effectiveDate')}
@@ -80,7 +82,8 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
             <p className="text-[13px] font-semibold text-gray-600 mb-1.5 tracking-wide">Review Application:</p>
             <YesNo value={form.reviewApplication} onChange={set('reviewApplication')} />
           </div>
-        </div>
+          </div>
+        </FieldGroup>
 
         {/* Saying yes reads the whole application back, as the legacy step does. */}
         {form.reviewApplication === 'yes' && (
