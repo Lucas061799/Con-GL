@@ -23,11 +23,18 @@ export function TurnaroundNotice({ onContinue, onCancel }) {
 // before moving on to payment.
 export function QuoteApproved({ quote, onContinue, onDismiss }) {
   return (
-    <Modal title="YOUR QUOTE HAS BEEN APPROVED!" onDismiss={onDismiss} footer={
-      <ModalButton onClick={onContinue}>Continue</ModalButton>
+    // The footer spreads its children, so an empty first slot keeps the lone
+    // button on the right with the other dialogs' primaries.
+    // Wide enough for the title to hold one line next to the close button.
+    <Modal title="YOUR QUOTE HAS BEEN APPROVED!" width={540} onDismiss={onDismiss} footer={
+      <>
+        <span />
+        <ModalButton onClick={onContinue}>Continue</ModalButton>
+      </>
     }>
-      <div className="flex items-center gap-3">
-        <CarrierMark carrier={quote?.carrier} product={quote?.product} logo={quote?.logo} size="sm" />
+      {/* The mark stands as tall as the three lines beside it. */}
+      <div className="flex items-center gap-4">
+        <CarrierMark carrier={quote?.carrier} product={quote?.product} logo={quote?.logo} size="lg" />
         <p className="text-[14px] text-gray-600 leading-relaxed">
           Click Continue to review the submission information and select the method of payment.
         </p>

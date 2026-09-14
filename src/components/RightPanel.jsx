@@ -322,18 +322,6 @@ export default function RightPanel({
           </svg>
           Download Application Summary
         </button>
-
-        {/* Legacy submits the coverage from under the breakdown. */}
-        {premium?.onSubmit && (
-          <button
-            type="button"
-            onClick={premium.onSubmit}
-            className="w-full mt-3 py-2.5 rounded-xl text-xs font-bold text-white transition hover:opacity-90"
-            style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
-          >
-            Submit
-          </button>
-        )}
       </div>
     </aside>
   )

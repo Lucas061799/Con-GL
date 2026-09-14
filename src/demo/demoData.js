@@ -57,6 +57,8 @@ export const demoPhaseTwo = () => ({
   installmentOption: 'one-pay',
   payMethod: 'complete',
   signMethod: 'esign',
+  insuredEmail: 'ops@sierraridge.com',
+  attested: true,
   workPct: { residential: '100', newConstruction: '100' },
   subTrades: ['Framing', 'Drywall'],
   subTradesOther: '',

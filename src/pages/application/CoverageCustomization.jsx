@@ -184,6 +184,12 @@ export default function CoverageCustomization({ form, set, errorFor }) {
           </CoverageRow>
         ))}
       </div>
+
+      {/* The figures move as covers are ticked, and they live in the rail. */}
+      <p className="text-[12px] text-gray-400">
+        Every cover you add updates the <span className="font-semibold" style={{ color: 'var(--ink-2)' }}>Premium Breakdown</span> on
+        the right — check it before you submit.
+      </p>
     </div>
   )
 }

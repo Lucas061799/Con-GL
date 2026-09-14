@@ -7,6 +7,7 @@ import EligibilityStatements from './pages/application/EligibilityStatements'
 import CoverageCustomization from './pages/application/CoverageCustomization'
 import ReviewSelectPayment from './pages/application/ReviewSelectPayment'
 import ApplicationSummary from './pages/application/ApplicationSummary'
+import SignAndBind from './pages/application/SignAndBind'
 import Submitted from './pages/application/Submitted'
 
 // Phase two picks the legacy flow up where Price Indication leaves off.
@@ -26,21 +27,12 @@ const STAGE_OF = {
   bind: 'bind',
 }
 
-// The legacy screens for the last two steps have not been supplied yet, so
-// they say so rather than carry invented fields.
-function PendingStep({ name }) {
-  return (
-    <p className="text-[12.5px] text-gray-400">
-      {name} — waiting on the legacy screens for this step.
-    </p>
-  )
-}
-
 export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOver, railExtras }) {
   const [form, setForm] = useState(seed)
   const [rows] = useState(seed.classifications ?? [])
   const [activeStep, setActiveStep] = useState('eligibility')
   const [stage, setStage] = useState('form')
+  const [files, setFiles] = useState([])
   const [submitted, setSubmitted] = useState(false)
   const [approved, setApproved] = useState(false)
   const [touched, setTouched] = useState(false)
@@ -78,15 +70,24 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
       out.review.push(...['installmentOption', 'payMethod'].filter(blank))
     }
 
+    // eSign needs somewhere to send the request; the manual path needs the
+    // signed copy back before anything can bind.
+    if (blank('signMethod')) out.bind.push('signMethod')
+    else if (form.signMethod === 'esign') {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(form.insuredEmail ?? '').trim())) out.bind.push('insuredEmail')
+    } else if (form.signMethod === 'upload' && files.length === 0) {
+      out.bind.push('signedFiles')
+    }
+    if (!form.attested) out.bind.push('attested')
+
     return out
-  }, [form])
+  }, [form, files])
 
   const completed = {
     eligibility: missingBySection.eligibility.length === 0,
     coverage: missingBySection.coverage.length === 0,
     review: missingBySection.review.length === 0,
-    // Nothing to complete here until the screen is supplied.
-    bind: true,
+    bind: missingBySection.bind.length === 0,
   }
 
   const allMissing = Object.values(missingBySection).flat()
@@ -131,7 +132,9 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
       if (first) jumpTo(first.key)
       return
     }
-    setApproved(true)
+    // The approval dialog belongs to the coverage submit; this one is the end
+    // of the flow, so it goes straight to the receipt.
+    setSubmitted(true)
   }
 
   // Legacy submits at the end of Coverage Customization: the quote clears, and
@@ -155,7 +158,13 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
         onContinue={() => jumpTo('bind')} onEdit={jumpTo}
       />
     ),
-    bind: <PendingStep name="Sign and Request to Bind" />,
+    bind: (
+      <SignAndBind
+        form={form} set={set} errorFor={errorFor}
+        files={files} setFiles={setFiles}
+        onDownload={() => setTimeout(() => window.print(), 50)}
+      />
+    ),
   }
 
   if (submitted) {

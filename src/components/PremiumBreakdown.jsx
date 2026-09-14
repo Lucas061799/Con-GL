@@ -1,4 +1,5 @@
 import CarrierMark from './CarrierMark'
+import { BRAND_GRADIENT } from './FormField'
 import { formatUSD } from '../lib/rating'
 import {
   CC_RECOMMENDED, CC_ADDITIONAL_INSUREDS, CC_OPTIONAL, BTIS_POLICY_FEE,
@@ -37,7 +38,7 @@ function Row({ label, value, bold = false, dark }) {
   )
 }
 
-export default function PremiumBreakdown({ form = {}, amount = 0, quote, onBrokerFee, dark = false }) {
+export default function PremiumBreakdown({ form = {}, amount = 0, quote, onBrokerFee, onSubmit, dark = false }) {
   const { glPremium, brokerFee, grossTotal, totalDue, pending } = computeBreakdown(form, amount)
 
   return (
@@ -90,6 +91,18 @@ export default function PremiumBreakdown({ form = {}, amount = 0, quote, onBroke
       <Row label="Broker Fee:" value={formatUSD(brokerFee)} dark={dark} />
       <div className="my-2" style={{ borderTop: `1px solid ${dark ? 'rgba(255,255,255,0.08)' : 'var(--line)'}` }} />
       <Row label="Total Due:" value={pending ? '---' : formatUSD(totalDue)} bold dark={dark} />
+
+      {/* The coverage is submitted from the card the price lives on. */}
+      {onSubmit && (
+        <button
+          type="button"
+          onClick={onSubmit}
+          className="w-full mt-4 py-2.5 rounded-xl text-xs font-bold text-white transition hover:opacity-90"
+          style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
+        >
+          Submit
+        </button>
+      )}
     </div>
   )
 }
