@@ -1,4 +1,5 @@
 import { BRAND_GRADIENT } from '../../components/FormField'
+import jungleImg from '../../assets/jungle.png'
 import CarrierMark from '../../components/CarrierMark'
 import { formatUSD } from '../../lib/rating'
 import { CLASS_CODES } from '../../data/classCodes'
@@ -222,15 +223,20 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
             </div>
           </div>
 
-      <div className="flex justify-center pb-4">
-        <button
-          type="button"
-          onClick={onStartOver}
-          className="px-8 py-2.5 rounded-xl text-[13.5px] font-bold text-white transition hover:opacity-90"
-          style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
-        >
-          Start a New Quote
-        </button>
+      {/* Builder's Risk closes on this rather than a button: the jungle banner
+          back to Norbielink. */}
+      <div
+        className="screen-only rounded-2xl relative cursor-pointer hover:opacity-95 transition overflow-hidden mb-8"
+        onClick={onStartOver}
+        style={{ minHeight: 100 }}
+      >
+        <img src={jungleImg} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="px-8 py-6 relative z-10">
+          <p className="text-lg font-bold mb-1" style={{ color: '#111827' }}>Return to the Jungle?</p>
+          <p className="text-xs text-gray-400">
+            Head back to <span className="font-semibold text-gradient underline underline-offset-2">Norbielink</span>
+          </p>
+        </div>
       </div>
     </div>
   )
