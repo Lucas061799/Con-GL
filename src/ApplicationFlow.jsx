@@ -8,6 +8,7 @@ import CoverageCustomization from './pages/application/CoverageCustomization'
 import ReviewSelectPayment from './pages/application/ReviewSelectPayment'
 import ApplicationSummary from './pages/application/ApplicationSummary'
 import SignAndBind from './pages/application/SignAndBind'
+import ApplicationPreview from './pages/application/ApplicationPreview'
 import Submitted from './pages/application/Submitted'
 
 // Phase two picks the legacy flow up where Price Indication leaves off.
@@ -35,6 +36,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
   const [files, setFiles] = useState([])
   const [submitted, setSubmitted] = useState(false)
   const [approved, setApproved] = useState(false)
+  const [preview, setPreview] = useState(false)
   const [touched, setTouched] = useState(false)
   const scrollRef = useRef(null)
   const sectionRefs = useRef({})
@@ -143,7 +145,8 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
     setTouched(true)
     const blocked = ['eligibility', 'coverage'].find(k => missingBySection[k].length)
     if (blocked) { jumpTo(blocked); return }
-    setApproved(true)
+    // Commercial Auto reads the application back before it goes anywhere.
+    setPreview(true)
   }
 
   /* ── Render ─────────────────────────────────────────────────────── */
@@ -248,6 +251,15 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
       <div id="submission-print-area" className="print-summary">
         <ApplicationSummary form={form} rows={rows} />
       </div>
+
+      {preview && (
+        <ApplicationPreview
+          form={form}
+          rows={rows}
+          onClose={() => setPreview(false)}
+          onSubmit={() => { setPreview(false); setApproved(true) }}
+        />
+      )}
 
       {approved && (
         <QuoteApproved
