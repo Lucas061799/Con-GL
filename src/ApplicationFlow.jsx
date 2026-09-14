@@ -116,7 +116,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
 
   const pages = {
     eligibility: <EligibilityStatements form={form} set={set} errorFor={errorFor} rows={rows} />,
-    coverage: <CoverageCustomization form={form} set={set} errorFor={errorFor} quote={quote} amount={amount} />,
+    coverage: <CoverageCustomization form={form} set={set} errorFor={errorFor} />,
     review: <PendingStep name="Review & Select Payment" />,
     bind: <PendingStep name="Sign and Request to Bind" />,
   }
@@ -160,6 +160,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
       progress={progress}
       quote={quote}
       quoteAmount={amount}
+      premium={{ form, amount, quote, onBrokerFee: set('brokerFee') }}
       scrollRef={scrollRef}
       bare
     >

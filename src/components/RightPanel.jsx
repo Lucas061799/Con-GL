@@ -1,5 +1,6 @@
 import { BRAND_GRADIENT } from './FormField'
 import CarrierMark from './CarrierMark'
+import PremiumBreakdown from './PremiumBreakdown'
 import { formatUSD } from '../lib/rating'
 
 function SkeletonRow() {
@@ -114,7 +115,7 @@ export default function RightPanel({
   progress, quotes = [], stale, onRefresh,
   selectedCarrier, onSelectCarrier,
   onFormReview, formComplete = false,
-  inCompare = false, compareStep, submitted = false, dark = false,
+  inCompare = false, compareStep, submitted = false, dark = false, premium,
 }) {
   // GL-BOP's rail values for dark: faint white fills, 0.08 lines.
   const idleFill = dark ? 'rgba(255,255,255,0.04)' : 'white'
@@ -166,8 +167,10 @@ export default function RightPanel({
           </>
         ) : (
           <>
-            {/* Cheapest carrier gets the hero treatment */}
-            {(() => {
+            {/* On the application the rail carries the premium breakdown where
+                the quote card sits during the quick quote. */}
+            {premium && <PremiumBreakdown {...premium} dark={dark} />}
+            {!premium && (() => {
               const isSelected = selectedCarrier === top.id
               // With nothing picked yet, the cheapest carrier carries the
               // highlight as the standing recommendation; once the applicant
