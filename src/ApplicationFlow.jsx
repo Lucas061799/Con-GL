@@ -61,7 +61,11 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
     }
     if (form.employeeBenefits && blank('employeeBenefitsLimit')) out.coverage.push('employeeBenefitsLimit')
 
-    out.review.push(...['effectiveDate', 'paymentMethod'].filter(blank))
+    out.review.push(...['effectiveDate', 'paymentMethod', 'signMethod'].filter(blank))
+    // Direct Bill asks for the instalment plan and who pays on top of that.
+    if (form.paymentMethod === 'direct-bill') {
+      out.review.push(...['installmentOption', 'payMethod'].filter(blank))
+    }
 
     return out
   }, [form])
@@ -122,7 +126,12 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
   const pages = {
     eligibility: <EligibilityStatements form={form} set={set} errorFor={errorFor} rows={rows} />,
     coverage: <CoverageCustomization form={form} set={set} errorFor={errorFor} />,
-    review: <ReviewSelectPayment form={form} set={set} errorFor={errorFor} />,
+    review: (
+      <ReviewSelectPayment
+        form={form} set={set} errorFor={errorFor}
+        amount={amount} onContinue={() => jumpTo('bind')}
+      />
+    ),
     bind: <PendingStep name="Sign and Request to Bind" />,
   }
 

@@ -10,9 +10,10 @@ const codeLabel = (code) => CLASS_CODES.find(c => c.code === code)?.label ?? cod
 // The legacy step reads the eligibility statements, then the operations
 // included in each chosen class, then the terms — and only then asks whether
 // the applicant agrees.
+// Small uppercase label, no rule — the section title already has one.
 function Heading({ children }) {
   return (
-    <h3 className="text-[13px] font-bold tracking-[0.06em] uppercase mb-3 pb-2" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--line-strong)' }}>
+    <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-400 mb-2.5 pl-0.5">
       {children}
     </h3>
   )

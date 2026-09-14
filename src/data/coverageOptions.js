@@ -170,3 +170,30 @@ export const PAYMENT_METHODS = [
     desc: 'The agency bills the insured and collects premium.',
   },
 ]
+
+// Direct Bill spells the instalment charge out once it is chosen.
+export const DIRECT_BILL_NOTE = '$10 fee added per installment'
+export const INSTALLMENT_FEE = 10
+
+// Back-solved from the legacy example ($1,907 due → 9 × $72.70 with $1,352.70
+// down): the instalments carry this share of the financed total. Worth
+// confirming against the real DirectPay schedule.
+export const INSTALLMENT_SHARE = 0.326
+
+export const PAY_OPTIONS = [
+  { key: 'complete', label: 'Complete payment for Applicant' },
+  { key: 'send', label: 'Send to Applicant for payment' },
+]
+
+export const SIGN_OPTIONS = [
+  {
+    key: 'esign',
+    label: 'eSign',
+    note: '(We will send the client an electronic signature request)',
+  },
+  {
+    key: 'upload',
+    label: 'Upload or email signed application',
+    note: '(You will collect the manual signature and upload the signed application)',
+  },
+]
