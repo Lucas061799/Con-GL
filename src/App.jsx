@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import PageZero from './pages/PageZero'
+import ClassificationsStep from './pages/ClassificationsStep'
 import ApplicantContact from './pages/ApplicantContact'
-import ApplicantBusiness from './pages/ApplicantBusiness'
 import BusinessOperations from './pages/BusinessOperations'
 import PriceIndication from './pages/PriceIndication'
 import AppShell from './components/AppShell'
@@ -17,9 +17,10 @@ import DemoBar from './demo/DemoBar'
 import { useDarkMode } from './theme'
 import { DEMO_INTAKE, demoPhaseOne, demoPhaseTwo } from './demo/demoData'
 
+// The legacy flow's own order and wording.
 const STEPS = [
-  { key: 'applicant',  number: 1, label: 'Applicant' },
-  { key: 'business',   number: 2, label: 'Business Information' },
+  { key: 'classes',    number: 1, label: 'Classifications' },
+  { key: 'applicant',  number: 2, label: 'Applicant Information' },
   { key: 'operations', number: 3, label: 'Business Operations' },
   { key: 'indication', number: 4, label: 'Price Indication' },
 ]
@@ -65,8 +66,8 @@ export default function App() {
 
   const scrollRef = useRef(null)
   const sectionRefs = {
+    classes: useRef(null),
     applicant: useRef(null),
-    business: useRef(null),
     operations: useRef(null),
     indication: useRef(null),
   }
@@ -109,7 +110,7 @@ export default function App() {
     setTerms(defaultTerms())
     setSelectedCarrier(null)
     setTouched(false)
-    setActiveStep('applicant')
+    setActiveStep('classes')
     setView('form')
     setHandoff('none')
     setQuotes([])
@@ -130,14 +131,20 @@ export default function App() {
   const missingBySection = useMemo(() => {
     const blank = (k) => !String(form[k] ?? '').trim()
 
-    const applicant = ['yearsOfExperience', 'yearsInBusiness', 'priorInsurance', 'lastName', 'phone', 'email'].filter(blank)
+    const applicant = ['lastName', 'phone', 'email', 'street', 'city', 'state', 'postalCode'].filter(blank)
     if (!blank('email') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) applicant.push('email')
+    if (!/^\d{5}$/.test(form.postalCode || '')) applicant.push('postalCode')
+    if (!form.mailingSame) {
+      applicant.push(...['mailStreet', 'mailCity', 'mailState', 'mailPostalCode'].filter(blank))
+    }
 
-    const business = ['effectiveDate', 'dba', 'legalName', 'entityType', 'street', 'city', 'state', 'postalCode'].filter(blank)
-    if (!blank('legalName') && form.legalName.trim().length < 5) business.push('legalName')
-    if (!/^\d{5}$/.test(form.postalCode || '')) business.push('postalCode')
-
-    const operations = ['grossReceipts', 'employeePayroll', 'employeeCount', 'activeOwners', 'operationsDescription'].filter(blank)
+    const operations = [
+      'effectiveDate', 'dba', 'legalName', 'entityType',
+      'yearsOfExperience', 'yearsInBusiness', 'priorInsurance',
+      'grossReceipts', 'activeOwners', 'operationsDescription',
+    ].filter(blank)
+    if (!blank('legalName') && form.legalName.trim().length < 5) operations.push('legalName')
+    if (form.hasEmployees === 'yes') operations.push(...['employeeCount', 'employeePayroll'].filter(blank))
     if (form.hiresSubs === 'yes') operations.push(...['subContractingCosts', 'subDwellingPct'].filter(blank))
     // Every trade question that applies has to be answered, and a yes needs
     // its follow-up too.
@@ -146,7 +153,7 @@ export default function App() {
       else if (form[rule.id] === 'yes' && blank(subKey(rule))) operations.push(subKey(rule))
     })
 
-    return { applicant, business, operations }
+    return { applicant, operations }
   }, [form, classifications])
 
   const classificationsValid =
@@ -155,8 +162,8 @@ export default function App() {
   const splitValid = form.newResidential !== 'yes' || splitTotal === 100
 
   const completed = {
+    classes: classificationsValid,
     applicant: missingBySection.applicant.length === 0,
-    business: missingBySection.business.length === 0 && classificationsValid,
     operations: missingBySection.operations.length === 0 && splitValid,
     indication: !!selectedCarrier,
   }
@@ -167,7 +174,6 @@ export default function App() {
 
   const allMissing = [
     ...missingBySection.applicant,
-    ...missingBySection.business,
     ...missingBySection.operations,
   ]
 
@@ -250,7 +256,7 @@ export default function App() {
     demoStart()
     setApplication(null)
     setHandoff('none')
-    setActiveStep('applicant')
+    setActiveStep('classes')
     setView('form')
   }
 
@@ -360,14 +366,13 @@ export default function App() {
     >
       {view === 'form' ? (
         <>
+          <ClassificationsStep
+            ref={sectionRefs.classes}
+            classifications={classifications} setClassifications={setClassifications}
+          />
           <ApplicantContact
             ref={sectionRefs.applicant}
             form={form} set={set} errorFor={errorFor}
-          />
-          <ApplicantBusiness
-            ref={sectionRefs.business}
-            form={form} set={set} errorFor={errorFor}
-            classifications={classifications} setClassifications={setClassifications}
           />
           <BusinessOperations
             ref={sectionRefs.operations}

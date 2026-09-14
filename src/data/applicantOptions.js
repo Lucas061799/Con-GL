@@ -32,3 +32,7 @@ export const AVAILABLE_STATES = [
 // 100. The legacy Classifications step says "add up to three", and phase two
 // reads this same number so the two can't drift apart.
 export const MAX_CLASSIFICATIONS = 3
+
+// The intake's own Classifications step says "add up to four" on the legacy
+// screens, so it carries its own limit rather than sharing the one above.
+export const MAX_INTAKE_CLASSIFICATIONS = 4

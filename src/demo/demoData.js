@@ -35,6 +35,7 @@ export const demoPhaseOne = () => ({
   city: 'Saratoga',
   state: 'CA',
   mailingSame: true,
+  hasEmployees: 'yes',
   employeeCount: '4',
   activeOwners: '2',
   operationsDescription:
@@ -46,6 +47,12 @@ export const demoPhaseOne = () => ({
 // The phase-two steps that phase one does not already seed.
 export const demoPhaseTwo = () => ({
   hasEmployees: 'yes',
+  agreeTerms: 'yes',
+  ccDeductible: '0',
+  ccGlLimits: '1000000/2000000/2000000',
+  ccDamagesToPremises: '100000',
+  ccMedicalLimit: '5000',
+  brokerFee: '100',
   workPct: { residential: '100', newConstruction: '100' },
   subTrades: ['Framing', 'Drywall'],
   subTradesOther: '',

@@ -1,12 +1,16 @@
 import { forwardRef } from 'react'
-import { CurrencyInput, Input, Textarea, PercentInput, ToggleQuestion, InfoTip } from '../components/FormField'
+import {
+  CurrencyInput, Input, Select, DateInput, TreeSelect, Textarea, PercentInput,
+  ToggleQuestion, InfoTip,
+} from '../components/FormField'
 import Section, { FieldGroup, QuestionCard } from '../components/Section'
 import { FIELD_HELP } from '../data/fieldHelp'
+import { ENTITY_TYPES } from '../data/applicantOptions'
+import { YEARS_OF_EXPERIENCE, YEARS_IN_BUSINESS, PRIOR_INSURANCE_TREE, PRIOR_INSURANCE_LEAVES } from '../data/intakeOptions'
 import { rulesForCodes, subKey, needsUnderwriterReview } from '../data/conditionalQuestions'
 
-// Section 3 — exposure figures plus the two branching questions.
-// Sub-contracting costs only exist when the applicant hires subs, and the
-// new/remodel split only appears for pre-C-of-O residential work.
+// Business Operations, following the legacy step: the business itself, then
+// its experience, then the exposure figures and the three branching questions.
 const BusinessOperations = forwardRef(function BusinessOperations(
   { form, set, errorFor, splitTotal, classCodes = [] }, ref
 ) {
@@ -15,36 +19,78 @@ const BusinessOperations = forwardRef(function BusinessOperations(
   const underwriterReview = needsUnderwriterReview(rules, form)
 
   return (
-    <Section
-      ref={ref}
-      id="operations"
-      title="Business Operations"
-      subtitle="Please answer all questions accurately. Your responses help determine coverage eligibility."
-    >
-      <FieldGroup label="Financials & Employees">
+    <Section ref={ref} id="operations" title="Business Operations">
+      <FieldGroup label="The Business">
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-[240px_1fr] gap-x-6 gap-y-5">
+            <DateInput
+              label="Effective start date" required
+              value={form.effectiveDate} onChange={set('effectiveDate')}
+              error={errorFor('effectiveDate')}
+            />
+            <Input
+              label="DBA" required
+              value={form.dba} onChange={set('dba')}
+              error={errorFor('dba')}
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_300px] gap-x-6 gap-y-5">
+            <Input
+              label="Legal business name" required
+              value={form.legalName} onChange={set('legalName')}
+              error={errorFor('legalName')}
+            />
+            <Select
+              label="Structure of the business" required
+              hint={FIELD_HELP.entityType}
+              options={ENTITY_TYPES}
+              value={form.entityType} onChange={set('entityType')}
+              placeholder="Select One"
+              error={errorFor('entityType')}
+            />
+          </div>
+        </div>
+      </FieldGroup>
+
+      <FieldGroup label="Experience & History">
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
+            <Select
+              label="Years of experience" required
+              options={YEARS_OF_EXPERIENCE}
+              value={form.yearsOfExperience} onChange={set('yearsOfExperience')}
+              placeholder="Select One"
+              error={errorFor('yearsOfExperience')}
+            />
+            <Select
+              label="Years in business" required
+              options={YEARS_IN_BUSINESS}
+              value={form.yearsInBusiness} onChange={set('yearsInBusiness')}
+              placeholder="Select One"
+              error={errorFor('yearsInBusiness')}
+            />
+          </div>
+          <TreeSelect
+            label="Insurance History" required
+            tree={PRIOR_INSURANCE_TREE}
+            leafLabels={PRIOR_INSURANCE_LEAVES}
+            value={form.priorInsurance} onChange={set('priorInsurance')}
+            placeholder="Select One"
+            error={errorFor('priorInsurance')}
+          />
+        </div>
+      </FieldGroup>
+
+      <FieldGroup label="Financials">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
           <CurrencyInput
-            label="Annual Gross Receipts" required
+            label="Annual gross receipts" required
             hint={FIELD_HELP.grossReceipts}
             value={form.grossReceipts} onChange={set('grossReceipts')}
             error={errorFor('grossReceipts')}
           />
-          <CurrencyInput
-            label="Annual Employee Payroll" required
-            hint={FIELD_HELP.employeePayroll}
-            value={form.employeePayroll} onChange={set('employeePayroll')}
-            error={errorFor('employeePayroll')}
-          />
           <Input
-            label="# of Employees" required
-            hint={FIELD_HELP.employeeCount}
-            value={form.employeeCount}
-            onChange={(v) => set('employeeCount')(v.replace(/\D/g, ''))}
-            placeholder="0"
-            error={errorFor('employeeCount')}
-          />
-          <Input
-            label="# of Active Owners" required
+            label="Number of owners active in the field" required
             hint={FIELD_HELP.activeOwners}
             value={form.activeOwners}
             onChange={(v) => set('activeOwners')(v.replace(/\D/g, ''))}
@@ -67,11 +113,35 @@ const BusinessOperations = forwardRef(function BusinessOperations(
       <div className="space-y-2">
         <QuestionCard>
           <ToggleQuestion
-            label="Does the applicant hire subcontractors?"
+            label="Does the Applicant have any employees?"
+            value={form.hasEmployees} onChange={set('hasEmployees')}
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
+              <Input
+                label="Number of employees" required
+                hint={FIELD_HELP.employeeCount}
+                value={form.employeeCount}
+                onChange={(v) => set('employeeCount')(v.replace(/\D/g, ''))}
+                placeholder="0"
+                error={errorFor('employeeCount')}
+              />
+              <CurrencyInput
+                label="Annual employee payroll" required
+                hint={FIELD_HELP.employeePayroll}
+                value={form.employeePayroll} onChange={set('employeePayroll')}
+                error={errorFor('employeePayroll')}
+              />
+            </div>
+          </ToggleQuestion>
+        </QuestionCard>
+
+        <QuestionCard>
+          <ToggleQuestion
+            label="Does the Applicant hire subcontractors?"
             value={form.hiresSubs} onChange={set('hiresSubs')}
           >
             <CurrencyInput
-              label="Sub-Contracting Costs" required
+              label="Annual subcontracting costs" required
               hint={FIELD_HELP.subContractingCosts}
               value={form.subContractingCosts} onChange={set('subContractingCosts')}
               className="max-w-[280px]"
@@ -96,13 +166,10 @@ const BusinessOperations = forwardRef(function BusinessOperations(
 
         <QuestionCard>
           <ToggleQuestion
-            label="Does the applicant perform new residential work prior to Certificate of Occupancy?"
+            label="Does the Applicant perform residential work prior to the certificate of occupancy?"
             hint={FIELD_HELP.newResidential}
             value={form.newResidential} onChange={set('newResidential')}
           >
-            <p className="text-[13px] text-gray-600 mb-3">
-              Specify the percentage of each type of work the applicant performs.
-            </p>
             <div className="flex gap-4">
               <PercentInput
                 label="New" required

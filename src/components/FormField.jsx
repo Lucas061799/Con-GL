@@ -240,7 +240,7 @@ const hoverOff = (selected) => (e) => { if (!selected) e.currentTarget.style.bac
 
 /* ── Text input ───────────────────────────────────────────────────── */
 
-export function Input({ label, required, hint, placeholder, type = 'text', value, onChange, maxLength, className = '', error = false }) {
+export function Input({ label, required, hint, placeholder, type = 'text', value, onChange, maxLength, className = '', error = false, disabled = false }) {
   return (
     <div className={className}>
       <Label label={label} required={required} hint={hint} />
@@ -248,9 +248,10 @@ export function Input({ label, required, hint, placeholder, type = 'text', value
         type={type}
         value={value || ''}
         maxLength={maxLength}
+        disabled={disabled}
         onChange={(e) => onChange && onChange(e.target.value)}
         placeholder={placeholder}
-        className={inputClass(error)}
+        className={`${inputClass(error)} ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`}
       />
       <FieldError error={error} />
     </div>
