@@ -42,6 +42,12 @@ html[data-dark="true"] .text-gradient {
 html[data-dark="true"] .grad-stop-0 { stop-color: #A78BFA; }
 html[data-dark="true"] .grad-stop-1 { stop-color: #E879F9; }
 
+/* The house confetti fall — the same one the other three products throw. */
+@keyframes confettiFall {
+  0%   { opacity: 1; transform: translateY(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+}
+
 /* Inland Marine's bind card: a purple→magenta stroke around a faintly tinted
    card, with a brand-tinted rule, drop zone and file rows to match. */
 .cb-choice-on {

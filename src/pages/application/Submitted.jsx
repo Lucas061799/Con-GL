@@ -1,5 +1,6 @@
 import { BRAND_GRADIENT } from '../../components/FormField'
 import jungleImg from '../../assets/jungle.png'
+import Confetti from '../../components/Confetti'
 import CarrierMark from '../../components/CarrierMark'
 import { formatUSD } from '../../lib/rating'
 import { CLASS_CODES } from '../../data/classCodes'
@@ -65,6 +66,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
 
   return (
     <div className="space-y-5 md:space-y-6">
+      <Confetti />
           <div id="submission-print-area" className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface-card)', border: '1px solid var(--line-soft)' }}>
             <div className="h-1" style={{ background: BRAND_GRADIENT }} />
 
