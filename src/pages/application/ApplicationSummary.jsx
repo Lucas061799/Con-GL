@@ -31,13 +31,13 @@ export default function ApplicationSummary({ form = {}, rows = [], onEdit }) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-      <Panel title="Classification(s)" icon="doc">
+      <Panel title="Classification(s)" icon="doc" action={edit('classes', 'Classification(s)')}>
         {rows.filter(r => r.code).map(r => (
           <Row key={r.code} label={codeLabel(r.code)} value={`${r.percentage || 0} %`} />
         ))}
       </Panel>
 
-      <Panel title="Contact Information" icon="user">
+      <Panel title="Contact Information" icon="user" action={edit('applicant', 'Contact Information')}>
         <Row label="Name" value={lines([form.firstName, form.middleName, form.lastName].filter(Boolean)).replace(/,/g, ' ')} />
         <Row label="Business Address" value={address} />
         <Row label="Mailing Address" value={mailing} />
@@ -46,7 +46,7 @@ export default function ApplicationSummary({ form = {}, rows = [], onEdit }) {
         <Row label="Email Address" value={form.email} />
       </Panel>
 
-      <Panel title="Business Information" icon="building">
+      <Panel title="Business Information" icon="building" action={edit('operations', 'Business Information')}>
         <Row label="Effective Date" value={form.effectiveDate} />
         <Row label="Legal Business Name" value={form.legalName} />
         <Row label="DBA" value={form.dba} />

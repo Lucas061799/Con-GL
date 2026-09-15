@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import ApplicationShell from './components/ApplicationShell'
 import Section from './components/Section'
 import { BRAND_GRADIENT } from './components/FormField'
@@ -29,12 +29,18 @@ const STAGE_OF = {
   bind: 'bind',
 }
 
-export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOver, railExtras }) {
-  const [form, setForm] = useState(seed)
-  const [rows] = useState(seed.classifications ?? [])
-  const [activeStep, setActiveStep] = useState('eligibility')
-  const [stage, setStage] = useState('form')
-  const [files, setFiles] = useState([])
+// The three read-back panels whose fields are answered back in phase one.
+const INTAKE_STEPS = new Set(['classes', 'applicant', 'operations'])
+
+// The form, the classifications and the uploads all live in App, so stepping
+// back into phase one to fix something keeps every answer on both sides.
+export default function ApplicationFlow({
+  form, set, rows = [], files = [], setFiles,
+  applicationNumber, resumeAt, onEditIntake,
+  quote, amount, onExit, onStartOver, railExtras,
+}) {
+  const [activeStep, setActiveStep] = useState(resumeAt?.step ?? 'eligibility')
+  const [stage, setStage] = useState(resumeAt?.stage ?? 'form')
   const [submitted, setSubmitted] = useState(false)
   const [approved, setApproved] = useState(false)
   const [preview, setPreview] = useState(false)
@@ -43,8 +49,6 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
   const [touched, setTouched] = useState({ form: false, bind: false })
   const scrollRef = useRef(null)
   const sectionRefs = useRef({})
-
-  const set = useCallback((key) => (value) => setForm(f => ({ ...f, [key]: value })), [])
 
   const steps = STEPS
 
@@ -116,6 +120,24 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
       sectionRefs.current[key]?.scrollIntoView({ behavior: 'smooth', block: 'start' })))
   }
 
+  // A pencil on one of the phase-one panels hands control back to App, telling
+  // it where to return; the rest scroll within phase two.
+  const edit = (key) => {
+    if (INTAKE_STEPS.has(key)) {
+      onEditIntake && onEditIntake(key, { stage, step: activeStep })
+      return
+    }
+    jumpTo(key)
+  }
+
+  // Coming back from a phase-one edit, land on the step that sent us there.
+  useEffect(() => {
+    if (!resumeAt?.step) return
+    requestAnimationFrame(() => requestAnimationFrame(() =>
+      sectionRefs.current[resumeAt.step]?.scrollIntoView({ block: 'start' })))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useEffect(() => {
     const root = scrollRef.current
     if (!root) return
@@ -164,7 +186,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
       <ReviewSelectPayment
         form={form} set={set} errorFor={errorFor}
         amount={amount} rows={rows}
-        onContinue={() => jumpTo('bind')} onEdit={jumpTo}
+        onContinue={() => jumpTo('bind')} onEdit={edit}
       />
     ),
     bind: (
@@ -180,7 +202,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
     return (
       <ApplicationShell
         railExtras={railExtras}
-        submissionNumber={form.applicationNumber}
+        submissionNumber={applicationNumber}
         steps={steps}
         activeStep={null}
         completed={Object.fromEntries(steps.map(s => [s.key, true]))}
@@ -192,7 +214,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
         onFormReview={() => setTimeout(() => window.print(), 50)}
       >
         <Submitted
-          submissionNumber={form.applicationNumber}
+          submissionNumber={applicationNumber}
           quote={quote}
           amount={amount}
           form={form}
@@ -207,7 +229,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
   return (
     <ApplicationShell
       railExtras={railExtras}
-      submissionNumber={form.applicationNumber}
+      submissionNumber={applicationNumber}
       steps={steps}
       activeStep={activeStep}
       completed={completed}
@@ -262,7 +284,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
         {stage === 'form' ? (
           <QuoteSummary
             form={form} quote={quote} amount={amount}
-            submissionNumber={form.applicationNumber}
+            submissionNumber={applicationNumber}
           />
         ) : (
           <ApplicationSummary form={form} rows={rows} />

@@ -59,7 +59,13 @@ export default function App() {
   const [view, setView] = useState('form')
   // 'none' → turnaround warning → quote-ready → the application itself.
   const [handoff, setHandoff] = useState('none')
-  const [application, setApplication] = useState(null)
+  // Phase two edits the same form object phase one fills in, so stepping back
+  // to fix a classification or an address loses nothing on either side.
+  const [applicationNumber, setApplicationNumber] = useState('')
+  const [inApplication, setInApplication] = useState(false)
+  const [appFiles, setAppFiles] = useState([])
+  // Where phase two was when it handed control back.
+  const [appReturn, setAppReturn] = useState({ stage: 'form', step: 'eligibility' })
 
   const [quotes, setQuotes] = useState([])
   const [ratedAt, setRatedAt] = useState('')
@@ -102,7 +108,10 @@ export default function App() {
   const summaryReady = false
 
   const startOver = () => {
-    setApplication(null)
+    setInApplication(false)
+    setApplicationNumber('')
+    setAppFiles([])
+    setAppReturn({ stage: 'form', step: 'eligibility' })
     setStarted(false)
     setSubmissionNumber('')
     setForm({})
@@ -230,18 +239,31 @@ export default function App() {
   // Carry everything already answered into the application so nothing gets
   // asked twice.
   const startApplicationPhase = () => {
-    setApplication({
-      ...form,
-      applicationNumber: newApplicationNumber(),
-      classifications: classifications.map(r => ({ ...r })),
-      hasEmployees: Number(form.employeeCount) > 0 ? 'yes' : form.hasEmployees,
+    setHandoff('none')
+    // An application already under way is resumed, not started again.
+    if (applicationNumber) { setInApplication(true); return }
+    setForm(f => ({
+      ...f,
+      hasEmployees: Number(f.employeeCount) > 0 ? 'yes' : f.hasEmployees,
       appLimit: APP_LIMITS[APP_LIMITS.length - 1].value,
       appDeductible: APP_DEDUCTIBLES[0].value,
       workPct: {},
       subTrades: [],
       disclosures: {},
-    })
-    setHandoff('none')
+    }))
+    setApplicationNumber(newApplicationNumber())
+    setAppFiles([])
+    setAppReturn({ stage: 'form', step: 'eligibility' })
+    setInApplication(true)
+  }
+
+  // A pencil on one of the three panels whose fields belong to phase one drops
+  // back onto that step; the application waits where it was left.
+  const editIntake = (step, resume) => {
+    if (resume) setAppReturn(resume)
+    setInApplication(false)
+    setTouched(true)
+    jumpTo(step)
   }
 
   /* ── Demo shortcuts ─────────────────────────────────────────────── */
@@ -253,18 +275,24 @@ export default function App() {
   }
 
   // Leaves the application too, or a jump from phase two lands nowhere.
+  const leaveApplication = () => {
+    setInApplication(false)
+    setApplicationNumber('')
+    setAppFiles([])
+    setAppReturn({ stage: 'form', step: 'eligibility' })
+    setHandoff('none')
+  }
+
   const demoForm = () => {
     demoStart()
-    setApplication(null)
-    setHandoff('none')
+    leaveApplication()
     setActiveStep('classes')
     setView('form')
   }
 
   const demoIndication = () => {
     demoStart()
-    setApplication(null)
-    setHandoff('none')
+    leaveApplication()
     setActiveStep('indication')
     setView('indication')
   }
@@ -273,16 +301,16 @@ export default function App() {
     demoStart()
     setSelectedCarrier('bravado')
     setHandoff('none')
-    setApplication({
-      ...DEMO_INTAKE,
-      effectiveDate: todayMDY(),
-      ...demoPhaseOne(),
+    setForm(f => ({
+      ...f,
       ...demoPhaseTwo(),
-      applicationNumber: newApplicationNumber(),
-      classifications: [{ code: DEMO_INTAKE.mainClassCode, percentage: '100' }],
       appLimit: APP_LIMITS[APP_LIMITS.length - 1].value,
       appDeductible: APP_DEDUCTIBLES[0].value,
-    })
+    }))
+    setApplicationNumber(newApplicationNumber())
+    setAppFiles([])
+    setAppReturn({ stage: 'form', step: 'eligibility' })
+    setInApplication(true)
   }
 
   const demoJumps = [
@@ -292,7 +320,7 @@ export default function App() {
     { key: 'application', label: 'Application', go: demoApplication },
   ]
 
-  const demoActive = application ? 'application'
+  const demoActive = inApplication ? 'application'
     : !started ? 'landing'
     : view === 'indication' ? 'indication'
     : 'form'
@@ -327,21 +355,24 @@ export default function App() {
     {demoBar}
   </>
 
-  if (application) {
+  if (inApplication) {
     return (
-      <>
       <ApplicationFlow
-        // The flow holds its own copy of the seed, so a fresh application has
-        // to remount rather than hand the old one a new prop.
-        key={application.applicationNumber}
-        seed={application}
+        key={applicationNumber}
+        form={form}
+        set={set}
+        rows={classifications}
+        files={appFiles}
+        setFiles={setAppFiles}
+        applicationNumber={applicationNumber}
+        resumeAt={appReturn}
+        onEditIntake={editIntake}
         quote={chosenQuote}
         amount={chosenPremium}
-        onExit={() => setApplication(null)}
+        onExit={leaveApplication}
         onStartOver={startOver}
         railExtras={railExtras}
       />
-      </>
     )
   }
 
@@ -383,11 +414,13 @@ export default function App() {
           <div className="px-4 md:px-10 pb-4 flex justify-end">
             <button
               type="button"
-              onClick={goToIndication}
+              onClick={applicationNumber ? () => setInApplication(true) : goToIndication}
               className="flex items-center gap-2 px-8 py-3 rounded-xl text-[13.5px] font-bold text-white transition hover:opacity-90"
               style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
             >
-              See Price Indication
+              {/* Stepping back from the application to fix a field returns to
+                  it, rather than starting the quote over. */}
+              {applicationNumber ? 'Return to Application' : 'See Price Indication'}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
