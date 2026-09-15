@@ -42,6 +42,13 @@ html[data-dark="true"] .text-gradient {
 html[data-dark="true"] .grad-stop-0 { stop-color: #A78BFA; }
 html[data-dark="true"] .grad-stop-1 { stop-color: #E879F9; }
 
+/* A two-line label would otherwise push its own control below the one beside
+   it. Reserve the second line while the grid has two columns; once it drops to
+   one, the labels take only what they need. */
+@media (min-width: 640px) {
+  .cc-limits > div > label { min-height: 39px; }
+}
+
 /* Admitted / Non-Admitted, in Builder's Risk's colours. Theirs are inline and
    stay dark-red on navy, so the dark pair is ours. */
 .paper-pill-admitted { background: rgba(115,201,183,0.18); color: #0D8B73; }

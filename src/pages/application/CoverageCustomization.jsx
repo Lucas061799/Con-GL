@@ -77,7 +77,7 @@ export default function CoverageCustomization({ form, set, errorFor }) {
     <div className="space-y-6">
       {/* An input cluster, so it takes the house box. */}
       <FieldGroup label="Limits and Recommended Options">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
+        <div className="cc-limits grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
           <Select
             label="Deductible" required hint={CC_LIMIT_HELP.deductible}
             options={CC_DEDUCTIBLES}
