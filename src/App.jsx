@@ -16,14 +16,9 @@ import { rulesForCodes, subKey } from './data/conditionalQuestions'
 import DemoBar from './demo/DemoBar'
 import { useDarkMode } from './theme'
 import { DEMO_INTAKE, demoPhaseOne, demoPhaseTwo } from './demo/demoData'
+import { ALL_STEPS, INTAKE_STEPS, STAGE_OF, isIntakeStep } from './data/flowSteps'
+import { applicationMissing } from './lib/applicationValidation'
 
-// The legacy flow's own order and wording.
-const STEPS = [
-  { key: 'classes',    number: 1, label: 'Classifications' },
-  { key: 'applicant',  number: 2, label: 'Applicant Information' },
-  { key: 'operations', number: 3, label: 'Business Operations' },
-  { key: 'indication', number: 4, label: 'Price Indication' },
-]
 
 // Answers that move the premium. Change any of them and the rail blanks out
 // until the applicant asks for a refreshed quote.
@@ -171,15 +166,30 @@ export default function App() {
     classifications.reduce((s, r) => s + (Number(r.percentage) || 0), 0) === 100
   const splitValid = form.newResidential !== 'yes' || splitTotal === 100
 
-  const completed = {
+  const intakeCompleted = {
     classes: classificationsValid,
     applicant: missingBySection.applicant.length === 0,
     operations: missingBySection.operations.length === 0 && splitValid,
     indication: !!selectedCarrier,
   }
 
+  // The rail lists the application's steps here too, so it has to know how far
+  // they are — the same check the application itself runs.
+  const appMissing = useMemo(() => applicationMissing(form, appFiles), [form, appFiles])
+  const completed = {
+    ...intakeCompleted,
+    eligibility: !!applicationNumber && appMissing.eligibility.length === 0,
+    coverage: !!applicationNumber && appMissing.coverage.length === 0,
+    review: !!applicationNumber && appMissing.review.length === 0,
+    bind: !!applicationNumber && appMissing.bind.length === 0,
+  }
+
+  // Nothing past the price can be opened before the application is started.
+  const railSteps = ALL_STEPS.map(s =>
+    (applicationNumber || isIntakeStep(s.key) ? s : { ...s, locked: true }))
+
   const progress = Math.round(
-    (STEPS.filter(s => completed[s.key]).length / STEPS.length) * 100
+    (ALL_STEPS.filter(s => completed[s.key]).length / ALL_STEPS.length) * 100
   )
 
   const allMissing = [
@@ -202,6 +212,12 @@ export default function App() {
   /* ── Sidebar navigation + scroll spy ────────────────────────────── */
 
   const jumpTo = (key) => {
+    if (!isIntakeStep(key)) {
+      if (!applicationNumber) return
+      setAppReturn({ stage: STAGE_OF[key] ?? 'form', step: key })
+      setInApplication(true)
+      return
+    }
     if (key === 'indication') {
       setView('indication')
       setActiveStep('indication')
@@ -331,7 +347,7 @@ export default function App() {
   const goToIndication = () => {
     setTouched(true)
     if (allMissing.length || !classificationsValid || !splitValid) {
-      const firstIncomplete = STEPS.find(s => !completed[s.key] && s.key !== 'indication')
+      const firstIncomplete = INTAKE_STEPS.find(s => !completed[s.key] && s.key !== 'indication')
       if (firstIncomplete) jumpTo(firstIncomplete.key)
       return
     }
@@ -367,6 +383,7 @@ export default function App() {
         applicationNumber={applicationNumber}
         resumeAt={appReturn}
         onEditIntake={editIntake}
+        intakeCompleted={intakeCompleted}
         quote={chosenQuote}
         amount={chosenPremium}
         onExit={leaveApplication}
@@ -380,7 +397,7 @@ export default function App() {
     <AppShell
       productName="Contractor General Liability"
       submissionNumber={submissionNumber}
-      steps={STEPS}
+      steps={railSteps}
       activeStep={activeStep}
       completed={completed}
       onStepClick={jumpTo}
@@ -411,7 +428,7 @@ export default function App() {
             form={form} set={set} errorFor={errorFor} splitTotal={splitTotal}
             classCodes={classCodes}
           />
-          <div className="px-4 md:px-10 pb-4 flex justify-end">
+          <div className="px-4 md:px-10 pb-4 flex justify-start">
             <button
               type="button"
               onClick={applicationNumber ? () => setInApplication(true) : goToIndication}

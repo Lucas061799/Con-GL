@@ -133,6 +133,8 @@ export default function Sidebar({
         {steps.map(step => {
           const isActive = step.key === activeStep
           const isDone = !!completed[step.key] && !isActive
+          // Steps that cannot be opened yet stay in the list, greyed and inert.
+          const locked = !!step.locked
           return (
             <div key={step.key} className="relative mb-0.5">
               {isActive && (
@@ -143,8 +145,9 @@ export default function Sidebar({
               )}
               <button
                 type="button"
-                onClick={() => onStepClick?.(step.key)}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-150"
+                disabled={locked}
+                onClick={() => !locked && onStepClick?.(step.key)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-150 ${locked ? 'cursor-default opacity-60' : ''}`}
                 style={isActive
                   ? dark
                     ? { background: 'linear-gradient(180deg, rgba(42,28,70,0.28) 0%, rgba(166,20,195,0.68) 100%)', border: '1.5px solid rgba(166,20,195,0.65)', boxShadow: '0 4px 24px rgba(166,20,195,0.25)' }

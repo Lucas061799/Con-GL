@@ -4,6 +4,8 @@ import Section from './components/Section'
 import { BRAND_GRADIENT } from './components/FormField'
 import { QuoteApproved } from './components/QuoteHandoff'
 import { rulesForCodes, needsUnderwriterReview } from './data/conditionalQuestions'
+import { ALL_STEPS, APPLICATION_STEPS, STAGE_OF, isIntakeStep } from './data/flowSteps'
+import { applicationMissing } from './lib/applicationValidation'
 import EligibilityStatements from './pages/application/EligibilityStatements'
 import CoverageCustomization from './pages/application/CoverageCustomization'
 import ReviewSelectPayment from './pages/application/ReviewSelectPayment'
@@ -13,31 +15,11 @@ import ApplicationPreview from './pages/application/ApplicationPreview'
 import QuoteSummary from './pages/application/QuoteSummary'
 import Submitted from './pages/application/Submitted'
 
-// Phase two picks the legacy flow up where Price Indication leaves off.
-const STEPS = [
-  { key: 'eligibility', label: 'Eligibility Statements' },
-  { key: 'coverage',    label: 'Coverage Customization' },
-  { key: 'review',      label: 'Review & Select Payment' },
-  { key: 'bind',        label: 'Sign and Request to Bind' },
-].map((s, i) => ({ ...s, number: i + 1 }))
-
-// The first two steps share a page; submitting the coverage moves on to the
-// second page, where the application is paid for and signed.
-const STAGE_OF = {
-  eligibility: 'form',
-  coverage: 'form',
-  review: 'bind',
-  bind: 'bind',
-}
-
-// The three read-back panels whose fields are answered back in phase one.
-const INTAKE_STEPS = new Set(['classes', 'applicant', 'operations'])
-
 // The form, the classifications and the uploads all live in App, so stepping
 // back into phase one to fix something keeps every answer on both sides.
 export default function ApplicationFlow({
   form, set, rows = [], files = [], setFiles,
-  applicationNumber, resumeAt, onEditIntake,
+  applicationNumber, resumeAt, onEditIntake, intakeCompleted = {},
   quote, amount, onExit, onStartOver, railExtras,
 }) {
   const [activeStep, setActiveStep] = useState(resumeAt?.step ?? 'eligibility')
@@ -51,51 +33,17 @@ export default function ApplicationFlow({
   const scrollRef = useRef(null)
   const sectionRefs = useRef({})
 
-  const steps = STEPS
+  // The rail shows the whole submission; this page renders its own four.
+  const steps = APPLICATION_STEPS
 
   /* ── Validation ─────────────────────────────────────────────────── */
 
-  const missingBySection = useMemo(() => {
-    const blank = (k) => !String(form[k] ?? '').trim()
-    const words = (k) => String(form[k] ?? '').trim().split(/\s+/).filter(Boolean).length
-    const out = { eligibility: [], coverage: [], review: [], bind: [] }
+  const missingBySection = useMemo(() => applicationMissing(form, files), [form, files])
 
-    if (blank('agreeTerms')) out.eligibility.push('agreeTerms')
-    // Both free-text answers carry the legacy ten-word minimum.
-    if (form.agreeTerms === 'no' && words('agreeExplanation') < 10) out.eligibility.push('agreeExplanation')
-    if (words('operationsDescription') < 10) out.eligibility.push('operationsDescription')
-
-    out.coverage.push(...['ccDeductible', 'ccGlLimits', 'ccDamagesToPremises', 'ccMedicalLimit'].filter(blank))
-    // The tools cover needs its claims question answered, and a limit unless
-    // the claims history rules the cover out.
-    if (form.toolsEquipment) {
-      if (blank('imClaims')) out.coverage.push('imClaims')
-      else if (form.imClaims === 'no' && blank('imLimit')) out.coverage.push('imLimit')
-    }
-    if (form.employeeBenefits && blank('employeeBenefitsLimit')) out.coverage.push('employeeBenefitsLimit')
-    // The tool floater's limit carries its own deductible, so it has to be picked.
-    if (form.toolFloater && blank('toolFloaterLimit')) out.coverage.push('toolFloaterLimit')
-
-    out.review.push(...['effectiveDate', 'paymentMethod', 'signMethod'].filter(blank))
-    // Direct Bill asks for the instalment plan and who pays on top of that.
-    if (form.paymentMethod === 'direct-bill') {
-      out.review.push(...['installmentOption', 'payMethod'].filter(blank))
-    }
-
-    // eSign needs somewhere to send the request; the manual path needs the
-    // signed copy back before anything can bind.
-    if (blank('signMethod')) out.bind.push('signMethod')
-    else if (form.signMethod === 'esign') {
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(form.insuredEmail ?? '').trim())) out.bind.push('insuredEmail')
-    } else if (form.signMethod === 'upload' && files.length === 0) {
-      out.bind.push('signedFiles')
-    }
-    if (!form.attested) out.bind.push('attested')
-
-    return out
-  }, [form, files])
-
+  // The rail's eight: the intake's four came in done, and these four answer
+  // for themselves.
   const completed = {
+    ...intakeCompleted,
     eligibility: missingBySection.eligibility.length === 0,
     coverage: missingBySection.coverage.length === 0,
     review: missingBySection.review.length === 0,
@@ -110,7 +58,7 @@ export default function ApplicationFlow({
   }
 
   const progress = Math.round(
-    (steps.filter(s => completed[s.key]).length / steps.length) * 100,
+    (ALL_STEPS.filter(s => completed[s.key]).length / ALL_STEPS.length) * 100,
   )
 
   /* ── Scroll navigation ──────────────────────────────────────────── */
@@ -126,7 +74,7 @@ export default function ApplicationFlow({
   // A pencil on one of the phase-one panels hands control back to App, telling
   // it where to return; the rest scroll within phase two.
   const edit = (key) => {
-    if (INTAKE_STEPS.has(key)) {
+    if (isIntakeStep(key)) {
       onEditIntake && onEditIntake(key, { stage, step: activeStep })
       return
     }
@@ -212,9 +160,9 @@ export default function ApplicationFlow({
       <ApplicationShell
         railExtras={railExtras}
         submissionNumber={applicationNumber}
-        steps={steps}
+        steps={ALL_STEPS}
         activeStep={null}
-        completed={Object.fromEntries(steps.map(s => [s.key, true]))}
+        completed={Object.fromEntries(ALL_STEPS.map(s => [s.key, true]))}
         progress={100}
         quote={quote}
         quoteAmount={amount}
@@ -239,10 +187,10 @@ export default function ApplicationFlow({
     <ApplicationShell
       railExtras={railExtras}
       submissionNumber={applicationNumber}
-      steps={steps}
+      steps={ALL_STEPS}
       activeStep={activeStep}
       completed={completed}
-      onStepClick={jumpTo}
+      onStepClick={edit}
       progress={progress}
       quote={quote}
       quoteAmount={amount}
@@ -272,7 +220,7 @@ export default function ApplicationFlow({
       ))}
 
       {stage === 'bind' && (
-      <div className="px-4 md:px-10 pb-10 flex justify-end">
+      <div className="px-4 md:px-10 pb-10 flex justify-start">
         <button
           type="button"
           onClick={submit}
