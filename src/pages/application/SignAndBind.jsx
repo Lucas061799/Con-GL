@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Input, Checkbox, BRAND_GRADIENT } from '../../components/FormField'
+import ChoiceCard from '../../components/ChoiceCard'
 import { SIGN_OPTIONS } from '../../data/coverageOptions'
 
 function Heading({ children }) {
@@ -7,42 +8,6 @@ function Heading({ children }) {
     <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-400 mb-2.5 pl-0.5">
       {children}
     </h3>
-  )
-}
-
-// Inland Marine's bind card: pick one of two, and the one you pick opens what
-// it needs inside the same card, under a thin rule.
-function ChoiceCard({ selected, label, detail, onSelect, children }) {
-  return (
-    <div
-      className={`rounded-xl transition-all ${selected ? 'cb-choice-on' : ''}`}
-      // Inland Marine's chosen card carries the stroke alone, no glow.
-      style={selected
-        ? undefined
-        : { background: 'var(--surface-card)', border: '1.5px solid var(--line)' }}
-    >
-      <button type="button" onClick={onSelect} className="w-full text-left px-4 py-3.5 flex items-start gap-3">
-        <span
-          className="w-4 h-4 rounded-full shrink-0 mt-0.5 flex items-center justify-center"
-          style={{
-            border: selected ? 'none' : '2px solid var(--line-strong)',
-            background: selected ? BRAND_GRADIENT : 'transparent',
-          }}
-        >
-          {selected && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
-        </span>
-        <span className="min-w-0">
-          <span className="block text-[13.5px] font-bold" style={{ color: 'var(--ink)' }}>{label}</span>
-          <span className="block text-[12px] text-gray-500 leading-relaxed mt-0.5">{detail}</span>
-        </span>
-      </button>
-      {/* The revealed field lines up with the label, not the card edge. */}
-      {selected && children && (
-        <div className="pl-11 pr-4 pb-4">
-          <div className="pt-4 cb-rule-brand">{children}</div>
-        </div>
-      )}
-    </div>
   )
 }
 

@@ -38,7 +38,9 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
   const [submitted, setSubmitted] = useState(false)
   const [approved, setApproved] = useState(false)
   const [preview, setPreview] = useState(false)
-  const [touched, setTouched] = useState(false)
+  // Errors belong to the page you have actually tried to submit — arriving on
+  // the payment page should not flag choices you have not reached yet.
+  const [touched, setTouched] = useState({ form: false, bind: false })
   const scrollRef = useRef(null)
   const sectionRefs = useRef({})
 
@@ -95,7 +97,10 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
 
   const allMissing = Object.values(missingBySection).flat()
 
-  const errorFor = (key) => touched && allMissing.includes(key)
+  const errorFor = (key) => {
+    const section = Object.keys(missingBySection).find(k => missingBySection[k].includes(key))
+    return !!section && !!touched[STAGE_OF[section]]
+  }
 
   const progress = Math.round(
     (steps.filter(s => completed[s.key]).length / steps.length) * 100,
@@ -129,7 +134,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
   }, [steps.length, submitted, stage])
 
   const submit = () => {
-    setTouched(true)
+    setTouched({ form: true, bind: true })
     if (allMissing.length) {
       const first = steps.find(s => !completed[s.key])
       if (first) jumpTo(first.key)
@@ -143,7 +148,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
   // Legacy submits at the end of Coverage Customization: the quote clears, and
   // the applicant carries on to payment.
   const submitCoverage = () => {
-    setTouched(true)
+    setTouched(t => ({ ...t, form: true }))
     const blocked = ['eligibility', 'coverage'].find(k => missingBySection[k].length)
     if (blocked) { jumpTo(blocked); return }
     // Commercial Auto reads the application back before it goes anywhere.
