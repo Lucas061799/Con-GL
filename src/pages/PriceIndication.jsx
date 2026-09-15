@@ -26,11 +26,9 @@ function PaperPill({ paper }) {
   const admitted = paper === 'Admitted'
   return (
     <span
-      className="text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap"
-      style={{
-        background: admitted ? 'rgba(115,201,183,0.18)' : 'rgba(252,165,165,0.18)',
-        color: admitted ? '#0D8B73' : '#B91C1C',
-      }}
+      className={`text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap ${
+        admitted ? 'paper-pill-admitted' : 'paper-pill-non'
+      }`}
     >
       {paper}
     </span>
