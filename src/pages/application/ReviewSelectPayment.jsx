@@ -80,7 +80,11 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
           />
           <div>
             <p className="text-[13px] font-semibold text-gray-600 mb-1.5 tracking-wide">Review Application:</p>
-            <YesNo value={form.reviewApplication} onChange={set('reviewApplication')} />
+            {/* The pills are shorter than the date field, so they sit centred
+                in a box of the same height rather than riding high beside it. */}
+            <div className="h-[42px] flex items-center">
+              <YesNo value={form.reviewApplication} onChange={set('reviewApplication')} />
+            </div>
           </div>
           </div>
         </FieldGroup>
