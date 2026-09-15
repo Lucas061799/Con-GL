@@ -116,6 +116,7 @@ export default function RightPanel({
   selectedCarrier, onSelectCarrier,
   onFormReview, formComplete = false,
   inCompare = false, compareStep, submitted = false, dark = false, premium,
+  downloadLabel = 'Download Application Summary',
 }) {
   // GL-BOP's rail values for dark: faint white fills, 0.08 lines.
   const idleFill = dark ? 'rgba(255,255,255,0.04)' : 'white'
@@ -320,7 +321,7 @@ export default function RightPanel({
             <rect x="9" y="3" width="6" height="4" rx="1" />
             <line x1="9" y1="13" x2="15" y2="13" /><line x1="9" y1="17" x2="13" y2="17" />
           </svg>
-          Download Application Summary
+          {downloadLabel}
         </button>
       </div>
     </aside>

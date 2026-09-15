@@ -120,7 +120,7 @@ export default function CoverageCustomization({ form, set, errorFor }) {
             {o.key === 'toolsEquipment' && toolsPicked && (
               <div className="mt-3 pl-1 space-y-3">
                 <div className="flex items-start gap-4 flex-wrap">
-                  <p className="flex-1 min-w-[240px] text-[12px] italic leading-relaxed" style={{ color: '#5C2ED4' }}>
+                  <p className="flex-1 min-w-[240px] text-[12px] italic leading-relaxed text-accent">
                     {CC_IM_CLAIMS_QUESTION}
                   </p>
                   <YesNo value={form.imClaims} onChange={set('imClaims')} />
@@ -128,8 +128,7 @@ export default function CoverageCustomization({ form, set, errorFor }) {
 
                 {toolsDeclined ? (
                   <div
-                    className="rounded-xl px-4 py-3 text-[12.5px] leading-relaxed"
-                    style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.35)', color: '#B91C1C' }}
+                    className="notice-danger rounded-xl px-4 py-3 text-[12.5px] leading-relaxed"
                   >
                     {CC_IM_DECLINED}
                   </div>
@@ -172,7 +171,7 @@ export default function CoverageCustomization({ form, set, errorFor }) {
           >
             {o.subOptions && form[o.key] && (
               <div className="mt-3 flex items-center gap-4 flex-wrap">
-                <span className="text-[12px] italic" style={{ color: '#5C2ED4' }}>{o.subLabel}</span>
+                <span className="text-[12px] italic text-accent">{o.subLabel}</span>
                 <Select
                   options={o.subOptions}
                   value={form[`${o.key}Limit`]} onChange={set(`${o.key}Limit`)}

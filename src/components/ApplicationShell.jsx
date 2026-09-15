@@ -11,7 +11,7 @@ export default function ApplicationShell({
   submissionNumber, steps, activeStep, completed, onStepClick,
   progress,
   quote, quoteAmount, onFormReview, summaryReady = false, submitted = false,
-  bare = false, scrollRef, railExtras, premium,
+  bare = false, scrollRef, railExtras, premium, downloadLabel,
   children,
 }) {
   // The rail follows the applicant across the hand-off — same quote, same
@@ -54,6 +54,7 @@ export default function ApplicationShell({
         <RightPanel
           dark={railExtras?.dark}
           premium={premium}
+          downloadLabel={downloadLabel}
           progress={progress}
           quotes={railQuotes}
           selectedCarrier={quote?.id}

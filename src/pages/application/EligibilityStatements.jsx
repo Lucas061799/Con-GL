@@ -114,7 +114,7 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
             value={form.operationsDescription} onChange={set('operationsDescription')}
             error={errorFor('operationsDescription')}
           />
-          <p className="text-[12px] font-semibold mt-2" style={{ color: '#5C2ED4' }}>
+          <p className="text-[12px] font-semibold mt-2 text-accent">
             {OPERATIONS_NOTE}
           </p>
         </div>

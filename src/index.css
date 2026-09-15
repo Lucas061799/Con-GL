@@ -42,6 +42,20 @@ html[data-dark="true"] .text-gradient {
 html[data-dark="true"] .grad-stop-0 { stop-color: #A78BFA; }
 html[data-dark="true"] .grad-stop-1 { stop-color: #E879F9; }
 
+/* Brand-purple copy: the deep purple disappears on navy, so dark takes the
+   lighter one the rest of the dark UI uses. */
+.text-accent { color: #5C2ED4; }
+html[data-dark="true"] .text-accent { color: #A78BFA; }
+
+/* The declined-cover notice: a red wash goes muddy on navy, so dark lifts the
+   text and keeps the fill faint. */
+.notice-danger { background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.35); color: #B91C1C; }
+html[data-dark="true"] .notice-danger {
+  background: rgba(248,113,113,0.10);
+  border-color: rgba(248,113,113,0.35);
+  color: #FCA5A5;
+}
+
 /* A two-line label would otherwise push its own control below the one beside
    it. Reserve the second line while the grid has two columns; once it drops to
    one, the labels take only what they need. */
