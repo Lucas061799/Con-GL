@@ -16,8 +16,9 @@ function ChoiceCard({ selected, label, detail, onSelect, children }) {
   return (
     <div
       className={`rounded-xl transition-all ${selected ? 'cb-choice-on' : ''}`}
+      // Inland Marine's chosen card carries the stroke alone, no glow.
       style={selected
-        ? { boxShadow: '0 6px 20px rgba(92,46,212,0.12)' }
+        ? undefined
         : { background: 'var(--surface-card)', border: '1.5px solid var(--line)' }}
     >
       <button type="button" onClick={onSelect} className="w-full text-left px-4 py-3.5 flex items-start gap-3">
