@@ -9,6 +9,7 @@ import ReviewSelectPayment from './pages/application/ReviewSelectPayment'
 import ApplicationSummary from './pages/application/ApplicationSummary'
 import SignAndBind from './pages/application/SignAndBind'
 import ApplicationPreview from './pages/application/ApplicationPreview'
+import QuoteSummary from './pages/application/QuoteSummary'
 import Submitted from './pages/application/Submitted'
 
 // Phase two picks the legacy flow up where Price Indication leaves off.
@@ -250,9 +251,17 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
       </div>
       )}
 
-      {/* Print target for the rail's download while the application is open. */}
+      {/* Print target for the rail's download. The first page hands over the
+          quote; the payment page hands over the application itself. */}
       <div id="submission-print-area" className="print-summary">
-        <ApplicationSummary form={form} rows={rows} />
+        {stage === 'form' ? (
+          <QuoteSummary
+            form={form} quote={quote} amount={amount}
+            submissionNumber={form.applicationNumber}
+          />
+        ) : (
+          <ApplicationSummary form={form} rows={rows} />
+        )}
       </div>
 
       {preview && (
