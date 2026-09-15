@@ -135,7 +135,7 @@ export default function App() {
   const missingBySection = useMemo(() => {
     const blank = (k) => !String(form[k] ?? '').trim()
 
-    const applicant = ['lastName', 'phone', 'email', 'street', 'city', 'state', 'postalCode'].filter(blank)
+    const applicant = ['firstName', 'lastName', 'phone', 'email', 'street', 'city', 'state', 'postalCode'].filter(blank)
     if (!blank('email') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) applicant.push('email')
     if (!/^\d{5}$/.test(form.postalCode || '')) applicant.push('postalCode')
     if (!form.mailingSame) {

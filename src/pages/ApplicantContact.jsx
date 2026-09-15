@@ -14,9 +14,10 @@ const ApplicantContact = forwardRef(function ApplicantContact({ form, set, error
       <FieldGroup label="Applicant Name">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-5">
           <Input
-            label="First Name"
+            label="First Name" required
             value={form.firstName} onChange={set('firstName')}
             placeholder="First name"
+            error={errorFor('firstName')}
           />
           <Input
             label="Middle Name"
