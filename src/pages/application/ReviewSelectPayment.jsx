@@ -1,7 +1,6 @@
 import { DateInput, YesNo, BRAND_GRADIENT } from '../../components/FormField'
 import { computeBreakdown } from '../../components/PremiumBreakdown'
 import { FieldGroup } from '../../components/Section'
-import ChoiceCard from '../../components/ChoiceCard'
 import ApplicationSummary from './ApplicationSummary'
 import {
   PAYMENT_METHODS, DIRECT_BILL_NOTE, INSTALLMENT_FEE, INSTALLMENT_SHARE,
@@ -21,11 +20,33 @@ function Heading({ children }) {
   )
 }
 
+function Radio({ checked, onChange, label, note }) {
+  return (
+    // The label's first line is set to the circle's own height, so the two line
+    // up exactly whether or not there is a note underneath.
+    <label onClick={onChange} className="flex items-start gap-2.5 cursor-pointer select-none py-1.5">
+      <span
+        className="w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0"
+        style={{
+          border: checked ? 'none' : '1.5px solid var(--line-strong)',
+          background: checked ? BRAND_GRADIENT : 'var(--surface-card)',
+        }}
+      >
+        {checked && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
+      </span>
+      <span className="min-w-0">
+        <span className="block text-[13px] leading-[18px]" style={{ color: 'var(--ink)' }}>{label}</span>
+        {note && <span className="block text-[12px] leading-snug text-gray-400 mt-0.5">{note}</span>}
+      </span>
+    </label>
+  )
+}
+
 function Group({ title, children }) {
   return (
-    <div className="mb-5">
-      <p className="text-[13px] font-bold mb-2" style={{ color: 'var(--ink)' }}>{title}</p>
-      <div className="space-y-2.5">{children}</div>
+    <div className="mb-4">
+      <p className="text-[13px] font-bold mb-1" style={{ color: 'var(--ink)' }}>{title}</p>
+      {children}
     </div>
   )
 }
@@ -135,24 +156,24 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
               {isDirect && (
                 <>
                   <Group title="Select installment options">
-                    <ChoiceCard
-                      selected={form.installmentOption === 'one-pay'}
-                      onSelect={() => set('installmentOption')('one-pay')}
+                    <Radio
+                      checked={form.installmentOption === 'one-pay'}
+                      onChange={() => set('installmentOption')('one-pay')}
                       label={`One payment of ${money(onePay)}`}
                     />
-                    <ChoiceCard
-                      selected={form.installmentOption === 'ten-pay'}
-                      onSelect={() => set('installmentOption')('ten-pay')}
+                    <Radio
+                      checked={form.installmentOption === 'ten-pay'}
+                      onChange={() => set('installmentOption')('ten-pay')}
                       label={`9 payments of ${money(installment)} with ${money(down)} down`}
                     />
                   </Group>
 
                   <Group title="Choose how to pay">
                     {PAY_OPTIONS.map(o => (
-                      <ChoiceCard
+                      <Radio
                         key={o.key}
-                        selected={form.payMethod === o.key}
-                        onSelect={() => set('payMethod')(o.key)}
+                        checked={form.payMethod === o.key}
+                        onChange={() => set('payMethod')(o.key)}
                         label={o.label}
                       />
                     ))}
@@ -162,12 +183,12 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
 
               <Group title="Choose how to sign">
                 {SIGN_OPTIONS.map(o => (
-                  <ChoiceCard
+                  <Radio
                     key={o.key}
-                    selected={form.signMethod === o.key}
-                    onSelect={() => set('signMethod')(o.key)}
+                    checked={form.signMethod === o.key}
+                    onChange={() => set('signMethod')(o.key)}
                     label={o.label}
-                    detail={o.note}
+                    note={o.note}
                   />
                 ))}
               </Group>
