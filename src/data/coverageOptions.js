@@ -2,6 +2,8 @@
 // legacy agent-facing GL screens. Every string here is the legacy wording —
 // including the tooltip bodies — so nothing on these steps is invented.
 
+import { TOOL_FLOATER_LIMITS } from './applicationOptions'
+
 export const POLICY_ELIGIBILITY = [
   "The applicant's gross receipts have not exceeded $1,500,000 in the past 2 years and the applicant has no past or current planned jobs exceeding $750,000 in value.",
   'The applicant has not completed any work involving apartment conversions, construction work involving condominiums, town homes or time shares in the past 10 years, nor does the applicant plan to begin or complete such work in the future.',
@@ -145,6 +147,45 @@ export const CC_OPTIONAL = [
     help: "Remove Form 49-0103 Amendment – Employers Liability Exclusion (Action Over): Action Over is a type of action in which an injured employee, after having collected workers compensation benefits from the employer, sues a third party for contributing to the employee's injury. Then, due to a contractual relationship between the third party and the employer, the liability is passed back to the employer. These types of claims will be excluded under your policy unless this exclusion is removed.",
   },
 ]
+
+// The product's own optional coverages, wording straight from the spec. They
+// sit under the same Optional Coverages heading as the legacy rows above.
+export const CC_PRODUCT_OPTIONS = [
+  {
+    key: 'blanketAIEndorsement',
+    label: 'Blanket Additional Insured Endorsement',
+    help: 'Provides additional insured status on a blanket basis as required by written contract for the insured’s ongoing operations. Coverage is provided on a primary/non-contributory basis and includes waiver of subrogation when required by written contract.',
+  },
+  {
+    key: 'stopGap',
+    label: 'Stop Gap – Employers Liability Coverage Endorsement Insurance',
+    help: 'Coverage protection for the policyholder in the event an employee sues for amounts beyond what is covered by workers compensation.',
+    // Only offered where workers compensation is state-administered.
+    states: ['WA', 'ND', 'WY', 'OH'],
+  },
+  {
+    key: 'cyberLiability',
+    label: 'Cyber Liability',
+    help: '$50K limit providing comprehensive data security and privacy coverage that addresses both first party losses and third-party liability claims. Includes breach response and cyber expert claim assistance.',
+  },
+  {
+    key: 'glEnhancement',
+    label: 'GL Enhancement Endorsement',
+    help: 'Provides 16 key coverage enhancements to the base GL policy form. Highlights include: Damage to property in your care custody and control or for costs to repair or restore ‘your work’ $15K per occurrence / $50K aggregate. Unintentional errors and omissions coverage. $10K Lost key coverage.',
+  },
+  {
+    key: 'toolFloater',
+    label: 'Inland Marine - Tool Floater',
+    help: 'Blanket tools limit for tools and equipment, with the deductible that goes with the limit chosen.',
+    subLabel: 'Select Blanket Tools Limit',
+    subOptions: TOOL_FLOATER_LIMITS,
+  },
+]
+
+// Stop Gap is only written where workers compensation is state-administered,
+// so every screen that lists or reads back these covers asks here.
+export const productOptionsFor = (state) =>
+  CC_PRODUCT_OPTIONS.filter(o => !o.states || o.states.includes(state))
 
 // The fee the legacy premium breakdown adds to every quote.
 export const BTIS_POLICY_FEE = 150

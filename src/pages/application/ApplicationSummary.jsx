@@ -4,7 +4,7 @@ import { ENTITY_TYPES } from '../../data/applicantOptions'
 import { YEARS_OF_EXPERIENCE, YEARS_IN_BUSINESS } from '../../data/intakeOptions'
 import {
   CC_DEDUCTIBLES, CC_GL_LIMITS, CC_DAMAGES_TO_PREMISES, CC_MEDICAL_LIMITS,
-  CC_RECOMMENDED, CC_ADDITIONAL_INSUREDS, CC_OPTIONAL,
+  CC_RECOMMENDED, CC_ADDITIONAL_INSUREDS, CC_OPTIONAL, productOptionsFor,
 } from '../../data/coverageOptions'
 
 const labelOf = (options, value) => options.find(o => (o.value ?? o) === value)?.label ?? ''
@@ -24,8 +24,12 @@ export default function ApplicationSummary({ form = {}, rows = [], onEdit }) {
     ? address
     : lines([form.mailStreet, lines([form.mailCity, form.mailState, form.mailPostalCode].filter(Boolean))])
 
-  const picked = [...CC_RECOMMENDED, ...CC_ADDITIONAL_INSUREDS.filter(o => o.price), ...CC_OPTIONAL]
-    .filter(o => form[o.key])
+  const picked = [
+    ...CC_RECOMMENDED,
+    ...CC_ADDITIONAL_INSUREDS.filter(o => o.price),
+    ...CC_OPTIONAL,
+    ...productOptionsFor(form.state),
+  ].filter(o => form[o.key])
 
   const edit = (step, label) => (onEdit ? <EditButton onClick={() => onEdit(step)} label={label} /> : null)
 
@@ -82,7 +86,15 @@ export default function ApplicationSummary({ form = {}, rows = [], onEdit }) {
       >
         <Row label="Blanket Additional Insured form" value="Included" />
         <Row label="Owners, Lessees or Contractors: Completed Operations CG 2037" value="Available upon request" />
-        {picked.map(o => <Row key={o.key} label={o.label} value="Yes" />)}
+        {picked.map(o => (
+          <Row
+            key={o.key}
+            label={o.label}
+            value={o.subOptions
+              ? (labelOf(o.subOptions, form[`${o.key}Limit`]) || 'Yes')
+              : 'Yes'}
+          />
+        ))}
       </Panel>
     </div>
   )

@@ -4,7 +4,7 @@ import { FieldGroup } from '../../components/Section'
 import {
   CC_DEDUCTIBLES, CC_GL_LIMITS, CC_DAMAGES_TO_PREMISES, CC_MEDICAL_LIMITS, CC_LIMIT_HELP,
   CC_RECOMMENDED, CC_IM_CLAIMS_QUESTION, CC_IM_LIMITS, CC_IM_DECLINED,
-  CC_ADDITIONAL_INSUREDS, CC_OPTIONAL,
+  CC_ADDITIONAL_INSUREDS, CC_OPTIONAL, productOptionsFor,
 } from '../../data/coverageOptions'
 
 // Small uppercase label, no rule — the section title already has one.
@@ -163,7 +163,9 @@ export default function CoverageCustomization({ form, set, errorFor }) {
 
       <div>
         <Heading>Optional Coverages</Heading>
-        {CC_OPTIONAL.map(o => (
+        {/* Stop Gap is only written where workers compensation is run by the
+            state, so it appears once the risk state says so. */}
+        {[...CC_OPTIONAL, ...productOptionsFor(form.state)].map(o => (
           <CoverageRow
             key={o.key}
             label={o.label} help={o.help} price={o.price} included={o.included}
@@ -176,7 +178,9 @@ export default function CoverageCustomization({ form, set, errorFor }) {
                   options={o.subOptions}
                   value={form[`${o.key}Limit`]} onChange={set(`${o.key}Limit`)}
                   placeholder="Select One"
-                  className="w-[200px]"
+                  // The tool floater spells its deductible out in the option, so give the
+                  // trigger the room to keep each line whole.
+                  className={o.subOptions.some(x => x.label.length > 20) ? 'w-[380px] max-w-full' : 'w-[200px]'}
                   error={errorFor(`${o.key}Limit`)}
                 />
               </div>

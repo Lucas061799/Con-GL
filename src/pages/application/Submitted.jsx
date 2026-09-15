@@ -6,8 +6,11 @@ import { formatUSD } from '../../lib/rating'
 import { CLASS_CODES } from '../../data/classCodes'
 import {
   STRUCTURE_OF_BUSINESS, STRUCTURE_TYPES, CONSTRUCTION_TYPES,
-  APP_LIMITS, APP_DEDUCTIBLES, OPTIONAL_COVERAGES,
+  APP_LIMITS, APP_DEDUCTIBLES,
 } from '../../data/applicationOptions'
+import {
+  CC_RECOMMENDED, CC_ADDITIONAL_INSUREDS, CC_OPTIONAL, productOptionsFor,
+} from '../../data/coverageOptions'
 
 const ICONS = {
   user: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
@@ -62,7 +65,14 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
     : { background: 'white', border: '1px solid #E5E7EB' }
   const pct = form.workPct || {}
   const trades = form.subTrades || []
-  const picked = OPTIONAL_COVERAGES.filter(c => form[c.key] === 'yes')
+  // Everything ticked on Coverage Customization, which is where the covers
+  // are actually chosen now.
+  const picked = [
+    ...CC_RECOMMENDED,
+    ...CC_ADDITIONAL_INSUREDS.filter(o => o.price),
+    ...CC_OPTIONAL,
+    ...productOptionsFor(form.state),
+  ].filter(o => form[o.key])
 
   return (
     <div className="space-y-5 md:space-y-6">
@@ -205,7 +215,15 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                   <Panel title="Optional Coverages" icon="shield">
                     {picked.length === 0
                       ? <Row label="Selected" value="None" />
-                      : picked.map(c => <Row key={c.key} label={c.label} value="Yes" />)}
+                      : picked.map(c => (
+                          <Row
+                            key={c.key}
+                            label={c.label}
+                            value={c.subOptions
+                              ? (labelOf(c.subOptions, form[`${c.key}Limit`]) || 'Yes')
+                              : 'Yes'}
+                          />
+                        ))}
                   </Panel>
 
                   <Panel title="General Questions" icon="clock">

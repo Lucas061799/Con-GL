@@ -72,6 +72,8 @@ export default function ApplicationFlow({
       else if (form.imClaims === 'no' && blank('imLimit')) out.coverage.push('imLimit')
     }
     if (form.employeeBenefits && blank('employeeBenefitsLimit')) out.coverage.push('employeeBenefitsLimit')
+    // The tool floater's limit carries its own deductible, so it has to be picked.
+    if (form.toolFloater && blank('toolFloaterLimit')) out.coverage.push('toolFloaterLimit')
 
     out.review.push(...['effectiveDate', 'paymentMethod', 'signMethod'].filter(blank))
     // Direct Bill asks for the instalment plan and who pays on top of that.
