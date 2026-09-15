@@ -219,7 +219,7 @@ export default function ApplicationFlow({ seed, quote, amount, onExit, onStartOv
       summaryReady
       // Legacy offers the quote alongside the coverage, and the application
       // itself once you are on the payment page.
-      downloadLabel={stage === 'form' ? 'Download Quick Quote' : 'Download Application'}
+      downloadLabel={stage === 'form' ? 'Download Quick Quote' : 'Download Application Summary'}
       onFormReview={() => setTimeout(() => window.print(), 50)}
       scrollRef={scrollRef}
       bare
