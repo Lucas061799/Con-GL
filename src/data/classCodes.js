@@ -63,7 +63,9 @@ export const CLASS_CODES = [
   { code: '98344',  label: 'Paperhanging' },
   { code: '98449',  label: 'Plaster/Stucco' },
   { code: '98482',  label: 'Plumbing Commercial' },
-  // GAP: entries between "Plumbing Commercial" and "Prefabricated Building Erection"
+  // From the class-specific questions doc, which lists 98483 as a trigger.
+  { code: '98483',  label: 'Plumbing Residential' },
+  // GAP: entries between "Plumbing Residential" and "Prefabricated Building Erection"
   { code: '98502',  label: 'Prefabricated Building Erection' },
   { code: '98636',  label: 'Refrigeration Equipment Installation/Service' },
   { code: '99650',  label: 'Satellite Dish Installation' },

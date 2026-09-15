@@ -3,6 +3,7 @@ import ApplicationShell from './components/ApplicationShell'
 import Section from './components/Section'
 import { BRAND_GRADIENT } from './components/FormField'
 import { QuoteApproved } from './components/QuoteHandoff'
+import { rulesForCodes, needsUnderwriterReview } from './data/conditionalQuestions'
 import EligibilityStatements from './pages/application/EligibilityStatements'
 import CoverageCustomization from './pages/application/CoverageCustomization'
 import ReviewSelectPayment from './pages/application/ReviewSelectPayment'
@@ -157,6 +158,12 @@ export default function ApplicationFlow({
     return () => observer.disconnect()
   }, [steps.length, submitted, stage])
 
+  // Disagreeing with the terms sends it to an underwriter, and so does high
+  // value home work over the threshold, as the class questions spell out.
+  const underwriterReview =
+    form.agreeTerms === 'no' ||
+    needsUnderwriterReview(rulesForCodes(rows.map(r => r.code).filter(Boolean)), form)
+
   const submit = () => {
     setTouched({ form: true, bind: true })
     if (allMissing.length) {
@@ -272,7 +279,7 @@ export default function ApplicationFlow({
           className="flex items-center gap-2 px-8 py-3 rounded-xl text-[13.5px] font-bold text-white transition hover:opacity-90"
           style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
         >
-          {form.agreeTerms === 'no' ? 'Submit for Underwriter Review' : 'Submit Application'}
+          {underwriterReview ? 'Submit for Underwriter Review' : 'Submit Application'}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
