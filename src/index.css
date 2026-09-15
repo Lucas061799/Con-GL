@@ -46,8 +46,10 @@ html[data-dark="true"] .grad-stop-1 { stop-color: #E879F9; }
    stay dark-red on navy, so the dark pair is ours. */
 .paper-pill-admitted { background: rgba(115,201,183,0.18); color: #0D8B73; }
 .paper-pill-non      { background: rgba(252,165,165,0.18); color: #B91C1C; }
-html[data-dark="true"] .paper-pill-admitted { background: rgba(115,201,183,0.15); color: #73C9B7; }
-html[data-dark="true"] .paper-pill-non      { background: rgba(248,113,113,0.15); color: #FCA5A5; }
+/* A red tint over navy just reads as mud, so dark takes the neutral fill the
+   rest of the house uses and lets the text carry the colour. */
+html[data-dark="true"] .paper-pill-admitted { background: rgba(255,255,255,0.08); color: #73C9B7; }
+html[data-dark="true"] .paper-pill-non      { background: rgba(255,255,255,0.08); color: #FCA5A5; }
 
 /* The house confetti fall — the same one the other three products throw. */
 @keyframes confettiFall {
