@@ -1,5 +1,5 @@
 import { BRAND_GRADIENT } from '../../components/FormField'
-import jungleImg from '../../assets/jungle.png'
+import sellMoreBg from '../../assets/sell-more-bg.png'
 import Confetti from '../../components/Confetti'
 import CarrierMark from '../../components/CarrierMark'
 import { formatUSD } from '../../lib/rating'
@@ -232,7 +232,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
         onClick={onStartOver}
         style={{ minHeight: 100 }}
       >
-        <img src={jungleImg} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <img src={sellMoreBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
         <div className="px-8 py-6 relative z-10">
           <p className="text-lg font-bold mb-1" style={{ color: '#111827' }}>Return to the Jungle?</p>
           <p className="text-xs text-gray-400">
