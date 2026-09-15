@@ -100,16 +100,6 @@ const BusinessOperations = forwardRef(function BusinessOperations(
         </div>
       </FieldGroup>
 
-      <FieldGroup label="Operations">
-        <Textarea
-          label="Description of Operations" required
-          rows={3}
-          value={form.operationsDescription} onChange={set('operationsDescription')}
-          placeholder="Describe the work the business performs."
-          error={errorFor('operationsDescription')}
-        />
-      </FieldGroup>
-
       <div className="space-y-2">
         <QuestionCard>
           <ToggleQuestion

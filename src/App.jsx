@@ -141,7 +141,8 @@ export default function App() {
     const operations = [
       'effectiveDate', 'dba', 'legalName', 'entityType',
       'yearsOfExperience', 'yearsInBusiness', 'priorInsurance',
-      'grossReceipts', 'activeOwners', 'operationsDescription',
+      // Description of Operations is asked once, in Eligibility Statements.
+      'grossReceipts', 'activeOwners',
     ].filter(blank)
     if (!blank('legalName') && form.legalName.trim().length < 5) operations.push('legalName')
     if (form.hasEmployees === 'yes') operations.push(...['employeeCount', 'employeePayroll'].filter(blank))
