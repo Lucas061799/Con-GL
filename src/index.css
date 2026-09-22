@@ -57,10 +57,12 @@ html[data-dark="true"] .notice-danger {
 }
 
 /* A two-line label would otherwise push its own control below the one beside
-   it. Reserve the second line while the grid has two columns; once it drops to
-   one, the labels take only what they need. */
+   it. While the grid has two columns, each cell hangs its label and control
+   from the bottom of the row: the controls line up, and a one-line label keeps
+   its own field close instead of floating between the two rows. */
 @media (min-width: 640px) {
-  .cc-limits > div > label { min-height: 39px; }
+  .cc-limits > div { display: flex; flex-direction: column; }
+  .cc-limits > div > label { margin-top: auto; }
 }
 
 /* Admitted / Non-Admitted, in Builder's Risk's colours. Theirs are inline and
