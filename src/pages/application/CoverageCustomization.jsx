@@ -22,15 +22,14 @@ function CoverageRow({ label, help, status, price, included, checked, pricing, o
   return (
     <div className="py-2.5" style={{ borderBottom: '1px solid var(--line-soft)' }}>
       <div className="flex items-start gap-3">
-        {/* The bubble sits at the end of the label, as it does everywhere else.
-            A div, not a p — the tooltip panel carries block content. */}
+        {/* These labels are long enough to wrap, which leaves a bubble trailing
+            the text stranded mid-row. It rides with the checkbox instead, so
+            every row's bubble lines up in one column. */}
         <div className="flex-1 text-[12.5px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
           {label}
-          <span className="inline-flex align-middle ml-1.5 -mt-px">
-            <InfoTip title={label}>{help}</InfoTip>
-          </span>
         </div>
         <div className="shrink-0 w-[150px] flex items-center gap-2 justify-start">
+          <InfoTip title={label}>{help}</InfoTip>
           {status ? (
             <span className="text-[12.5px] font-bold" style={{ color: 'var(--ink)' }}>{status}</span>
           ) : (
