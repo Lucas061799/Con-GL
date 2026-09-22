@@ -38,12 +38,15 @@ function Row({ label, value, bold = false, dark }) {
   )
 }
 
-export default function PremiumBreakdown({ form = {}, amount = 0, quote, onBrokerFee, onSubmit, dark = false }) {
+export default function PremiumBreakdown({ form = {}, amount = 0, quote, onBrokerFee, onSubmit, submitDisabled = false, submitHint, dark = false }) {
   const { glPremium, brokerFee, grossTotal, totalDue, pending } = computeBreakdown(form, amount)
+
+  // Armed once the coverage is actually submittable.
+  const armed = !!onSubmit && !submitDisabled
 
   return (
     <div
-      className="rounded-2xl p-5 mb-3"
+      className={`rounded-2xl p-5 mb-3 ${armed ? 'pb-armed' : ''}`}
       style={{
         background: dark ? 'rgba(255,255,255,0.04)' : 'white',
         border: `1px solid ${dark ? 'rgba(255,255,255,0.08)' : 'var(--line)'}`,
@@ -92,16 +95,29 @@ export default function PremiumBreakdown({ form = {}, amount = 0, quote, onBroke
       <div className="my-2" style={{ borderTop: `1px solid ${dark ? 'rgba(255,255,255,0.08)' : 'var(--line)'}` }} />
       <Row label="Total Due:" value={pending ? '---' : formatUSD(totalDue)} bold dark={dark} />
 
-      {/* The coverage is submitted from the card the price lives on. */}
+      {/* The coverage is submitted from the card the price lives on — but not
+          before the statements above it have been read through. */}
       {onSubmit && (
-        <button
-          type="button"
-          onClick={onSubmit}
-          className="w-full mt-4 py-2.5 rounded-xl text-xs font-bold text-white transition hover:opacity-90"
-          style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
-        >
-          Submit
-        </button>
+        <>
+          <button
+            type="button"
+            disabled={submitDisabled}
+            onClick={() => !submitDisabled && onSubmit()}
+            title={submitDisabled ? submitHint : undefined}
+            className={`w-full mt-4 py-2.5 rounded-xl text-xs font-bold transition disabled:cursor-not-allowed enabled:hover:opacity-90 ${armed ? 'pb-cta-armed' : ''}`}
+            style={submitDisabled
+              ? dark
+                ? { background: 'rgba(255,255,255,0.06)', color: '#6B7280', border: '1px solid rgba(255,255,255,0.08)' }
+                : { background: '#FAFAFB', color: '#9CA3AF', border: '1px solid var(--line)' }
+              // The pulse owns the shadow while it is armed.
+              : { background: BRAND_GRADIENT, color: 'white' }}
+          >
+            Submit
+          </button>
+          {submitDisabled && submitHint && (
+            <p className="text-[10.5px] text-gray-400 leading-snug mt-2 text-center">{submitHint}</p>
+          )}
+        </>
       )}
     </div>
   )

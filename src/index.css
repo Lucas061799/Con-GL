@@ -65,6 +65,52 @@ html[data-dark="true"] .notice-danger {
   .cc-limits > div > label { margin-top: auto; }
 }
 
+/* The moment the coverage can be submitted, the price card lights up: a stroke
+   runs round the border and the button breathes, so the eye goes to the rail
+   rather than hunting for what to do next. */
+.pb-armed { position: relative; overflow: hidden; border-color: transparent !important; }
+.pb-armed::before {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 190%; aspect-ratio: 1;
+  translate: -50% -50%;
+  background: conic-gradient(from 0turn, transparent 0 60%, #5C2ED4 78%, #E879F9 90%, transparent 97%);
+  animation: pbOrbit 3.2s linear infinite;
+}
+.pb-armed::after {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  border-radius: 14.5px;
+  background: var(--surface-card);
+}
+html[data-dark="true"] .pb-armed::before {
+  background: conic-gradient(from 0turn, transparent 0 60%, #A78BFA 78%, #E879F9 90%, transparent 97%);
+}
+.pb-armed > * { position: relative; z-index: 1; }
+@keyframes pbOrbit { to { rotate: 1turn; } }
+
+.pb-cta-armed { animation: pbCta 2.4s ease-in-out infinite; }
+@keyframes pbCta {
+  0%, 100% { box-shadow: 0 4px 14px rgba(92,46,212,0.22); }
+  50%      { box-shadow: 0 6px 24px rgba(166,20,195,0.48); }
+}
+
+/* Anyone who asked for less motion gets the lit border without the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .pb-armed::before { animation: none; background: linear-gradient(88.09deg, #5C2ED4 0%, #A614C3 100%); }
+  .pb-cta-armed { animation: none; }
+}
+
+/* The house note: a faint brand wash the eye catches without it shouting.
+   Business Operations' underwriter notice wears the same one. */
+.notice-brand { background: rgba(92,46,212,0.05); border: 1px solid rgba(92,46,212,0.18); }
+html[data-dark="true"] .notice-brand {
+  background: rgba(167,139,250,0.08);
+  border-color: rgba(167,139,250,0.28);
+}
+
 /* The info bubble wears the Quick Jump chip's tint. Filled with the solid
    gradient it pulled harder than the field it was explaining. */
 .info-dot {

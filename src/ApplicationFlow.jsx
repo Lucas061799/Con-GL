@@ -92,14 +92,21 @@ export default function ApplicationFlow({
   useEffect(() => {
     const root = scrollRef.current
     if (!root) return
-    // Whichever section owns the top third of the viewport is the active one.
+    // Whichever section has crossed the top third is the active one. Reading
+    // the positions rather than the entries matters on the way back up, where
+    // the only entry in the batch is the section that just left.
+    const pick = () => {
+      const line = root.getBoundingClientRect().top + root.clientHeight * 0.34
+      const seen = Object.entries(sectionRefs.current)
+        .filter(([, el]) => el)
+        .map(([key, el]) => [key, el.getBoundingClientRect().top])
+        .sort((a, b) => a[1] - b[1])
+      const above = seen.filter(([, top]) => top <= line)
+      const next = (above.length ? above[above.length - 1] : seen[0])?.[0]
+      if (next) setActiveStep(next)
+    }
     const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter(e => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0]
-        if (visible?.target?.id) setActiveStep(visible.target.id)
-      },
+      pick,
       { root, rootMargin: '0px 0px -66% 0px', threshold: 0 },
     )
     Object.values(sectionRefs.current).forEach(el => el && observer.observe(el))
@@ -199,6 +206,10 @@ export default function ApplicationFlow({
         onBrokerFee: set('brokerFee'),
         // Legacy submits from under the breakdown, and only on the first page.
         onSubmit: stage === 'form' ? submitCoverage : null,
+        // Legacy submits at the foot of Coverage Customization, so while the
+        // reader is still up in the statements the button waits.
+        submitDisabled: stage === 'form' && activeStep === 'eligibility',
+        submitHint: 'Read through the eligibility statements first.',
       }}
       summaryReady
       // Legacy offers the quote alongside the coverage, and the application

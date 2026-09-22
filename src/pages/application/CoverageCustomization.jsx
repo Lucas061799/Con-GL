@@ -188,11 +188,26 @@ export default function CoverageCustomization({ form, set, errorFor }) {
         ))}
       </div>
 
-      {/* The figures move as covers are ticked, and they live in the rail. */}
-      <p className="text-[12px] text-gray-400">
-        Every cover you add updates the <span className="font-semibold" style={{ color: 'var(--ink-2)' }}>Premium Breakdown</span> on
-        the right — check it before you submit.
-      </p>
+      {/* The figures move as covers are ticked, and they live in the rail —
+          grey type at the foot of a long page was too easy to scroll past. */}
+      <div className="notice-brand rounded-xl px-4 py-3 flex items-start gap-3">
+        <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" strokeWidth="1.8" viewBox="0 0 24 24">
+          <defs>
+            <linearGradient id="ccNoteG" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#5C2ED4" className="grad-stop-0" />
+              <stop offset="100%" stopColor="#A614C3" className="grad-stop-1" />
+            </linearGradient>
+          </defs>
+          <circle cx="12" cy="12" r="9" stroke="url(#ccNoteG)" />
+          <path d="M12 8v5" stroke="url(#ccNoteG)" strokeLinecap="round" />
+          <circle cx="12" cy="16.5" r="0.6" fill="url(#ccNoteG)" />
+        </svg>
+        <p className="text-[12.5px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
+          Every cover you add updates the{' '}
+          <span className="font-bold" style={{ color: 'var(--ink)' }}>Premium Breakdown</span>{' '}
+          on the right — check it, then submit from there.
+        </p>
+      </div>
     </div>
   )
 }
