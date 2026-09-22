@@ -90,11 +90,8 @@ export function InfoTip({ title, children, size = 'sm', label }) {
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(v => !v) }}
         onFocus={show}
         onBlur={hide}
-        className={`${size === 'xs' ? 'w-3.5 h-3.5 text-[8px]' : 'w-4 h-4 text-[10px]'} rounded-full flex items-center justify-center font-bold text-white shrink-0 transition-all hover:scale-110`}
-        style={{
-          background: 'linear-gradient(88.09deg, #5C2ED4 0%, #A614C3 100%)',
-          boxShadow: open ? '0 2px 8px rgba(92,46,212,0.4)' : '0 1px 3px rgba(92,46,212,0.25)',
-        }}
+        data-open={open}
+        className={`info-dot ${size === 'xs' ? 'w-3.5 h-3.5 text-[8px]' : 'w-4 h-4 text-[10px]'} rounded-full flex items-center justify-center font-bold shrink-0 transition-all hover:scale-110`}
         aria-label={`More info: ${typeof title === 'string' ? title : 'details'}`}
       >
         i

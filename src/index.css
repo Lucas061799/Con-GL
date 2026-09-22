@@ -65,6 +65,19 @@ html[data-dark="true"] .notice-danger {
   .cc-limits > div > label { margin-top: auto; }
 }
 
+/* The info bubble wears the Quick Jump chip's tint. Filled with the solid
+   gradient it pulled harder than the field it was explaining. */
+.info-dot {
+  background: linear-gradient(88.09deg, rgba(92,46,212,0.14) 0%, rgba(166,20,195,0.14) 100%);
+  color: #7C3AED;
+}
+.info-dot:hover, .info-dot[data-open="true"] {
+  background: linear-gradient(88.09deg, rgba(92,46,212,0.24) 0%, rgba(166,20,195,0.24) 100%);
+}
+html[data-dark="true"] .info-dot { background: rgba(167,139,250,0.18); color: #A78BFA; }
+html[data-dark="true"] .info-dot:hover,
+html[data-dark="true"] .info-dot[data-open="true"] { background: rgba(167,139,250,0.30); }
+
 /* Admitted / Non-Admitted, in Builder's Risk's colours. Theirs are inline and
    stay dark-red on navy, so the dark pair is ours. */
 .paper-pill-admitted { background: rgba(115,201,183,0.18); color: #0D8B73; }
