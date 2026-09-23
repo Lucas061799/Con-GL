@@ -4,6 +4,7 @@ import Confetti from '../../components/Confetti'
 import CarrierMark from '../../components/CarrierMark'
 import { formatUSD } from '../../lib/rating'
 import { CLASS_CODES } from '../../data/classCodes'
+import { rulesForCodes, needsUnderwriterReview } from '../../data/conditionalQuestions'
 import {
   STRUCTURE_OF_BUSINESS, STRUCTURE_TYPES, CONSTRUCTION_TYPES,
   APP_LIMITS, APP_DEDUCTIBLES,
@@ -67,6 +68,23 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
   const trades = form.subTrades || []
   // Everything ticked on Coverage Customization, which is where the covers
   // are actually chosen now.
+  // Nothing is bound yet: the insured still has to sign, and a submission over
+  // the high value home threshold goes to an underwriter first. The headline
+  // says what actually happened — a request went in.
+  const carrier = quote?.carrier ?? 'The carrier'
+  const inReview =
+    form.agreeTerms === 'no' ||
+    needsUnderwriterReview(rulesForCodes(rows.map(r => r.code).filter(Boolean)), form)
+  const headline = inReview ? 'Sent for underwriter review' : 'Request to bind sent'
+  const statusLabel = inReview ? 'In review' : 'Bind requested'
+  const subline = inReview
+    ? `${carrier} will come back to you once an underwriter has read it through.`
+    : form.signMethod === 'esign'
+      ? `${carrier} has the application, and the insured has been emailed to sign it.`
+      : form.signMethod === 'upload'
+        ? `${carrier} has the application and the signed copy.`
+        : `${carrier} has the application.`
+
   const picked = [
     ...CC_RECOMMENDED,
     ...CC_ADDITIONAL_INSUREDS.filter(o => o.price),
@@ -96,10 +114,8 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
               </div>
 
               <div className="flex-1 min-w-0">
-                <h1 className="text-xl font-bold mb-1" style={{ color: 'var(--ink)' }}>Application submitted!</h1>
-                <p className="text-xs text-gray-400 leading-relaxed">
-                  {quote?.carrier ?? 'The carrier'} has the submission.
-                </p>
+                <h1 className="text-xl font-bold mb-1" style={{ color: 'var(--ink)' }}>{headline}</h1>
+                <p className="text-xs text-gray-400 leading-relaxed">{subline}</p>
               </div>
 
               <button
@@ -144,7 +160,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                 </p>
                 <span className="inline-flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full" style={{ background: BRAND_GRADIENT }} />
-                  <span className="text-sm font-bold text-gradient">Submitted</span>
+                  <span className="text-sm font-bold text-gradient">{statusLabel}</span>
                 </span>
               </div>
             </div>
@@ -206,7 +222,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                     <Row label="Trades" value={[...trades, form.subTradesOther].filter(Boolean).join(', ')} />
                   </Panel>
 
-                  <Panel title="% of Work" icon="doc">
+                  <Panel title="Work Breakdown" icon="doc">
                     {[...STRUCTURE_TYPES, ...CONSTRUCTION_TYPES]
                       .filter(r => pct[r.key])
                       .map(r => <Row key={r.key} label={r.label} value={`${pct[r.key]}%`} />)}
