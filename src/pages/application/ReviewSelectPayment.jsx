@@ -87,14 +87,16 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
               </div>
             </div>
           </div>
-        </FieldGroup>
 
-        {/* Saying yes reads the whole application back, as the legacy step does. */}
-        {form.reviewApplication === 'yes' && (
-          <div className="mt-5">
-            <ApplicationSummary form={form} rows={rows} onEdit={onEdit} />
-          </div>
-        )}
+          {/* Saying yes reads the whole application back, inside the same box
+              the question is asked in. The summary's own bottom margin is
+              taken off — the box already has padding. */}
+          {form.reviewApplication === 'yes' && (
+            <div className="mt-5 pt-5 -mb-6" style={{ borderTop: '1px solid var(--line)' }}>
+              <ApplicationSummary form={form} rows={rows} onEdit={onEdit} />
+            </div>
+          )}
+        </FieldGroup>
       </div>
 
       <div>
