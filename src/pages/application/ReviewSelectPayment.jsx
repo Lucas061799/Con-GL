@@ -106,23 +106,32 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
               {PAYMENT_METHODS.map(m => (
                 <div
                   key={m.key}
-                  className="rounded-xl overflow-hidden flex flex-col"
-                  style={{ background: 'var(--surface-card)', border: '1.5px solid var(--line)' }}
+                  // The recommended one is marked by its own border and the
+                  // badge below; a full banner left the other two with a bald
+                  // strip of nothing on top.
+                  className={`rounded-xl overflow-hidden flex flex-col ${m.recommended ? 'pay-rec' : ''}`}
+                  style={{
+                    background: 'var(--surface-card)',
+                    border: m.recommended ? undefined : '1.5px solid var(--line)',
+                  }}
                 >
-                  {/* Every card keeps the banner's height, or the one that
-                      carries it starts a row lower than the other two. */}
-                  <div
-                    className="py-1.5 text-center text-[10px] font-bold tracking-[0.12em] text-white"
-                    style={m.recommended ? { background: BRAND_GRADIENT } : { background: 'transparent' }}
-                  >
-                    {m.recommended ? 'RECOMMENDED' : '\u00A0'}
-                  </div>
                   <div className="p-4 flex-1 flex flex-col">
-                    {/* The name block is held to one height too, so the three
+                    {/* The name block is held to one height, so the three
                         descriptions start on the same line whether or not the
-                        card has a "by" line or a title that wraps. */}
+                        card has a "by" line or a title that wraps. The badge
+                        rides in this row rather than adding one. */}
                     <div className="sm:min-h-[44px]">
-                      <p className="text-[14px] font-bold" style={{ color: 'var(--ink)' }}>{m.label}</p>
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-[14px] font-bold" style={{ color: 'var(--ink)' }}>{m.label}</p>
+                        {m.recommended && (
+                          <span
+                            className="shrink-0 mt-0.5 px-2 py-[3px] rounded-full text-[8.5px] font-bold tracking-[0.1em] text-white"
+                            style={{ background: BRAND_GRADIENT }}
+                          >
+                            RECOMMENDED
+                          </span>
+                        )}
+                      </div>
                       {m.by && <p className="text-[12px] text-gray-400">{m.by}</p>}
                     </div>
                     <p className="text-[12.5px] leading-relaxed mt-2 mb-5 flex-1" style={{ color: 'var(--ink-2)' }}>

@@ -65,6 +65,11 @@ html[data-dark="true"] .notice-danger {
   .cc-limits > div > label { margin-top: auto; }
 }
 
+/* The recommended payment card's own border. The deep purple is invisible on
+   navy, so dark takes the lavender. */
+.pay-rec { border: 1.5px solid rgba(92,46,212,0.40); }
+html[data-dark="true"] .pay-rec { border-color: rgba(167,139,250,0.50); }
+
 /* Selected states that were painted in the deep brand purple: legible on
    white, all but invisible on navy, so dark takes the light pair. */
 .yn-on {
