@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { DateInput, BRAND_GRADIENT } from '../../components/FormField'
 import { computeBreakdown } from '../../components/PremiumBreakdown'
 import { FieldGroup } from '../../components/Section'
+import ApplicationSummary from './ApplicationSummary'
 import {
   PAYMENT_METHODS, DIRECT_BILL_NOTE, INSTALLMENT_FEE, INSTALLMENT_SHARE,
   PAY_OPTIONS, SIGN_OPTIONS,
@@ -53,7 +55,10 @@ function Group({ title, children }) {
 // The legacy step is two numbered parts: check the application over, then pick
 // how the premium gets paid. Choosing a method swaps the three cards for that
 // method's own questions.
-export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, onContinue }) {
+export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, rows = [], onContinue, onEdit }) {
+  // The read-back is there for whoever wants it and folded away for whoever
+  // does not — it is a long stretch to scroll past on the way to paying.
+  const [reviewing, setReviewing] = useState(false)
   const picked = PAYMENT_METHODS.find(m => m.key === form.paymentMethod)
   const { totalDue } = computeBreakdown(form, amount)
 
@@ -77,6 +82,28 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, o
             error={errorFor('effectiveDate')}
           />
         </FieldGroup>
+
+        <button
+          type="button"
+          onClick={() => setReviewing(v => !v)}
+          className="mt-3 inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12.5px] font-semibold transition hover:opacity-90"
+          style={{ background: 'var(--surface-card)', color: 'var(--ink-2)', border: '1px solid var(--line)' }}
+        >
+          {reviewing ? 'Hide the application' : 'Review the application'}
+          <svg
+            width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+            style={{ transform: reviewing ? 'rotate(180deg)' : 'none', transition: 'transform 150ms' }}
+          >
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+
+        {reviewing && (
+          <div className="mt-4">
+            <ApplicationSummary form={form} rows={rows} onEdit={onEdit} />
+          </div>
+        )}
       </div>
 
       <div>
