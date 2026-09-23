@@ -102,36 +102,33 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
 
         {!picked ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
               {PAYMENT_METHODS.map(m => (
                 <div
                   key={m.key}
-                  // The recommended one is marked by its own border and the
-                  // badge below; a full banner left the other two with a bald
-                  // strip of nothing on top.
-                  className={`rounded-xl overflow-hidden flex flex-col ${m.recommended ? 'pay-rec' : ''}`}
+                  // The badge sits on the top edge rather than in a band of
+                  // its own, so the other two cards need no blank strip to
+                  // keep up with it.
+                  className={`relative rounded-xl flex flex-col ${m.recommended ? 'pay-rec' : ''}`}
                   style={{
                     background: 'var(--surface-card)',
                     border: m.recommended ? undefined : '1.5px solid var(--line)',
                   }}
                 >
+                  {m.recommended && (
+                    <span
+                      className="absolute -top-[9px] left-1/2 -translate-x-1/2 px-2.5 py-[3px] rounded-full text-[9px] font-bold tracking-[0.12em] text-white whitespace-nowrap"
+                      style={{ background: BRAND_GRADIENT, boxShadow: '0 2px 8px rgba(92,46,212,0.30)' }}
+                    >
+                      RECOMMENDED
+                    </span>
+                  )}
                   <div className="p-4 flex-1 flex flex-col">
                     {/* The name block is held to one height, so the three
                         descriptions start on the same line whether or not the
-                        card has a "by" line or a title that wraps. The badge
-                        rides in this row rather than adding one. */}
+                        card has a "by" line or a title that wraps. */}
                     <div className="sm:min-h-[44px]">
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="text-[14px] font-bold" style={{ color: 'var(--ink)' }}>{m.label}</p>
-                        {m.recommended && (
-                          <span
-                            className="shrink-0 mt-0.5 px-2 py-[3px] rounded-full text-[8.5px] font-bold tracking-[0.1em] text-white"
-                            style={{ background: BRAND_GRADIENT }}
-                          >
-                            RECOMMENDED
-                          </span>
-                        )}
-                      </div>
+                      <p className="text-[14px] font-bold" style={{ color: 'var(--ink)' }}>{m.label}</p>
                       {m.by && <p className="text-[12px] text-gray-400">{m.by}</p>}
                     </div>
                     <p className="text-[12.5px] leading-relaxed mt-2 mb-5 flex-1" style={{ color: 'var(--ink-2)' }}>
