@@ -315,7 +315,9 @@ export default function App() {
 
   const demoApplication = () => {
     demoStart()
-    setSelectedCarrier('bravado')
+    // RLI is the admitted paper, so the demo lands on the one an agent would
+    // reach for first.
+    setSelectedCarrier('rli')
     setHandoff('none')
     setForm(f => ({
       ...f,
