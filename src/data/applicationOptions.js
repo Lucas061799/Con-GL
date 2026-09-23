@@ -10,8 +10,6 @@ export const STRUCTURE_OF_BUSINESS = [
   { value: 'sole-proprietor', label: 'Sole Proprietor or Individual' },
 ]
 
-// Phase two allows three trades, not the four the indication took.
-export { MAX_CLASSIFICATIONS as MAX_APPLICATION_CLASSIFICATIONS } from './applicantOptions'
 
 export const APP_DEDUCTIBLES = [
   { value: '1000', label: '$1,000' },

@@ -28,11 +28,7 @@ export const AVAILABLE_STATES = [
   'UT','VA','VT','WA','WI','WV','WY',
 ]
 
-// Up to three trades can be split by percentage of work; they must total
-// 100. The legacy Classifications step says "add up to three", and phase two
-// reads this same number so the two can't drift apart.
-export const MAX_CLASSIFICATIONS = 3
-
-// The intake's own Classifications step says "add up to four" on the legacy
-// screens, so it carries its own limit rather than sharing the one above.
+// The Classifications step says "add up to four" on the legacy screens. The
+// three-trade limit that used to sit beside this went with the phase-two
+// screen that was the only thing reading it.
 export const MAX_INTAKE_CLASSIFICATIONS = 4
