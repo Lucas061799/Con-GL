@@ -3,6 +3,8 @@ import sellMoreBg from '../../assets/sell-more-bg.png'
 import Confetti from '../../components/Confetti'
 import CarrierMark from '../../components/CarrierMark'
 import { formatUSD } from '../../lib/rating'
+import { CARRIER_TERMS } from '../../data/carrierTerms'
+import { computeBreakdown } from '../../components/PremiumBreakdown'
 import { CLASS_CODES } from '../../data/classCodes'
 import { rulesForCodes, needsUnderwriterReview } from '../../data/conditionalQuestions'
 import {
@@ -89,6 +91,12 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
     ? `${carrier} will come back to you once an underwriter has read it through.`
     : `${carrier} is processing the bind.${signingNote} You'll get a confirmation email shortly.`
 
+  // Builder's Risk closes its header with a row naming the carrier and the
+  // money. Theirs says "Policy bound with X · Charged today"; ours says what
+  // was actually sent, and what the total comes to once it is.
+  const { totalDue } = computeBreakdown(form, amount)
+  const paper = CARRIER_TERMS[quote?.id]?.paper
+
   const picked = [
     ...CC_RECOMMENDED,
     ...CC_ADDITIONAL_INSUREDS.filter(o => o.price),
@@ -168,6 +176,30 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                 </span>
               </div>
             </div>
+
+            {quote && (
+              <div
+                className="flex items-center gap-4 flex-wrap px-6 py-4"
+                style={{ borderTop: '1px solid var(--line-soft)' }}
+              >
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold" style={{ color: 'var(--ink)' }}>
+                    {inReview ? 'Sent to ' : 'Bind submitted to '}{carrier}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Program: <span className="font-semibold">{quote.product}</span>
+                    {paper && <>{' · '}{paper}</>}
+                    {' · '}Premium {formatUSD(Math.round(amount))}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                    Total Due
+                  </div>
+                  <div className="text-xl font-bold" style={{ color: 'var(--ink)' }}>{formatUSD(totalDue)}</div>
+                </div>
+              </div>
+            )}
 
             <div style={{ borderTop: '1px solid var(--line-soft)' }}>
               <div className="px-5 py-5">
