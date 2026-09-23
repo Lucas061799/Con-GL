@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { DateInput, BRAND_GRADIENT } from '../../components/FormField'
+import { DateInput, YesNo, BRAND_GRADIENT } from '../../components/FormField'
 import { computeBreakdown } from '../../components/PremiumBreakdown'
 import { FieldGroup } from '../../components/Section'
 import ApplicationSummary from './ApplicationSummary'
@@ -56,9 +55,6 @@ function Group({ title, children }) {
 // how the premium gets paid. Choosing a method swaps the three cards for that
 // method's own questions.
 export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, rows = [], onContinue, onEdit }) {
-  // The read-back is there for whoever wants it and folded away for whoever
-  // does not — it is a long stretch to scroll past on the way to paying.
-  const [reviewing, setReviewing] = useState(false)
   const picked = PAYMENT_METHODS.find(m => m.key === form.paymentMethod)
   const { totalDue } = computeBreakdown(form, amount)
 
@@ -75,32 +71,27 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
       <div>
         <Heading>Step 1: Review / Edit the Application</Heading>
         <FieldGroup>
-          <DateInput
-            label="Effective Date" required
-            value={form.effectiveDate} onChange={set('effectiveDate')}
-            className="w-[220px]"
-            error={errorFor('effectiveDate')}
-          />
+          <div className="flex flex-wrap items-start gap-x-10 gap-y-5">
+            <DateInput
+              label="Effective Date" required
+              value={form.effectiveDate} onChange={set('effectiveDate')}
+              className="w-[220px]"
+              error={errorFor('effectiveDate')}
+            />
+            <div>
+              <p className="text-[13px] font-semibold text-gray-600 mb-1.5 tracking-wide">Review Application:</p>
+              {/* The pills are shorter than the date field, so they sit centred
+                  in a box of the same height rather than riding high beside it. */}
+              <div className="h-[42px] flex items-center">
+                <YesNo value={form.reviewApplication} onChange={set('reviewApplication')} />
+              </div>
+            </div>
+          </div>
         </FieldGroup>
 
-        <button
-          type="button"
-          onClick={() => setReviewing(v => !v)}
-          className="mt-3 inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12.5px] font-semibold transition hover:opacity-90"
-          style={{ background: 'var(--surface-card)', color: 'var(--ink-2)', border: '1px solid var(--line)' }}
-        >
-          {reviewing ? 'Hide the application' : 'Review the application'}
-          <svg
-            width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
-            style={{ transform: reviewing ? 'rotate(180deg)' : 'none', transition: 'transform 150ms' }}
-          >
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-        </button>
-
-        {reviewing && (
-          <div className="mt-4">
+        {/* Saying yes reads the whole application back, as the legacy step does. */}
+        {form.reviewApplication === 'yes' && (
+          <div className="mt-5">
             <ApplicationSummary form={form} rows={rows} onEdit={onEdit} />
           </div>
         )}
