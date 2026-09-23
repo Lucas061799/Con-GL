@@ -5,7 +5,7 @@
 //
 // `field` is the path the answer maps to on the submission payload — keep it
 // alongside the question so the mapping doesn't drift once the API is wired.
-export const CONDITIONAL_QUESTIONS = [
+const CONDITIONAL_QUESTIONS = [
   {
     id: 'specialCoatings',
     // Painting Exterior/Interior, Sign Painting Exterior/Interior

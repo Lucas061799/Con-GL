@@ -4,7 +4,7 @@ import { FieldGroup } from '../../components/Section'
 import ApplicationSummary from './ApplicationSummary'
 import {
   PAYMENT_METHODS, DIRECT_BILL_NOTE, INSTALLMENT_FEE, INSTALLMENT_SHARE,
-  PAY_OPTIONS, SIGN_OPTIONS,
+  PAY_OPTIONS,
 } from '../../data/coverageOptions'
 
 const money = (n) =>
@@ -64,7 +64,9 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
   const down = Math.round((financed - installment * 9) * 100) / 100
 
   const isDirect = picked?.key === 'direct-bill'
-  const ready = !!form.signMethod && (!isDirect || (!!form.installmentOption && !!form.payMethod))
+  // How it gets signed is asked on the next step, so this one only waits on
+  // the payment method and whatever that method needs.
+  const ready = !!picked && (!isDirect || (!!form.installmentOption && !!form.payMethod))
 
   return (
     <div className="space-y-6">
@@ -194,18 +196,6 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
                   </Group>
                 </>
               )}
-
-              <Group title="Choose how to sign">
-                {SIGN_OPTIONS.map(o => (
-                  <Radio
-                    key={o.key}
-                    checked={form.signMethod === o.key}
-                    onChange={() => set('signMethod')(o.key)}
-                    label={o.label}
-                    note={o.note}
-                  />
-                ))}
-              </Group>
 
               <div className="flex items-center justify-between gap-4 mt-5">
                 <button

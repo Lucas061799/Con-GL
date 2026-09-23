@@ -150,7 +150,7 @@ export const CC_OPTIONAL = [
 
 // The product's own optional coverages, wording straight from the spec. They
 // sit under the same Optional Coverages heading as the legacy rows above.
-export const CC_PRODUCT_OPTIONS = [
+const CC_PRODUCT_OPTIONS = [
   {
     key: 'blanketAIEndorsement',
     label: 'Blanket Additional Insured Endorsement',

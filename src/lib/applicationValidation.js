@@ -22,7 +22,7 @@ export function applicationMissing(form = {}, files = []) {
   // The tool floater's limit carries its own deductible, so it has to be picked.
   if (form.toolFloater && blank('toolFloaterLimit')) out.coverage.push('toolFloaterLimit')
 
-  out.review.push(...['effectiveDate', 'paymentMethod', 'signMethod'].filter(blank))
+  out.review.push(...['effectiveDate', 'paymentMethod'].filter(blank))
   // Direct Bill asks for the instalment plan and who pays on top of that.
   if (form.paymentMethod === 'direct-bill') {
     out.review.push(...['installmentOption', 'payMethod'].filter(blank))
