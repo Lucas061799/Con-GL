@@ -75,15 +75,19 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
   const inReview =
     form.agreeTerms === 'no' ||
     needsUnderwriterReview(rulesForCodes(rows.map(r => r.code).filter(Boolean)), form)
-  const headline = inReview ? 'Sent for underwriter review' : 'Request to bind sent'
-  const statusLabel = inReview ? 'In review' : 'Bind requested'
+  // Builder's Risk's wording: "Bind submitted!" over "{carrier} is processing
+  // the bind. You'll get a confirmation email shortly." Theirs then says Sold,
+  // because their carrier binds on the platform; ours is still waiting on a
+  // signature, so the status says what was submitted rather than what closed.
+  const headline = inReview ? 'Sent for underwriter review' : 'Bind submitted!'
+  const statusLabel = inReview ? 'In Review' : 'Bind Submitted'
+  const signingNote =
+    form.signMethod === 'esign' ? ' The insured has been emailed to sign.'
+      : form.signMethod === 'upload' ? ' The signed application went with it.'
+        : ''
   const subline = inReview
     ? `${carrier} will come back to you once an underwriter has read it through.`
-    : form.signMethod === 'esign'
-      ? `${carrier} has the application, and the insured has been emailed to sign it.`
-      : form.signMethod === 'upload'
-        ? `${carrier} has the application and the signed copy.`
-        : `${carrier} has the application.`
+    : `${carrier} is processing the bind.${signingNote} You'll get a confirmation email shortly.`
 
   const picked = [
     ...CC_RECOMMENDED,
