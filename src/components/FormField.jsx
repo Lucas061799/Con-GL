@@ -232,11 +232,12 @@ const triggerStyle = (open, error, hasValue) => ({
 
 const panelStyle = { background: 'var(--surface-card)', border: '1px solid var(--line)', boxShadow: '0 12px 32px rgba(27,7,80,0.14)' }
 
+// The selected row's colour lives in CSS so dark can lift it off the navy.
 const optionStyle = (selected) => ({
   background: selected ? 'linear-gradient(88.09deg, rgba(92,46,212,0.07) 0%, rgba(166,20,195,0.07) 100%)' : 'transparent',
-  color: selected ? '#A614C3' : 'var(--ink-2)',
   fontWeight: selected ? 600 : 400,
 })
+const optionClass = (selected) => (selected ? 'opt-on' : 'opt-off')
 
 const hoverOn = (selected) => (e) => { if (!selected) e.currentTarget.style.background = 'var(--surface-soft)' }
 const hoverOff = (selected) => (e) => { if (!selected) e.currentTarget.style.background = 'transparent' }
@@ -324,7 +325,7 @@ export function Select({ label, required, hint, options = [], value, onChange, p
                   key={v}
                   type="button"
                   onClick={() => { onChange && onChange(v); setOpen(false) }}
-                  className="w-full text-left px-3.5 py-2.5 text-sm transition-all flex items-center justify-between gap-2"
+                  className={`w-full text-left px-3.5 py-2.5 text-sm transition-all flex items-center justify-between gap-2 ${optionClass(isSel)}`}
                   style={optionStyle(isSel)}
                   onMouseEnter={hoverOn(isSel)}
                   onMouseLeave={hoverOff(isSel)}
@@ -403,7 +404,7 @@ export function SearchableSelect({ label, required, hint, options = [], value, o
                   key={o.value}
                   type="button"
                   onClick={() => { onChange && onChange(o.value); setOpen(false); setQuery('') }}
-                  className="w-full text-left px-3.5 py-2.5 text-sm transition-all flex items-center justify-between gap-2"
+                  className={`w-full text-left px-3.5 py-2.5 text-sm transition-all flex items-center justify-between gap-2 ${optionClass(isSel)}`}
                   style={optionStyle(isSel)}
                   onMouseEnter={hoverOn(isSel)}
                   onMouseLeave={hoverOff(isSel)}
@@ -468,7 +469,7 @@ export function TreeSelect({ label, required, hint, tree = [], leafLabels = {}, 
             onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
           >
             <span className="text-left leading-snug">{node.label}</span>
-            <span className="shrink-0 text-base leading-none font-normal" style={{ color: '#A614C3' }}>
+            <span className="tree-sign shrink-0 text-base leading-none font-normal">
               {isOpen ? '−' : '+'}
             </span>
           </button>
@@ -482,7 +483,7 @@ export function TreeSelect({ label, required, hint, tree = [], leafLabels = {}, 
         key={node.id}
         type="button"
         onClick={() => { onChange && onChange(node.id); setOpen(false) }}
-        className="w-full text-left px-3.5 py-2.5 text-sm transition-all flex items-center justify-between gap-2"
+        className={`w-full text-left px-3.5 py-2.5 text-sm transition-all flex items-center justify-between gap-2 ${optionClass(isSel)}`}
         style={{ ...optionStyle(isSel), paddingLeft: 14 + depth * 14 }}
         onMouseEnter={hoverOn(isSel)}
         onMouseLeave={hoverOff(isSel)}
@@ -763,18 +764,15 @@ export function YesNo({ value, onChange, className = '' }) {
         type="button"
         onClick={() => onChange && onChange(v)}
         className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all text-xs font-medium ${
-          on
-            ? 'border-[#5C2ED4] text-[#5C2ED4]'
-            : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50'
+          on ? 'yn-on' : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50'
         }`}
-        style={on ? { background: 'linear-gradient(88.09deg, rgba(92,46,212,0.08) 0%, rgba(166,20,195,0.08) 100%)' } : undefined}
       >
         <span
           className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-            on ? 'border-[#A614C3]' : 'border-gray-300'
+            on ? 'yn-ring' : 'border-gray-300'
           }`}
         >
-          {on && <span className="w-1.5 h-1.5 rounded-full" style={{ background: BRAND_GRADIENT }} />}
+          {on && <span className="yn-dot w-1.5 h-1.5 rounded-full" />}
         </span>
         {labelText}
       </button>

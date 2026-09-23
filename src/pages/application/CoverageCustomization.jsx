@@ -132,8 +132,8 @@ export default function CoverageCustomization({ form, set, errorFor }) {
                     {CC_IM_DECLINED}
                   </div>
                 ) : (
-                  <div className="flex items-center gap-4 flex-wrap">
-                    <span className="text-[12.5px]" style={{ color: 'var(--ink-2)' }}>Select IM limits:</span>
+                  <div>
+                    <span className="block text-[12.5px] mb-1.5" style={{ color: 'var(--ink-2)' }}>Select IM limits:</span>
                     <Select
                       options={CC_IM_LIMITS}
                       value={form.imLimit} onChange={set('imLimit')}
@@ -171,8 +171,10 @@ export default function CoverageCustomization({ form, set, errorFor }) {
             checked={form[o.key]} pricing={pricing.has(o.key)} onChange={toggle(o)}
           >
             {o.subOptions && form[o.key] && (
-              <div className="mt-3 flex items-center gap-4 flex-wrap">
-                <span className="text-[12px] italic text-accent">{o.subLabel}</span>
+              // The limit label reads as a prompt for the field, so the field
+              // sits under it rather than squeezed alongside.
+              <div className="mt-3">
+                <span className="block text-[12px] italic text-accent mb-1.5">{o.subLabel}</span>
                 <Select
                   options={o.subOptions}
                   value={form[`${o.key}Limit`]} onChange={set(`${o.key}Limit`)}

@@ -65,6 +65,30 @@ html[data-dark="true"] .notice-danger {
   .cc-limits > div > label { margin-top: auto; }
 }
 
+/* Selected states that were painted in the deep brand purple: legible on
+   white, all but invisible on navy, so dark takes the light pair. */
+.yn-on {
+  border-color: #5C2ED4;
+  color: #5C2ED4;
+  background: linear-gradient(88.09deg, rgba(92,46,212,0.08) 0%, rgba(166,20,195,0.08) 100%);
+}
+.yn-ring { border-color: #A614C3; }
+.yn-dot { background: linear-gradient(88.09deg, #5C2ED4 0%, #A614C3 100%); }
+html[data-dark="true"] .yn-on {
+  border-color: #A78BFA;
+  color: #FFFFFF;
+  background: linear-gradient(88.09deg, rgba(167,139,250,0.22) 0%, rgba(232,121,249,0.22) 100%);
+}
+html[data-dark="true"] .yn-ring { border-color: #E879F9; }
+html[data-dark="true"] .yn-dot { background: linear-gradient(88.09deg, #A78BFA 0%, #E879F9 100%); }
+
+.opt-on { color: #A614C3; }
+.opt-off { color: var(--ink-2); }
+html[data-dark="true"] .opt-on { color: #F0ABFC; }
+
+.tree-sign { color: #A614C3; }
+html[data-dark="true"] .tree-sign { color: #E879F9; }
+
 /* The info popover, taken from Inland Marine's im-info-pop. Ours was a plain
    .bg-white card, and the dark rules map that onto --surface — the same colour
    as the page behind it, so the card vanished. Dark lifts to #252948 instead,
@@ -153,9 +177,11 @@ html[data-dark="true"] .notice-brand {
 .info-dot:hover, .info-dot[data-open="true"] {
   background: linear-gradient(88.09deg, rgba(92,46,212,0.24) 0%, rgba(166,20,195,0.24) 100%);
 }
-html[data-dark="true"] .info-dot { background: rgba(167,139,250,0.18); color: #A78BFA; }
+/* On navy an 18% wash with a mid purple glyph all but disappears; these are
+   the lavender pair Inland Marine's dark popover uses. */
+html[data-dark="true"] .info-dot { background: rgba(167,139,250,0.28); color: #E9D5FF; }
 html[data-dark="true"] .info-dot:hover,
-html[data-dark="true"] .info-dot[data-open="true"] { background: rgba(167,139,250,0.30); }
+html[data-dark="true"] .info-dot[data-open="true"] { background: rgba(167,139,250,0.42); }
 
 /* Admitted / Non-Admitted, in Builder's Risk's colours. Theirs are inline and
    stay dark-red on navy, so the dark pair is ours. */
