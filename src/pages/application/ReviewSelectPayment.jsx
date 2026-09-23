@@ -112,17 +112,19 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
                     border: m.recommended ? undefined : '1.5px solid var(--line)',
                   }}
                 >
-                  {/* The band across the top, as it was. Only this card has
-                      one, so its title starts a row lower than the other two. */}
+                  {/* The band across the top. The other two cards answer it
+                      with the same measure of padding rather than an empty
+                      band of their own, so the titles line up and the space
+                      reads as the card breathing. */}
                   {m.recommended && (
                     <div
-                      className="py-1.5 text-center text-[10px] font-bold tracking-[0.12em] text-white"
+                      className="h-[22px] flex items-center justify-center text-[9.5px] font-bold tracking-[0.12em] text-white"
                       style={{ background: BRAND_GRADIENT }}
                     >
                       RECOMMENDED
                     </div>
                   )}
-                  <div className="p-4 flex-1 flex flex-col">
+                  <div className={`p-4 flex-1 flex flex-col ${m.recommended ? '' : 'sm:pt-[38px]'}`}>
                     {/* The name block is held to one height, so the three
                         descriptions start on the same line whether or not the
                         card has a "by" line or a title that wraps. */}
