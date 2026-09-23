@@ -81,9 +81,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
   // the bind. You'll get a confirmation email shortly." Theirs then says Sold,
   // because their carrier binds on the platform; ours is still waiting on a
   // signature, so the status says what was submitted rather than what closed.
-  const headline = inReview
-    ? 'Sent for underwriter review'
-    : 'Congratulations, your bind request is in!'
+  const headline = inReview ? 'Sent for underwriter review' : 'Bind submitted!'
   const statusLabel = inReview ? 'In Review' : 'Bind Submitted'
   const signingNote =
     form.signMethod === 'esign' ? ' The insured has been emailed to sign.'
