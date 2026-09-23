@@ -1,4 +1,4 @@
-import { DateInput, YesNo, BRAND_GRADIENT } from '../../components/FormField'
+import { DateInput, BRAND_GRADIENT } from '../../components/FormField'
 import { computeBreakdown } from '../../components/PremiumBreakdown'
 import { FieldGroup } from '../../components/Section'
 import ApplicationSummary from './ApplicationSummary'
@@ -71,30 +71,19 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
       <div>
         <Heading>Step 1: Review / Edit the Application</Heading>
         <FieldGroup>
-          <div className="flex flex-wrap items-start gap-x-10 gap-y-5">
           <DateInput
             label="Effective Date" required
             value={form.effectiveDate} onChange={set('effectiveDate')}
             className="w-[220px]"
             error={errorFor('effectiveDate')}
           />
-          <div>
-            <p className="text-[13px] font-semibold text-gray-600 mb-1.5 tracking-wide">Review Application:</p>
-            {/* The pills are shorter than the date field, so they sit centred
-                in a box of the same height rather than riding high beside it. */}
-            <div className="h-[42px] flex items-center">
-              <YesNo value={form.reviewApplication} onChange={set('reviewApplication')} />
-            </div>
-          </div>
-          </div>
         </FieldGroup>
 
-        {/* Saying yes reads the whole application back, as the legacy step does. */}
-        {form.reviewApplication === 'yes' && (
-          <div className="mt-5">
-            <ApplicationSummary form={form} rows={rows} onEdit={onEdit} />
-          </div>
-        )}
+        {/* The step is the review, so it reads the application back without
+            being asked. */}
+        <div className="mt-5">
+          <ApplicationSummary form={form} rows={rows} onEdit={onEdit} />
+        </div>
       </div>
 
       <div>
