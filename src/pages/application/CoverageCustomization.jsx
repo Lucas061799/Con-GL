@@ -16,16 +16,37 @@ function Heading({ children }) {
   )
 }
 
+// A list of coverage rows, boxed. Three bare lists of thin grey lines ran
+// together as one wall of text; a panel each gives the eye somewhere to rest.
+function CoverageList({ title, children }) {
+  return (
+    <div>
+      <Heading>{title}</Heading>
+      <div
+        className="cc-list rounded-xl overflow-hidden"
+        style={{ background: 'var(--surface-card)', border: '1px solid var(--line)' }}
+      >
+        {children}
+      </div>
+    </div>
+  )
+}
+
 // One coverage line: label on the left, help bubble, then either a price-bearing
 // checkbox or a read-only status, the way the legacy rows read.
 function CoverageRow({ label, help, status, price, included, checked, pricing, onChange, children }) {
+  // A status row is read-only; the rest take a click anywhere along the line.
+  const clickable = !status && !!onChange
   return (
-    <div className="py-2.5" style={{ borderBottom: '1px solid var(--line-soft)' }}>
+    <div
+      className={`px-4 py-3.5 transition-colors ${clickable ? 'cc-row cursor-pointer' : ''}`}
+      onClick={clickable ? () => onChange(!checked) : undefined}
+    >
       <div className="flex items-start gap-3">
         {/* These labels are long enough to wrap, which leaves a bubble trailing
             the text stranded mid-row. It rides with the checkbox instead, so
             every row's bubble lines up in one column. */}
-        <div className="flex-1 text-[12.5px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
+        <div className="flex-1 text-[13px] font-medium leading-relaxed" style={{ color: 'var(--ink)' }}>
           {label}
         </div>
         <div className="shrink-0 w-[150px] flex items-center gap-2 justify-start">
@@ -108,8 +129,7 @@ export default function CoverageCustomization({ form, set, errorFor }) {
         </div>
       </FieldGroup>
 
-      <div>
-        <Heading>Recommended Options</Heading>
+      <CoverageList title="Recommended Options">
         {CC_RECOMMENDED.map(o => (
           <CoverageRow
             key={o.key}
@@ -147,10 +167,9 @@ export default function CoverageCustomization({ form, set, errorFor }) {
             )}
           </CoverageRow>
         ))}
-      </div>
+      </CoverageList>
 
-      <div>
-        <Heading>Additional Insureds</Heading>
+      <CoverageList title="Additional Insureds">
         {CC_ADDITIONAL_INSUREDS.map(o => (
           <CoverageRow
             key={o.key}
@@ -158,10 +177,9 @@ export default function CoverageCustomization({ form, set, errorFor }) {
             checked={form[o.key]} pricing={pricing.has(o.key)} onChange={toggle(o)}
           />
         ))}
-      </div>
+      </CoverageList>
 
-      <div>
-        <Heading>Optional Coverages</Heading>
+      <CoverageList title="Optional Coverages">
         {/* Stop Gap is only written where workers compensation is run by the
             state, so it appears once the risk state says so. */}
         {[...CC_OPTIONAL, ...productOptionsFor(form.state)].map(o => (
@@ -188,7 +206,7 @@ export default function CoverageCustomization({ form, set, errorFor }) {
             )}
           </CoverageRow>
         ))}
-      </div>
+      </CoverageList>
 
       {/* The figures move as covers are ticked, and they live in the rail —
           grey type at the foot of a long page was too easy to scroll past. */}

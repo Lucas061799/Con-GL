@@ -65,6 +65,12 @@ html[data-dark="true"] .notice-danger {
   .cc-limits > div > label { margin-top: auto; }
 }
 
+/* The coverage lists: hairlines between rows, and a whole row that answers to
+   a click. The bare lists ran together as one block of grey text. */
+.cc-list > div + div { border-top: 1px solid var(--line-soft); }
+.cc-row:hover { background: var(--surface-soft); }
+html[data-dark="true"] .cc-row:hover { background: rgba(255,255,255,0.04); }
+
 /* The recommended payment card's own border. The deep purple is invisible on
    navy, so dark takes the lavender. */
 .pay-rec { border: 1.5px solid rgba(92,46,212,0.40); }
