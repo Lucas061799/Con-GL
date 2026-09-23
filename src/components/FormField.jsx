@@ -154,7 +154,7 @@ const inputClass = (error) =>
   `w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 transition-all ${
     error
       ? 'border-red-300 bg-red-50/50 focus:ring-red-100 focus:border-red-400'
-      : 'border-gray-200 bg-white focus:ring-[#7C3AED]/10 focus:border-[#7C3AED]/40 hover:border-gray-300'
+      : 'border-gray-200 field-fill focus:ring-[#7C3AED]/10 focus:border-[#7C3AED]/40 hover:border-gray-300'
   }`
 
 // Anchors a dropdown panel to its trigger with position:fixed, so the panel
@@ -389,7 +389,7 @@ export function SearchableSelect({ label, required, hint, options = [], value, o
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={searchPlaceholder}
-                className="w-full rounded-lg border border-gray-200 bg-white pl-8 pr-3 py-2 text-[13px] text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/10 focus:border-[#7C3AED]/40"
+                className="w-full rounded-lg border border-gray-200 field-fill pl-8 pr-3 py-2 text-[13px] text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/10 focus:border-[#7C3AED]/40"
               />
             </div>
           </div>

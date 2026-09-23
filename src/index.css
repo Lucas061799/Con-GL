@@ -65,6 +65,13 @@ html[data-dark="true"] .notice-danger {
   .cc-limits > div > label { margin-top: auto; }
 }
 
+/* Field fills. In light an input is white on a soft card — a step above what
+   holds it. Dark mapped .bg-white onto the page colour, which put the input a
+   step *below* its card, and on the brand-tinted bind card it read as a hole.
+   A translucent white keeps the input above whatever is behind it. */
+.field-fill { background: #ffffff; }
+html[data-dark="true"] .field-fill { background: rgba(255,255,255,0.06) !important; }
+
 /* The coverage lists: hairlines between rows, and a whole row that answers to
    a click. The bare lists ran together as one block of grey text. */
 .cc-list > div + div { border-top: 1px solid var(--line-soft); }
