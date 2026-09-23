@@ -209,7 +209,7 @@ export default function CoverageCustomization({ form, set, errorFor }) {
         </svg>
         <p className="text-[12.5px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
           Every cover you add updates the{' '}
-          <span className="font-bold" style={{ color: 'var(--ink)' }}>Premium Breakdown</span>{' '}
+          <span className="text-gradient font-bold">Premium Breakdown</span>{' '}
           on the right — check it, then submit from there.
         </p>
       </div>
