@@ -102,26 +102,25 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
 
         {!picked ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {PAYMENT_METHODS.map(m => (
                 <div
                   key={m.key}
-                  // The badge sits on the top edge rather than in a band of
-                  // its own, so the other two cards need no blank strip to
-                  // keep up with it.
-                  className={`relative rounded-xl flex flex-col ${m.recommended ? 'pay-rec' : ''}`}
+                  className={`rounded-xl overflow-hidden flex flex-col ${m.recommended ? 'pay-rec' : ''}`}
                   style={{
                     background: 'var(--surface-card)',
                     border: m.recommended ? undefined : '1.5px solid var(--line)',
                   }}
                 >
+                  {/* The band across the top, as it was. Only this card has
+                      one, so its title starts a row lower than the other two. */}
                   {m.recommended && (
-                    <span
-                      className="absolute -top-[9px] left-1/2 -translate-x-1/2 px-2.5 py-[3px] rounded-full text-[9px] font-bold tracking-[0.12em] text-white whitespace-nowrap"
-                      style={{ background: BRAND_GRADIENT, boxShadow: '0 2px 8px rgba(92,46,212,0.30)' }}
+                    <div
+                      className="py-1.5 text-center text-[10px] font-bold tracking-[0.12em] text-white"
+                      style={{ background: BRAND_GRADIENT }}
                     >
                       RECOMMENDED
-                    </span>
+                    </div>
                   )}
                   <div className="p-4 flex-1 flex flex-col">
                     {/* The name block is held to one height, so the three
