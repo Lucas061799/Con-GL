@@ -329,14 +329,31 @@ export default function App() {
     setInApplication(true)
   }
 
+  // Straight to the receipt: the application filled in, paid for, signed and
+  // handed over, so the submitted screen can be looked at on its own.
+  const demoSubmitted = () => {
+    demoApplication()
+    setForm(f => ({
+      ...f,
+      paymentMethod: 'direct-bill',
+      installmentOption: 'one-pay',
+      payMethod: 'complete',
+      signMethod: 'esign',
+      insuredEmail: f.insuredEmail || f.email,
+      attested: true,
+    }))
+    setAppReturn({ stage: 'bind', step: 'bind', submitted: true })
+  }
+
   const demoJumps = [
     { key: 'landing', label: 'Landing', go: startOver },
     { key: 'form', label: 'Form', go: demoForm },
     { key: 'indication', label: 'Indication', go: demoIndication },
     { key: 'application', label: 'Application', go: demoApplication },
+    { key: 'submitted', label: 'Submitted', go: demoSubmitted },
   ]
 
-  const demoActive = inApplication ? 'application'
+  const demoActive = inApplication ? (appReturn.submitted ? 'submitted' : 'application')
     : !started ? 'landing'
     : view === 'indication' ? 'indication'
     : 'form'

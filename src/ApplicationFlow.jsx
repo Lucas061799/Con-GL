@@ -24,7 +24,7 @@ export default function ApplicationFlow({
 }) {
   const [activeStep, setActiveStep] = useState(resumeAt?.step ?? 'eligibility')
   const [stage, setStage] = useState(resumeAt?.stage ?? 'form')
-  const [submitted, setSubmitted] = useState(false)
+  const [submitted, setSubmitted] = useState(!!resumeAt?.submitted)
   const [approved, setApproved] = useState(false)
   const [preview, setPreview] = useState(false)
   // Errors belong to the page you have actually tried to submit — arriving on
