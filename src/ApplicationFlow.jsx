@@ -149,8 +149,8 @@ export default function ApplicationFlow({
     review: (
       <ReviewSelectPayment
         form={form} set={set} errorFor={errorFor}
-        amount={amount} rows={rows}
-        onContinue={() => jumpTo('bind')} onEdit={edit}
+        amount={amount}
+        onContinue={() => jumpTo('bind')}
       />
     ),
     bind: (
