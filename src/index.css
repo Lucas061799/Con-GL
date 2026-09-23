@@ -177,11 +177,16 @@ html[data-dark="true"] .notice-brand {
 .info-dot:hover, .info-dot[data-open="true"] {
   background: linear-gradient(88.09deg, rgba(92,46,212,0.24) 0%, rgba(166,20,195,0.24) 100%);
 }
-/* On navy an 18% wash with a mid purple glyph all but disappears; these are
-   the lavender pair Inland Marine's dark popover uses. */
-html[data-dark="true"] .info-dot { background: rgba(167,139,250,0.28); color: #E9D5FF; }
+/* Dark takes Inland Marine's im-info-dot exactly: a filled light gradient with
+   the glyph knocked out in the deep purple. A wash of it disappeared on navy. */
+html[data-dark="true"] .info-dot {
+  background: linear-gradient(88.09deg, #A78BFA 0.11%, #E879F9 63.8%);
+  color: #1B0750;
+}
 html[data-dark="true"] .info-dot:hover,
-html[data-dark="true"] .info-dot[data-open="true"] { background: rgba(167,139,250,0.42); }
+html[data-dark="true"] .info-dot[data-open="true"] {
+  box-shadow: 0 2px 10px rgba(167,139,250,0.45);
+}
 
 /* Admitted / Non-Admitted, in Builder's Risk's colours. Theirs are inline and
    stay dark-red on navy, so the dark pair is ours. */
