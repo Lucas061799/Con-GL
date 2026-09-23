@@ -53,10 +53,9 @@ export const demoPhaseTwo = () => ({
   ccDamagesToPremises: '100000',
   ccMedicalLimit: '5000',
   brokerFee: '100',
-  paymentMethod: 'direct-bill',
-  installmentOption: 'one-pay',
-  payMethod: 'complete',
-  signMethod: 'esign',
+  // No payment method and no signature choice: those two steps should open on
+  // their own first screen, not half way through someone else's answer. The
+  // email is only a prefill for whenever eSign does get picked.
   insuredEmail: 'ops@sierraridge.com',
   attested: true,
   workPct: { residential: '100', newConstruction: '100' },

@@ -109,17 +109,22 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
                   className="rounded-xl overflow-hidden flex flex-col"
                   style={{ background: 'var(--surface-card)', border: '1.5px solid var(--line)' }}
                 >
-                  {m.recommended && (
-                    <div
-                      className="py-1.5 text-center text-[10px] font-bold tracking-[0.12em] text-white"
-                      style={{ background: BRAND_GRADIENT }}
-                    >
-                      RECOMMENDED
-                    </div>
-                  )}
+                  {/* Every card keeps the banner's height, or the one that
+                      carries it starts a row lower than the other two. */}
+                  <div
+                    className="py-1.5 text-center text-[10px] font-bold tracking-[0.12em] text-white"
+                    style={m.recommended ? { background: BRAND_GRADIENT } : { background: 'transparent' }}
+                  >
+                    {m.recommended ? 'RECOMMENDED' : '\u00A0'}
+                  </div>
                   <div className="p-4 flex-1 flex flex-col">
-                    <p className="text-[14px] font-bold" style={{ color: 'var(--ink)' }}>{m.label}</p>
-                    {m.by && <p className="text-[12px] text-gray-400 mb-2">{m.by}</p>}
+                    {/* The name block is held to one height too, so the three
+                        descriptions start on the same line whether or not the
+                        card has a "by" line or a title that wraps. */}
+                    <div className="sm:min-h-[44px]">
+                      <p className="text-[14px] font-bold" style={{ color: 'var(--ink)' }}>{m.label}</p>
+                      {m.by && <p className="text-[12px] text-gray-400">{m.by}</p>}
+                    </div>
                     <p className="text-[12.5px] leading-relaxed mt-2 mb-5 flex-1" style={{ color: 'var(--ink-2)' }}>
                       {m.desc}
                     </p>
