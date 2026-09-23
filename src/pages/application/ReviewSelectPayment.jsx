@@ -2,6 +2,7 @@ import { DateInput, YesNo, BRAND_GRADIENT } from '../../components/FormField'
 import { computeBreakdown } from '../../components/PremiumBreakdown'
 import { FieldGroup } from '../../components/Section'
 import ApplicationSummary from './ApplicationSummary'
+import ChoiceCard from '../../components/ChoiceCard'
 import {
   PAYMENT_METHODS, DIRECT_BILL_NOTE, INSTALLMENT_FEE, INSTALLMENT_SHARE,
   PAY_OPTIONS, SIGN_OPTIONS,
@@ -100,72 +101,31 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
       <div>
         <Heading>Step 2: Select Payment and Request to Bind</Heading>
 
-        {!picked ? (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {PAYMENT_METHODS.map(m => (
-                <div
-                  key={m.key}
-                  className={`rounded-xl overflow-hidden flex flex-col ${m.recommended ? 'pay-rec' : ''}`}
-                  style={{
-                    background: 'var(--surface-card)',
-                    border: m.recommended ? undefined : '1.5px solid var(--line)',
-                  }}
-                >
-                  {/* The band across the top. The other two cards answer it
-                      with the same measure of padding rather than an empty
-                      band of their own, so the titles line up and the space
-                      reads as the card breathing. */}
+        {/* Inland Marine's bind rows: every option stays on screen, and the
+            one you pick opens its own questions underneath. */}
+        <div className="space-y-2.5">
+          {PAYMENT_METHODS.map(m => (
+            <ChoiceCard
+              key={m.key}
+              selected={form.paymentMethod === m.key}
+              onSelect={() => set('paymentMethod')(m.key)}
+              label={
+                <span className="inline-flex items-center flex-wrap gap-x-2 gap-y-1">
+                  {m.label}
+                  {m.by && <span className="text-[11.5px] font-normal text-gray-400">{m.by}</span>}
                   {m.recommended && (
-                    <div
-                      className="h-[22px] flex items-center justify-center text-[9.5px] font-bold tracking-[0.12em] text-white"
+                    <span
+                      className="px-2 py-[2px] rounded-full text-[8.5px] font-bold tracking-[0.12em] text-white"
                       style={{ background: BRAND_GRADIENT }}
                     >
                       RECOMMENDED
-                    </div>
+                    </span>
                   )}
-                  <div className={`p-4 flex-1 flex flex-col ${m.recommended ? '' : 'sm:pt-[38px]'}`}>
-                    {/* The name block is held to one height, so the three
-                        descriptions start on the same line whether or not the
-                        card has a "by" line or a title that wraps. */}
-                    <div className="sm:min-h-[44px]">
-                      <p className="text-[14px] font-bold" style={{ color: 'var(--ink)' }}>{m.label}</p>
-                      {m.by && <p className="text-[12px] text-gray-400">{m.by}</p>}
-                    </div>
-                    <p className="text-[12.5px] leading-relaxed mt-2 mb-5 flex-1" style={{ color: 'var(--ink-2)' }}>
-                      {m.desc}
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => set('paymentMethod')(m.key)}
-                      className="w-full py-2 rounded-lg text-[12.5px] font-bold transition hover:opacity-90"
-                      style={{ background: 'var(--surface-soft)', color: 'var(--ink-2)', border: '1px solid var(--line)' }}
-                    >
-                      Select
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {errorFor('paymentMethod') && (
-              <p className="text-[11px] text-red-500 mt-2">Pick how the premium will be paid.</p>
-            )}
-          </>
-        ) : (
-          <div className="rounded-xl overflow-hidden" style={{ background: 'var(--surface-card)', border: '1px solid var(--line)' }}>
-            <div className="flex flex-wrap gap-4 justify-between p-4" style={{ borderBottom: '1px solid var(--line)' }}>
-              <div>
-                <p className="text-[14px] font-bold" style={{ color: 'var(--ink)' }}>{picked.label}</p>
-                {picked.by && <p className="text-[12px] text-gray-400">{picked.by}</p>}
-              </div>
-              <p className="text-[12.5px] leading-relaxed max-w-[340px]" style={{ color: 'var(--ink-2)' }}>
-                {picked.desc}
-                {isDirect && <><br />{DIRECT_BILL_NOTE}</>}
-              </p>
-            </div>
-
-            <div className="p-4">
-              {isDirect && (
+                </span>
+              }
+              detail={m.key === 'direct-bill' ? `${m.desc} ${DIRECT_BILL_NOTE}` : m.desc}
+            >
+              {m.key === 'direct-bill' && (
                 <>
                   <Group title="Select installment options">
                     <Radio
@@ -192,41 +152,39 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
                   </Group>
                 </>
               )}
+            </ChoiceCard>
+          ))}
+        </div>
+        {errorFor('paymentMethod') && (
+          <p className="text-[11px] text-red-500 mt-2">Pick how the premium will be paid.</p>
+        )}
 
-              <Group title="Choose how to sign">
-                {SIGN_OPTIONS.map(o => (
-                  <Radio
-                    key={o.key}
-                    checked={form.signMethod === o.key}
-                    onChange={() => set('signMethod')(o.key)}
-                    label={o.label}
-                    note={o.note}
-                  />
-                ))}
-              </Group>
+        {/* The signature question belongs to the step, not to one method. */}
+        {picked && (
+          <div className="mt-5">
+            <Group title="Choose how to sign">
+              {SIGN_OPTIONS.map(o => (
+                <Radio
+                  key={o.key}
+                  checked={form.signMethod === o.key}
+                  onChange={() => set('signMethod')(o.key)}
+                  label={o.label}
+                  note={o.note}
+                />
+              ))}
+            </Group>
 
-              <div className="flex items-center justify-between gap-4 mt-5">
-                <button
-                  type="button"
-                  onClick={() => set('paymentMethod')('')}
-                  className="px-5 py-2 rounded-lg text-[12.5px] font-semibold transition hover:opacity-90"
-                  style={{ background: 'var(--surface-card)', color: 'var(--ink-2)', border: '1px solid var(--line)' }}
-                >
-                  Back
-                </button>
-                <button
-                  type="button"
-                  disabled={!ready}
-                  onClick={() => ready && onContinue && onContinue()}
-                  className="px-6 py-2 rounded-lg text-[12.5px] font-bold text-white transition enabled:hover:opacity-90 disabled:cursor-not-allowed"
-                  style={ready
-                    ? { background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }
-                    : { background: '#FAFAFB', color: '#9CA3AF', border: '1px solid var(--line)' }}
-                >
-                  Continue
-                </button>
-              </div>
-            </div>
+            <button
+              type="button"
+              disabled={!ready}
+              onClick={() => ready && onContinue && onContinue()}
+              className="mt-3 px-6 py-2 rounded-lg text-[12.5px] font-bold text-white transition enabled:hover:opacity-90 disabled:cursor-not-allowed"
+              style={ready
+                ? { background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }
+                : { background: '#FAFAFB', color: '#9CA3AF', border: '1px solid var(--line)' }}
+            >
+              Continue
+            </button>
           </div>
         )}
       </div>
