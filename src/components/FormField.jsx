@@ -116,14 +116,20 @@ export function InfoTip({ title, children, size = 'sm', label }) {
           <div
             ref={cardRef}
             role="tooltip"
-            className="rounded-xl bg-white"
-            style={{ border: '1px solid rgba(92,46,212,0.18)', boxShadow: '0 8px 28px rgba(15,10,40,0.16)' }}
+            className="cb-info-pop rounded-2xl overflow-hidden"
           >
-            <div
-              className="px-4 py-3 rounded-t-xl"
-              style={{ background: 'linear-gradient(88deg, rgba(92,46,212,0.06), rgba(166,20,195,0.06))' }}
-            >
+            <div className="cb-info-pop-head flex items-start justify-between gap-3 px-4 py-3">
               <h4 className="text-[13px] font-bold" style={{ color: 'var(--ink)' }}>{title}</h4>
+              <button
+                type="button"
+                onClick={hide}
+                aria-label="Close"
+                className="cb-info-pop-close w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition"
+              >
+                <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                  <path d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
             <div className="px-4 py-3 text-[12px] text-gray-600 leading-relaxed max-h-80 overflow-y-auto custom-scroll">
               {children}
