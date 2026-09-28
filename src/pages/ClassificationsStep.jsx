@@ -1,58 +1,14 @@
-import { forwardRef, useState } from 'react'
+import { forwardRef } from 'react'
 import { SearchableSelect, PercentInput } from '../components/FormField'
 import Section, { FieldGroup } from '../components/Section'
 import { CLASS_CODE_OPTIONS } from '../data/classCodes'
 import { MAX_INTAKE_CLASSIFICATIONS as MAX } from '../data/applicantOptions'
 
-// The legacy step hangs a collapsible Class Description off every row. The
-// copy belongs to the carrier's class guide, which we do not have yet, so the
-// panel is laid out here with placeholder lines instead of invented text.
-function ClassDescription() {
-  const [open, setOpen] = useState(false)
-  const line = (w) => (
-    <div className="h-2.5 rounded-full" style={{ width: w, background: 'var(--fill-subtle)' }} />
-  )
-
-  return (
-    <div className="mt-2">
-      <button
-        type="button"
-        onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12.5px] font-medium transition"
-        style={{ background: 'var(--fill-subtle)', color: 'var(--ink-2)' }}
-      >
-        <span className="w-3 text-center text-[15px] leading-none">{open ? '−' : '+'}</span>
-        Class Description
-      </button>
-
-      {open && (
-        <div
-          className="mt-2 rounded-lg px-4 py-4 space-y-4"
-          style={{ background: 'var(--surface-card)', border: '1px solid var(--line)' }}
-        >
-          <div className="space-y-2">
-            <p className="text-[12.5px] font-semibold" style={{ color: 'var(--ink)' }}>
-              The following operations are included in this classification:
-            </p>
-            <div className="space-y-1.5 pl-3">{line('82%')}{line('64%')}</div>
-          </div>
-          <div className="space-y-2">
-            <p className="text-[12.5px] font-semibold" style={{ color: 'var(--ink)' }}>
-              The following operations are not included in this classification:
-            </p>
-            <div className="space-y-1.5 pl-3">{line('74%')}{line('88%')}{line('56%')}</div>
-          </div>
-          <p className="text-[11px] text-gray-400">
-            Placeholder — the class guide copy is not wired up yet.
-          </p>
-        </div>
-      )}
-    </div>
-  )
-}
-
 // Step one of the legacy flow: the class split, before anything is asked about
 // the applicant. Rows must add up to exactly 100%.
+//
+// No class description here: it differs by carrier, so it belongs to the
+// carrier's own rater, not to the one screen that shops all of them.
 const ClassificationsStep = forwardRef(function ClassificationsStep(
   { classifications, setClassifications }, ref
 ) {
@@ -114,9 +70,6 @@ const ClassificationsStep = forwardRef(function ClassificationsStep(
                     </button>
                   )}
                 </div>
-              </div>
-              <div className="pr-[192px]">
-                <ClassDescription />
               </div>
             </div>
           ))}
