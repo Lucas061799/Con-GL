@@ -40,32 +40,6 @@ const WHATS_NEXT = [
   { n: 3, title: 'Policy in Force', desc: 'Coverage starts on the effective date you selected.' },
 ]
 
-function WhatsNext() {
-  return (
-    <div className="mb-6">
-      <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-400 mb-4 pl-0.5">
-        What's Next?
-      </div>
-      <div className="space-y-5">
-        {WHATS_NEXT.map(s => (
-          <div key={s.n} className="flex gap-3">
-            <span
-              className="w-9 h-9 rounded-full text-sm font-bold flex items-center justify-center shrink-0"
-              style={{ background: 'linear-gradient(88.09deg, rgba(92,46,212,0.25) 0%, rgba(166,20,195,0.25) 100%)' }}
-            >
-              <span className="text-gradient">{s.n}</span>
-            </span>
-            <div className="min-w-0">
-              <p className="text-[13px] font-semibold leading-tight text-gray-900">{s.title}</p>
-              <p className="text-[11px] mt-1 leading-relaxed" style={{ color: '#9CA3AF' }}>{s.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 const COMPARE_STEPS = [
   { n: 1, label: 'Select Carrier' },
   { n: 2, label: 'Complete Application' },
@@ -156,9 +130,9 @@ export default function RightPanel({
 
         <div className="mb-5" style={{ borderTop: `1px solid ${dark ? 'rgba(255,255,255,0.08)' : '#F3F4F6'}` }} />
 
-        {submitted ? (
-          <WhatsNext />
-        ) : !hasQuotes ? (
+        {/* No WHAT'S NEXT on the receipt: there are no next steps, and no
+            going back. */}
+        {submitted ? null : !hasQuotes ? (
           <>
             <p className="text-[11px] text-gray-400 mb-3 leading-snug">
               Finish the quick quote to see live carrier prices.

@@ -2,7 +2,7 @@ import norbielinkLogo from '../assets/norbielink-logo.png'
 import btisLogo from '../assets/btislogo.png'
 import norbielinkLogoDark from '../assets/norbielink-logo-dark.png'
 import btisLogoDark from '../assets/btislogo-dark.png'
-import Sidebar from './Sidebar'
+import Sidebar, { RailFooter } from './Sidebar'
 import RightPanel from './RightPanel'
 
 // Phase two is one long scroll like phase one: every step is on the page and
@@ -43,15 +43,22 @@ export default function ApplicationShell({
       </header>
 
       <div className="flex-1 flex min-h-0">
-        <Sidebar
-          productName="Contractor General Liability"
-          submissionNumber={submissionNumber}
-          steps={steps}
-          activeStep={activeStep}
-          completed={completed}
-          onStepClick={onStepClick}
-          {...railExtras}
-        />
+        {/* Once it is submitted there is nowhere to navigate — the steps are
+            behind you and you cannot go back — so the rail goes and only its
+            bottom cards stay, floating. */}
+        {submitted ? (
+          <RailFooter floating {...railExtras} />
+        ) : (
+          <Sidebar
+            productName="Contractor General Liability"
+            submissionNumber={submissionNumber}
+            steps={steps}
+            activeStep={activeStep}
+            completed={completed}
+            onStepClick={onStepClick}
+            {...railExtras}
+          />
+        )}
 
         <main ref={scrollRef} className="flex-1 min-w-0 overflow-y-auto custom-scroll">
           <div className={`mx-auto max-w-5xl 2xl:max-w-6xl ${

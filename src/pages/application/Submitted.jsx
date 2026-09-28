@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { BRAND_GRADIENT } from '../../components/FormField'
 import sellMoreBg from '../../assets/sell-more-bg.png'
 import Confetti from '../../components/Confetti'
@@ -70,6 +71,9 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
   const trades = form.subTrades || []
   // Everything ticked on Coverage Customization, which is where the covers
   // are actually chosen now.
+  // They filled all of this in a screen ago and cannot change it now, so the
+  // read-back is folded away — open for whoever wants to check it.
+  const [detailOpen, setDetailOpen] = useState(false)
   const carrier = quote?.carrier ?? 'The carrier'
   const inReview =
     form.agreeTerms === 'no' ||
@@ -212,7 +216,27 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
             )}
 
             <div style={{ borderTop: '1px solid var(--line-soft)' }}>
-              <div className="px-5 py-5">
+              <button
+                type="button"
+                onClick={() => setDetailOpen(o => !o)}
+                className="screen-only w-full px-5 py-3.5 flex items-center justify-between gap-3 transition hover:opacity-80"
+              >
+                <span className="text-[12.5px] font-semibold" style={{ color: 'var(--ink-2)' }}>
+                  {detailOpen ? 'Hide the submitted details' : 'See the submitted details'}
+                </span>
+                <svg
+                  width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF"
+                  strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+                  style={{ transform: detailOpen ? 'rotate(180deg)' : 'none', transition: 'transform 150ms' }}
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+
+              {/* Printing is the one time the whole thing should be there
+                  whether or not it is open on screen. */}
+              <div className={detailOpen ? '' : 'hidden print:block'}>
+              <div className="px-5 pb-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 
                   <Panel title="Applicant" icon="user">
@@ -301,6 +325,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                   </Panel>
 
                 </div>
+              </div>
               </div>
             </div>
           </div>

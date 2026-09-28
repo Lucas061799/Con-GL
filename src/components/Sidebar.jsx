@@ -101,6 +101,44 @@ function DarkToggle({ dark, onToggle }) {
   )
 }
 
+// The rail's bottom cards. The submitted page drops the step rail entirely —
+// there is nowhere left to navigate — but the chat stays, so these float on
+// their own there.
+export function RailFooter({ dark = false, onToggleDark, demoJumps, demoActive, floating = false }) {
+  return (
+    <div className={floating ? 'fixed bottom-4 left-4 w-56 z-30 space-y-2' : 'contents'}>
+      {demoJumps && (
+        <div className={floating ? 'relative z-20' : 'px-3 pb-2 relative z-20'}>
+          <DemoJump jumps={demoJumps} active={demoActive} dark={dark} />
+        </div>
+      )}
+
+      <div className={floating ? 'relative z-10' : 'px-3 pb-2 relative z-10'}>
+        <div
+          className="flex items-center gap-3 rounded-xl px-4 py-3"
+          style={{
+            background: dark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.55)',
+            border: dark ? '1.5px solid transparent' : '1.5px solid #E5E7EB',
+            backdropFilter: floating ? 'blur(6px)' : undefined,
+          }}
+        >
+          <img src={norbieface} alt="Norbie" className="w-8 h-8 rounded-full shrink-0 object-cover" />
+          <div>
+            <p className="text-sm font-normal" style={{ color: dark ? '#F9FAFB' : '#374151' }}>Chat with Norbie</p>
+            <p className="text-xs" style={{ color: '#9CA3AF' }}>AI Assistant</p>
+          </div>
+        </div>
+      </div>
+
+      {onToggleDark && (
+        <div className={floating ? 'relative z-10' : 'px-3 pb-4 relative z-10'}>
+          <DarkToggle dark={dark} onToggle={onToggleDark} />
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function Sidebar({
   productName, submissionNumber, steps, activeStep, completed, onStepClick, progress,
   dark = false, onToggleDark, demoJumps, demoActive,
@@ -185,30 +223,7 @@ export default function Sidebar({
         })}
       </nav>
 
-      {demoJumps && (
-        <div className="px-3 pb-2 relative z-20">
-          <DemoJump jumps={demoJumps} active={demoActive} dark={dark} />
-        </div>
-      )}
-
-      <div className="px-3 pb-2 relative z-10">
-        <div
-          className="flex items-center gap-3 rounded-xl px-4 py-3"
-          style={{ background: dark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.55)', border: dark ? '1.5px solid transparent' : '1.5px solid #E5E7EB' }}
-        >
-          <img src={norbieface} alt="Norbie" className="w-8 h-8 rounded-full shrink-0 object-cover" />
-          <div>
-            <p className="text-sm font-normal" style={{ color: dark ? '#F9FAFB' : '#374151' }}>Chat with Norbie</p>
-            <p className="text-xs" style={{ color: '#9CA3AF' }}>AI Assistant</p>
-          </div>
-        </div>
-      </div>
-
-      {onToggleDark && (
-        <div className="px-3 pb-4 relative z-10">
-          <DarkToggle dark={dark} onToggle={onToggleDark} />
-        </div>
-      )}
+      <RailFooter dark={dark} onToggleDark={onToggleDark} demoJumps={demoJumps} demoActive={demoActive} />
 
       <div className="absolute bottom-0 left-0 right-0 h-full pointer-events-none select-none">
         <img
