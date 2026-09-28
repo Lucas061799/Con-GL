@@ -12,7 +12,7 @@ import { rulesForCodes, subKey, needsUnderwriterReview } from '../data/condition
 // Business Operations, following the legacy step: the business itself, then
 // its experience, then the exposure figures and the three branching questions.
 const BusinessOperations = forwardRef(function BusinessOperations(
-  { form, set, errorFor, splitTotal, classCodes = [] }, ref
+  { form, set, errorFor, splitTotal, classCodes = [], footer }, ref
 ) {
   // Trades on the submission decide which underwriting questions apply.
   const rules = rulesForCodes(classCodes)
@@ -100,7 +100,10 @@ const BusinessOperations = forwardRef(function BusinessOperations(
         </div>
       </FieldGroup>
 
-      <div className="space-y-2">
+      {/* Every question card is a direct child of the section, so they keep the
+          same rhythm as the field groups above, and the ones a class code adds
+          join that rhythm instead of starting a second stack. */}
+      <>
         <QuestionCard>
           <ToggleQuestion
             label="Does the Applicant have any employees?"
@@ -180,10 +183,10 @@ const BusinessOperations = forwardRef(function BusinessOperations(
             )}
           </ToggleQuestion>
         </QuestionCard>
-      </div>
+      </>
 
       {rules.length > 0 && (
-        <div className="space-y-2">
+        <>
           {rules.map(rule => (
             <QuestionCard key={rule.id}>
               <ToggleQuestion
@@ -225,8 +228,12 @@ const BusinessOperations = forwardRef(function BusinessOperations(
               </p>
             </div>
           )}
-        </div>
+        </>
       )}
+
+      {/* The step's own action, inside the section — where Commercial Auto and
+          GL-BOP keep theirs, rather than floating below every section. */}
+      {footer}
     </Section>
   )
 })

@@ -446,22 +446,22 @@ export default function App() {
             ref={sectionRefs.operations}
             form={form} set={set} errorFor={errorFor} splitTotal={splitTotal}
             classCodes={classCodes}
+            footer={
+              <button
+                type="button"
+                onClick={applicationNumber ? () => setInApplication(true) : goToIndication}
+                className="inline-flex items-center gap-2 px-7 py-2.5 rounded-xl text-sm font-semibold text-white transition hover:opacity-90"
+                style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.25)' }}
+              >
+                {/* Stepping back from the application to fix a field returns to
+                    it, rather than starting the quote over. */}
+                {applicationNumber ? 'Return to Application' : 'See Price Indication'}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </button>
+            }
           />
-          <div className="px-4 md:px-10 pb-4 flex justify-start">
-            <button
-              type="button"
-              onClick={applicationNumber ? () => setInApplication(true) : goToIndication}
-              className="flex items-center gap-2 px-8 py-3 rounded-xl text-[13.5px] font-bold text-white transition hover:opacity-90"
-              style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
-            >
-              {/* Stepping back from the application to fix a field returns to
-                  it, rather than starting the quote over. */}
-              {applicationNumber ? 'Return to Application' : 'See Price Indication'}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
         </>
       ) : (
         <PriceIndication
