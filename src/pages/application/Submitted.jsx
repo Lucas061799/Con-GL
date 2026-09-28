@@ -70,26 +70,36 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
   const trades = form.subTrades || []
   // Everything ticked on Coverage Customization, which is where the covers
   // are actually chosen now.
-  // Nothing is bound yet: the insured still has to sign, and a submission over
-  // the high value home threshold goes to an underwriter first. The headline
-  // says what actually happened — a request went in.
   const carrier = quote?.carrier ?? 'The carrier'
   const inReview =
     form.agreeTerms === 'no' ||
     needsUnderwriterReview(rulesForCodes(rows.map(r => r.code).filter(Boolean)), form)
-  // Builder's Risk's wording: "Bind submitted!" over "{carrier} is processing
-  // the bind. You'll get a confirmation email shortly." Theirs then says Sold,
-  // because their carrier binds on the platform; ours is still waiting on a
-  // signature, so the status says what was submitted rather than what closed.
-  const headline = inReview ? 'Sent for underwriter review' : 'Bind submitted!'
-  const statusLabel = inReview ? 'In Review' : 'Bound'
-  const signingNote =
-    form.signMethod === 'esign' ? ' The insured has been emailed to sign.'
-      : form.signMethod === 'upload' ? ' The signed application went with it.'
-        : ''
-  const subline = inReview
-    ? `${carrier} will come back to you once an underwriter has read it through.`
-    : `${carrier} is processing the bind.${signingNote} You'll get a confirmation email shortly.`
+
+  // Three outcomes, and the wording follows what actually happened. An upload
+  // carries the signed application with it, so it binds on the spot; eSign
+  // cannot bind until the insured signs, so the request is pending until they
+  // do; and a referral is neither, it is with an underwriter.
+  const outcome = inReview ? 'review' : form.signMethod === 'upload' ? 'bound' : 'pending'
+  const headline = {
+    review: 'Sent for underwriter review',
+    bound: 'Bound!',
+    pending: 'Bind request sent',
+  }[outcome]
+  const statusLabel = {
+    review: 'In Review',
+    bound: 'Bound',
+    pending: 'Bind Request Pending',
+  }[outcome]
+  const subline = {
+    review: `${carrier} will come back to you once an underwriter has read it through.`,
+    bound: `${carrier} has the signed application and the bind is in. You'll get a confirmation email shortly.`,
+    pending: `${carrier} has the application, and the insured has been emailed to sign. It binds as soon as they do.`,
+  }[outcome]
+  const carrierLine = {
+    review: `Sent to ${carrier}`,
+    bound: `Policy bound with ${carrier}`,
+    pending: `Bind requested with ${carrier}`,
+  }[outcome]
 
   // Builder's Risk closes its header with a row naming the carrier and the
   // money. Theirs says "Policy bound with X · Charged today"; ours says what
@@ -184,7 +194,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
               >
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold" style={{ color: 'var(--ink)' }}>
-                    {inReview ? 'Sent to ' : 'Bind submitted to '}{carrier}
+                    {carrierLine}
                   </p>
                   <p className="text-xs text-gray-500 mt-0.5">
                     Program: <span className="font-semibold">{quote.product}</span>
