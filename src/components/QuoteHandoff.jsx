@@ -1,24 +1,6 @@
 import Modal, { ModalButton } from './Modal'
 import CarrierMark from './CarrierMark'
 
-// Two-step hand-off between the price indication and the full application,
-// as the marketplace does it: warn about the turnaround, then confirm the
-// quote is ready before moving on.
-export function TurnaroundNotice({ onContinue, onCancel }) {
-  return (
-    <Modal title="HEADS UP!" onDismiss={onCancel} footer={
-      <>
-        <ModalButton variant="ghost" onClick={onCancel}>Cancel</ModalButton>
-        <ModalButton onClick={onContinue}>Continue</ModalButton>
-      </>
-    }>
-      <p className="text-[14px] text-gray-600 leading-relaxed">
-        This quote has a 24-hour turnaround time — would you like to proceed?
-      </p>
-    </Modal>
-  )
-}
-
 // Submitting the coverage step clears the quote, and the legacy screen says so
 // before moving on to payment.
 export function QuoteApproved({ quote, onContinue, onDismiss }) {

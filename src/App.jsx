@@ -6,7 +6,7 @@ import BusinessOperations from './pages/BusinessOperations'
 import PriceIndication from './pages/PriceIndication'
 import AppShell from './components/AppShell'
 import ApplicationFlow from './ApplicationFlow'
-import { TurnaroundNotice, QuoteReady } from './components/QuoteHandoff'
+import { QuoteReady } from './components/QuoteHandoff'
 import { premiumWithTerms } from './data/carrierTerms'
 import { APP_LIMITS, APP_DEDUCTIBLES } from './data/applicationOptions'
 import { todayMDY, BRAND_GRADIENT } from './components/FormField'
@@ -52,7 +52,9 @@ export default function App() {
   const [activeStep, setActiveStep] = useState('applicant')
   // 'form' holds the three scrolling sections; the indication gets its own page.
   const [view, setView] = useState('form')
-  // 'none' → turnaround warning → quote-ready → the application itself.
+  // 'none' → quote-ready → the application itself. The 24-hour turnaround
+  // warning that used to sit in front is gone: the new rater prices on the
+  // spot, so there is no turnaround to warn about.
   const [handoff, setHandoff] = useState('none')
   // Phase two edits the same form object phase one fills in, so stepping back
   // to fix a classification or an address loses nothing on either side.
@@ -469,17 +471,11 @@ export default function App() {
           terms={terms}
           onTermsChange={updateTerms}
           selected={selectedCarrier}
-          onSelect={(id) => { setSelectedCarrier(id); setHandoff('turnaround') }}
+          onSelect={(id) => { setSelectedCarrier(id); setHandoff('ready') }}
           submissionNumber={submissionNumber}
         />
       )}
 
-      {handoff === 'turnaround' && (
-        <TurnaroundNotice
-          onContinue={() => setHandoff('ready')}
-          onCancel={() => setHandoff('none')}
-        />
-      )}
       {handoff === 'ready' && chosenQuote && (
         <QuoteReady
           quote={chosenQuote}
