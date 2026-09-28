@@ -23,8 +23,18 @@ export default function ApplicationShell({
         className="flex items-center justify-between border-b border-gray-100 px-6 md:px-8 shrink-0"
         style={{ height: 56, background: 'var(--surface-rail)' }}
       >
-        <img src={norbielinkLogo} alt="NorbieLink" className="h-8 logo-light" />
-        <img src={norbielinkLogoDark} alt="NorbieLink" className="h-8 logo-dark" />
+        {/* Coming from Legacy, nobody knows what NorbieLink is — the mark
+            explains itself. A new tab, so a half-filled application survives. */}
+        <a
+          href="https://marketplace.btisinc.com/norbielink/"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="What is NorbieLink?"
+          className="inline-flex shrink-0 transition hover:opacity-80"
+        >
+          <img src={norbielinkLogo} alt="NorbieLink" className="h-8 logo-light" />
+          <img src={norbielinkLogoDark} alt="NorbieLink" className="h-8 logo-dark" />
+        </a>
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-gray-400 tracking-wide font-semibold">POWERED BY</span>
           <img src={btisLogo} alt="btis" className="h-6 logo-light" />

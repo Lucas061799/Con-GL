@@ -110,7 +110,7 @@ function WhereYouAre({ activeIndex }) {
 }
 
 // Right rail, following the GL-BOP layout: progress at the top, the cheapest
-// carrier promoted to a hero card, the rest as a compact list.
+// carriers as equal cards — nothing is promoted, there is no best choice.
 export default function RightPanel({
   progress, quotes = [], stale, onRefresh,
   selectedCarrier, onSelectCarrier,
@@ -126,8 +126,9 @@ export default function RightPanel({
     : { background: '#FAFAFB', color: '#9CA3AF', border: '1px solid #E5E7EB' }
   const hasQuotes = quotes.length > 0
   const chosen = quotes.find(q => q.id === selectedCarrier)
+  // On the comparison page the rail echoes the one being looked at; in the
+  // intake it lists them all, the same size.
   const top = inCompare ? (chosen ?? quotes[0]) : quotes[0]
-  const rest = quotes.slice(1)
 
   return (
     <aside
@@ -171,110 +172,66 @@ export default function RightPanel({
             {/* On the application the rail carries the premium breakdown where
                 the quote card sits during the quick quote. */}
             {premium && <PremiumBreakdown {...premium} dark={dark} />}
-            {!premium && (() => {
-              const isSelected = selectedCarrier === top.id
-              // With nothing picked yet, the cheapest carrier carries the
-              // highlight as the standing recommendation; once the applicant
-              // chooses, the ring follows their choice instead.
-              const isHighlighted = isSelected || !selectedCarrier
-              // Once the carrier can no longer be changed there is no handler,
-              // and a card that hovers and lifts is claiming otherwise.
-              const pickable = typeof onSelectCarrier === 'function'
-              const Tag = pickable ? 'button' : 'div'
-              return (
-                <Tag
-                  {...(pickable ? { type: 'button', onClick: () => onSelectCarrier(top.id) } : {})}
-                  className={`w-full rounded-2xl px-5 py-5 mb-3 flex flex-col items-center text-center relative overflow-hidden transition ${
-                    pickable ? 'cursor-pointer hover:-translate-y-px' : ''
-                  }`}
-                  style={{
-                    background: idleFill,
-                    border: `1.5px solid ${isHighlighted
-                      ? (dark ? 'rgba(124,58,237,0.55)' : isSelected ? '#5C2ED4' : '#7C3AED')
-                      : idleLine}`,
-                    boxShadow: isSelected
-                      ? '0 6px 24px rgba(92,46,212,0.22)'
-                      : isHighlighted ? '0 4px 20px rgba(92,46,212,0.10)' : 'none',
-                  }}
-                >
-                  <div
-                    className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider text-white"
-                    style={{ background: BRAND_GRADIENT }}
-                  >
-                    {isSelected ? 'SELECTED' : 'BEST'}
-                  </div>
-                  {isSelected && (
-                    <div
-                      className="absolute top-2.5 left-2.5 w-5 h-5 rounded-full flex items-center justify-center"
-                      style={{ background: BRAND_GRADIENT }}
+            {/* No best-choice badge any more, so no hero card either: every
+                carrier gets the same card and shows its own price. */}
+            {!premium && (
+              <div className="space-y-3">
+                {(inCompare ? [top] : quotes).map(q => {
+                  const isSelected = selectedCarrier === q.id
+                  // Once the carrier can no longer be changed there is no
+                  // handler, and a card that hovers and lifts claims otherwise.
+                  const pickable = typeof onSelectCarrier === 'function'
+                  const Tag = pickable ? 'button' : 'div'
+                  return (
+                    <Tag
+                      key={q.id}
+                      {...(pickable ? { type: 'button', onClick: () => onSelectCarrier(q.id) } : {})}
+                      className={`w-full rounded-2xl px-5 py-4 flex flex-col items-center text-center relative overflow-hidden transition ${
+                        pickable ? 'cursor-pointer hover:-translate-y-px' : ''
+                      }`}
+                      style={{
+                        background: idleFill,
+                        border: `1.5px solid ${isSelected ? (dark ? 'rgba(124,58,237,0.55)' : '#5C2ED4') : idleLine}`,
+                        boxShadow: isSelected ? '0 6px 24px rgba(92,46,212,0.22)' : 'none',
+                      }}
                     >
-                      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                        <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                  )}
-
-                  {/* The logos are full lockups, so the name would only be
-                      printing what the mark already says. */}
-                  <CarrierMark
-                    carrier={top.carrier} product={top.product} logo={top.logo}
-                    size="xl"
-                  />
-
-                  <div className="mt-3">
-                    {stale ? (
-                      <span className="text-3xl font-bold text-gray-300 tracking-[0.08em]">---</span>
-                    ) : (
-                      <span className="text-3xl font-bold text-gradient">{formatUSD(top.premium)}</span>
-                    )}
-                  </div>
-                  <p className="text-[11px] text-gray-500 mt-0.5">Annual Premium</p>
-                  <p
-                    className="text-[10px] font-semibold mt-2"
-                    style={{ color: isSelected ? (dark ? '#A78BFA' : '#5C2ED4') : '#9CA3AF' }}
-                  >
-                    {isSelected ? '✓ Selected' : pickable ? 'Tap to select' : ''}
-                  </p>
-                </Tag>
-              )
-            })()}
-
-            {!inCompare && <div className="space-y-2">
-              {rest.map(q => {
-                const isSelected = selectedCarrier === q.id
-                return (
-                  <button
-                    type="button"
-                    key={q.id}
-                    onClick={() => onSelectCarrier?.(q.id)}
-                    className="w-full rounded-xl px-3 py-3 flex items-center gap-3 transition text-left cursor-pointer"
-                    style={{
-                      background: isSelected ? (dark ? 'rgba(124,58,237,0.18)' : 'rgba(124,58,237,0.06)') : idleFill,
-                      border: `1.5px solid ${isSelected ? '#7C3AED' : idleLine}`,
-                      boxShadow: isSelected ? '0 4px 14px rgba(92,46,212,0.10)' : 'none',
-                    }}
-                  >
-                    <CarrierMark carrier={q.carrier} product={q.product} logo={q.logo} size="sm" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[11px] font-semibold truncate" style={{ color: dark ? '#F9FAFB' : '#374151' }}>{q.carrier}</p>
                       {isSelected && (
-                        <p className="text-[9px] font-semibold mt-0.5 text-gradient">✓ Selected</p>
+                        <div
+                          className="absolute top-2.5 left-2.5 w-5 h-5 rounded-full flex items-center justify-center"
+                          style={{ background: BRAND_GRADIENT }}
+                        >
+                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                            <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
                       )}
-                    </div>
-                    <div className="text-right shrink-0">
-                      {stale ? (
-                        <div className="text-sm font-bold leading-tight text-gray-300 tracking-[0.08em]">---</div>
-                      ) : (
-                        <>
-                          <div className="text-sm font-bold leading-tight text-gray-900">{formatUSD(q.premium)}</div>
-                          <div className="text-[9px] text-gray-400">per year</div>
-                        </>
-                      )}
-                    </div>
-                  </button>
-                )
-              })}
-            </div>}
+
+                      {/* The logos are full lockups, so the name would only be
+                          printing what the mark already says. */}
+                      <CarrierMark
+                        carrier={q.carrier} product={q.product} logo={q.logo}
+                        size="lg"
+                      />
+
+                      <div className="mt-2.5">
+                        {stale ? (
+                          <span className="text-2xl font-bold text-gray-300 tracking-[0.08em]">---</span>
+                        ) : (
+                          <span className="text-2xl font-bold text-gradient">{formatUSD(q.premium)}</span>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-gray-500 mt-0.5">Annual Premium</p>
+                      <p
+                        className="text-[10px] font-semibold mt-1.5"
+                        style={{ color: isSelected ? (dark ? '#A78BFA' : '#5C2ED4') : '#9CA3AF' }}
+                      >
+                        {isSelected ? '✓ Selected' : pickable ? 'Tap to select' : ''}
+                      </p>
+                    </Tag>
+                  )
+                })}
+              </div>
+            )}
 
             {/* The application's own rail already lists the steps, so the
                 two-step summary only belongs on the indication page. */}

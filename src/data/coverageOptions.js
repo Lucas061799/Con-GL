@@ -188,18 +188,14 @@ export const BTIS_POLICY_FEE = 150
 
 /* ── Review & Select Payment ─────────────────────────────────────── */
 
+// Two, and the direct bill is the carrier's own — not BTIS DirectPay, which
+// is what the other products use.
 export const PAYMENT_METHODS = [
   {
     key: 'direct-bill',
     label: 'Direct Bill',
-    by: 'by BTIS DirectPay',
-    desc: 'Automatic renewals with 1 pay or 10 pay options.',
+    desc: 'The carrier bills the insured, with 1 pay or 10 pay options.',
     recommended: true,
-  },
-  {
-    key: 'premium-financing',
-    label: 'Paperless Premium Financing',
-    desc: 'Down payment with 10 monthly installments.',
   },
   {
     key: 'agency-bill',
