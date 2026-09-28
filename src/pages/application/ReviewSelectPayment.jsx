@@ -117,9 +117,12 @@ export default function ReviewSelectPayment({ form, set, errorFor, amount = 0, r
               label={
                 <span className="inline-flex items-center flex-wrap gap-x-2 gap-y-1">
                   {m.label}
+                  {/* Shorter than the line and lifted a pixel: a badge that
+                      fills the whole line box reads low against a title whose
+                      letters have no descenders. */}
                   {m.recommended && (
                     <span
-                      className="px-2 py-[2px] rounded-full text-[8.5px] font-bold tracking-[0.12em] text-white"
+                      className="px-2 py-[3px] rounded-full text-[8.5px] font-bold leading-none tracking-[0.12em] text-white -translate-y-px"
                       style={{ background: BRAND_GRADIENT }}
                     >
                       RECOMMENDED
