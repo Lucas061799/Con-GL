@@ -68,19 +68,24 @@ export default function ApplicationShell({
           </div>
         </main>
 
-        <RightPanel
-          dark={railExtras?.dark}
-          premium={premium}
-          downloadLabel={downloadLabel}
-          progress={progress}
-          quotes={railQuotes}
-          selectedCarrier={quote?.id}
-          onFormReview={onFormReview}
-          formComplete={summaryReady}
-          submitted={submitted}
-          inCompare
-          compareStep={1}
-        />
+        {/* And the right rail goes the same way once it is submitted: no
+            progress left to track, nothing left to choose. The receipt keeps
+            its own print button. */}
+        {!submitted && (
+          <RightPanel
+            dark={railExtras?.dark}
+            premium={premium}
+            downloadLabel={downloadLabel}
+            progress={progress}
+            quotes={railQuotes}
+            selectedCarrier={quote?.id}
+            onFormReview={onFormReview}
+            formComplete={summaryReady}
+            submitted={submitted}
+            inCompare
+            compareStep={1}
+          />
+        )}
       </div>
     </div>
   )
