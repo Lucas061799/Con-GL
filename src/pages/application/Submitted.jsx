@@ -84,10 +84,12 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
   // cannot bind until the insured signs, so the request is pending until they
   // do; and a referral is neither, it is with an underwriter.
   const outcome = inReview ? 'review' : form.signMethod === 'upload' ? 'bound' : 'pending'
+  // The top of this page says thank you first and what happened second —
+  // there is nothing left for anyone to do here.
   const headline = {
-    review: 'Sent for underwriter review',
-    bound: 'Bound!',
-    pending: 'Bind request sent',
+    review: 'Thank you — this risk has been referred.',
+    bound: "Thank you — you're bound!",
+    pending: 'Thank you — your bind request is in.',
   }[outcome]
   const statusLabel = {
     review: 'In Review',
@@ -95,8 +97,8 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
     pending: 'Bind Request Pending',
   }[outcome]
   const subline = {
-    review: `${carrier} will come back to you once an underwriter has read it through.`,
-    bound: `${carrier} has the signed application and the bind is in. You'll get a confirmation email shortly.`,
+    review: `An underwriter at ${carrier} is reading it through — you'll hear back shortly.`,
+    bound: `${carrier} has the signed application. Check your email for the confirmation.`,
     pending: `${carrier} has the application, and the insured has been emailed to sign. It binds as soon as they do.`,
   }[outcome]
   const carrierLine = {
