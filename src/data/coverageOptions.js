@@ -91,14 +91,10 @@ export const CC_IM_LIMITS = [
 export const CC_IM_DECLINED =
   'Tools coverage is not available due to claims history, however we may have another market for you. Please email IMsubs@btisinc.com or call 877-649-6682.'
 
-// Additional insureds — two are read-only statuses, one is selectable.
+// Additional insureds — one read-only status, one selectable. The blanket AI
+// that used to head this list is the selectable Blanket Additional Insured
+// Endorsement below; it was the same cover written twice.
 export const CC_ADDITIONAL_INSUREDS = [
-  {
-    key: 'blanketAI',
-    label: 'Blanket Additional Insured Form CG 2010 07/04 equivalent',
-    status: 'Included',
-    help: 'Includes Primary Wording & Waiver of Subrogation when required by written contract.',
-  },
   {
     key: 'completedOps',
     label: 'Owners, Lessees or Contractors: Completed Operations CG 2037',

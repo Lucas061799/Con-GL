@@ -84,7 +84,6 @@ export default function ApplicationSummary({ form = {}, rows = [], onEdit }) {
         icon="tools"
         action={edit('coverage', 'Additional Insureds and Optional Coverages')}
       >
-        <Row label="Blanket Additional Insured form" value="Included" />
         <Row label="Owners, Lessees or Contractors: Completed Operations CG 2037" value="Available upon request" />
         {picked.map(o => (
           <Row

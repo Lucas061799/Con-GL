@@ -43,7 +43,6 @@ export default function QuoteSummary({ form = {}, quote, amount = 0, submissionN
         </Panel>
 
         <Panel title="Selected Coverages" icon="tools">
-          <Row label="Blanket Additional Insured form" value="Included" />
           {picked.map(o => (
             <Row key={o.key} label={o.label} value={o.price != null ? `$${o.price}` : 'Included'} />
           ))}
