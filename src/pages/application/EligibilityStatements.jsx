@@ -1,6 +1,6 @@
 import { Textarea, YesNo, ToggleQuestion } from '../../components/FormField'
 import { FieldGroup, QuestionCard } from '../../components/Section'
-import { rulesForCodes, subKey, needsUnderwriterReview } from '../../data/conditionalQuestions'
+import { rulesForCodes, subKey } from '../../data/conditionalQuestions'
 import { CLASS_CODES } from '../../data/classCodes'
 import {
   POLICY_ELIGIBILITY, TERMS_AND_CONDITIONS, AGREE_QUESTION, OPERATIONS_NOTE,
@@ -39,7 +39,6 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
   // The trade-specific questions belong to the carrier, so they are asked
   // here rather than while the market is still being shopped.
   const rules = rulesForCodes(codes)
-  const underwriterReview = needsUnderwriterReview(rules, form)
 
   return (
     <div className="space-y-6">
@@ -102,11 +101,40 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
                   onChange={set(rule.id)}
                 >
                   {rule.sub.type === 'yesno' ? (
-                    <ToggleQuestion
-                      label={rule.sub.question}
-                      value={form[subKey(rule)]}
-                      onChange={set(subKey(rule))}
-                    />
+                    <>
+                      <ToggleQuestion
+                        label={rule.sub.question}
+                        value={form[subKey(rule)]}
+                        onChange={set(subKey(rule))}
+                      />
+                      {/* The notice is what this answer did, so it sits with
+                          the answer. Outside the card it took the same eight
+                          pixels that separate one question from the next, and
+                          read as a third question. */}
+                      {rule.sub.underwriterReviewOnYes && form[subKey(rule)] === 'yes' && (
+                        <div className="notice-brand rounded-xl p-4 flex items-start gap-3 mt-4">
+                          <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" strokeWidth="1.8" viewBox="0 0 24 24">
+                            <defs>
+                              {/* userSpaceOnUse, or the stroke on the "!" vanishes: a
+                                  vertical line has a zero-width bounding box, and an
+                                  objectBoundingBox gradient over one paints nothing. */}
+                              <linearGradient id="uwNoteG" gradientUnits="userSpaceOnUse" x1="3" y1="12" x2="21" y2="12">
+                                <stop offset="0%" stopColor="#5C2ED4" className="grad-stop-0" />
+                                <stop offset="100%" stopColor="#A614C3" className="grad-stop-1" />
+                              </linearGradient>
+                            </defs>
+                            <circle cx="12" cy="12" r="9" stroke="url(#uwNoteG)" />
+                            <path d="M12 8v5" stroke="url(#uwNoteG)" strokeLinecap="round" />
+                            <circle cx="12" cy="16.5" r="0.6" fill="url(#uwNoteG)" />
+                          </svg>
+                          <p className="text-[12.5px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
+                            <span className="font-bold" style={{ color: 'var(--ink)' }}>This submission needs underwriter review.</span>{' '}
+                            High value home work above the 15% threshold can&rsquo;t be bound automatically — an
+                            underwriter will pick it up after you submit.
+                          </p>
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <Textarea
                       label={rule.sub.question} required
@@ -120,29 +148,6 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
               </QuestionCard>
             ))}
 
-            {underwriterReview && (
-              <div className="notice-brand rounded-xl p-4 flex items-start gap-3">
-                <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" strokeWidth="1.8" viewBox="0 0 24 24">
-                  <defs>
-                    {/* userSpaceOnUse, or the stroke on the "!" vanishes: a
-                        vertical line has a zero-width bounding box, and an
-                        objectBoundingBox gradient over one paints nothing. */}
-                    <linearGradient id="uwNoteG" gradientUnits="userSpaceOnUse" x1="3" y1="12" x2="21" y2="12">
-                      <stop offset="0%" stopColor="#5C2ED4" className="grad-stop-0" />
-                      <stop offset="100%" stopColor="#A614C3" className="grad-stop-1" />
-                    </linearGradient>
-                  </defs>
-                  <circle cx="12" cy="12" r="9" stroke="url(#uwNoteG)" />
-                  <path d="M12 8v5" stroke="url(#uwNoteG)" strokeLinecap="round" />
-                  <circle cx="12" cy="16.5" r="0.6" fill="url(#uwNoteG)" />
-                </svg>
-                <p className="text-[12.5px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
-                  <span className="font-bold" style={{ color: 'var(--ink)' }}>This submission needs underwriter review.</span>{' '}
-                  High value home work above the 15% threshold can&rsquo;t be bound automatically — an
-                  underwriter will pick it up after you submit.
-                </p>
-              </div>
-            )}
           </div>
         </div>
       )}
