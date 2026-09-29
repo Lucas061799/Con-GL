@@ -50,6 +50,12 @@ export const demoPhaseOne = () => ({
 export const demoPhaseTwo = () => ({
   hasEmployees: 'yes',
   agreeTerms: 'yes',
+  // The two questions 98304 pulls in, answered so the read-back panels have
+  // something to print. High value homes stays No: a yes to its follow-up
+  // would put every demo run in front of an underwriter.
+  specialCoatings: 'yes',
+  specialCoatingsSub: 'Epoxy floor coatings on garage and warehouse slabs.',
+  highValueHomes: 'no',
   ccDeductible: '0',
   ccGlLimits: '1000000/2000000/2000000',
   ccDamagesToPremises: '100000',

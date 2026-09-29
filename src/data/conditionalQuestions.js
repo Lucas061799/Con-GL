@@ -60,6 +60,26 @@ export const rulesForCodes = (codes) => {
   return CONDITIONAL_QUESTIONS.filter(r => r.classCodes.some(c => set.has(c)))
 }
 
+// The answers as read-back rows: the question, then its follow-up when the
+// answer called for one. A follow-up is only printed under a yes — otherwise
+// a question switched back to No still shows the details it once collected.
+// The review panel and the receipt both print these, from here, so they
+// cannot drift apart.
+export const ruleAnswers = (codes, form = {}) => {
+  const yn = (v) => (v === 'yes' ? 'Yes' : v === 'no' ? 'No' : '')
+  const out = []
+  rulesForCodes(codes).forEach(rule => {
+    out.push({ label: rule.question, value: yn(form[rule.id]) })
+    if (form[rule.id] !== 'yes') return
+    const answer = form[subKey(rule)]
+    out.push({
+      label: rule.sub.question,
+      value: rule.sub.type === 'yesno' ? yn(answer) : String(answer ?? ''),
+    })
+  })
+  return out
+}
+
 // True once an answered rule has tripped its underwriter-review condition.
 export const needsUnderwriterReview = (rules, form) =>
   rules.some(r => r.sub?.underwriterReviewOnYes && form[r.id] === 'yes' && form[subKey(r)] === 'yes')

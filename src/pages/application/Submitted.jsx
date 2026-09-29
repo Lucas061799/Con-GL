@@ -7,7 +7,7 @@ import { formatUSD } from '../../lib/rating'
 import { CARRIER_TERMS } from '../../data/carrierTerms'
 import { computeBreakdown } from '../../components/PremiumBreakdown'
 import { CLASS_CODES } from '../../data/classCodes'
-import { rulesForCodes, needsUnderwriterReview } from '../../data/conditionalQuestions'
+import { rulesForCodes, needsUnderwriterReview, ruleAnswers } from '../../data/conditionalQuestions'
 import {
   STRUCTURE_OF_BUSINESS, STRUCTURE_TYPES, CONSTRUCTION_TYPES,
   APP_LIMITS, APP_DEDUCTIBLES,
@@ -326,6 +326,19 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                       label="Disclosures"
                       value={(form.disclosures || {}).none ? 'None' : Object.values(form.disclosures || {}).filter(Boolean).length || ''}
                     />
+                  </Panel>
+
+                  {/* The eligibility step was missing from the receipt
+                      altogether — neither the agreement nor the description
+                      was printed. Same rows as the review panel, from the
+                      same place. */}
+                  <Panel title="Eligibility Statements" icon="clock">
+                    <Row label="Terms Agreement Response" value={yesNo(form.agreeTerms)} />
+                    {form.agreeTerms === 'no' && <Row label="Explanation" value={form.agreeExplanation} />}
+                    <Row label="Description of Operations" value={form.operationsDescription} />
+                    {ruleAnswers(rows.filter(r => r.code).map(r => r.code), form).map(a => (
+                      <Row key={a.label} label={a.label} value={a.value} />
+                    ))}
                   </Panel>
 
                 </div>

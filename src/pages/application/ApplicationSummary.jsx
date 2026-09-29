@@ -1,5 +1,6 @@
 import { Panel, Row, EditButton } from '../../components/SummaryPanel'
 import { CLASS_CODES } from '../../data/classCodes'
+import { ruleAnswers } from '../../data/conditionalQuestions'
 import { ENTITY_TYPES } from '../../data/applicantOptions'
 import { YEARS_OF_EXPERIENCE, YEARS_IN_BUSINESS } from '../../data/intakeOptions'
 import {
@@ -67,9 +68,16 @@ export default function ApplicationSummary({ form = {}, rows = [], onEdit }) {
         />
       </Panel>
 
-      <Panel title="Terms & Conditions" icon="clock" action={edit('eligibility', 'Terms & Conditions')}>
+      {/* Named after the step it reads back, the way the other panels are,
+          so everything answered there — the agreement, the description and
+          the questions the classes pulled in — has a place to land. */}
+      <Panel title="Eligibility Statements" icon="clock" action={edit('eligibility', 'Eligibility Statements')}>
         <Row label="Terms Agreement Response" value={yesNo(form.agreeTerms)} />
+        {form.agreeTerms === 'no' && <Row label="Explanation" value={form.agreeExplanation} />}
         <Row label="Description of Operations" value={form.operationsDescription} />
+        {ruleAnswers(rows.filter(r => r.code).map(r => r.code), form).map(a => (
+          <Row key={a.label} label={a.label} value={a.value} />
+        ))}
       </Panel>
 
       <Panel title="Deductible & Limits" icon="shield" action={edit('coverage', 'Deductible & Limits')}>
