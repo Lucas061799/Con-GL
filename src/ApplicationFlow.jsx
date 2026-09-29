@@ -297,7 +297,7 @@ export default function ApplicationFlow({
           role="status"
           aria-live="polite"
         >
-          <div className="w-[150px] h-[150px]">
+          <div className="w-[130px] h-[130px]">
             <NorbieLoader dark={railExtras?.dark} />
           </div>
         </div>

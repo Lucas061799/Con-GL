@@ -16,6 +16,9 @@ const LAYOUT = { eyeY: -70, earY: -45, earX: 220, nostrilOffsetTop: 50 }
 LAYOUT.noseTopY = LAYOUT.eyeY + DIMS.eye.h / 2 - 5
 
 const SPHERE_RADIUS = 280
+// Screen-space offsets from the studies, read at their globalScale of 0.2.
+const BODY_Y = 50
+const SHADOW_Y = 180
 const FLOAT = { speed: 0.0012, range: 15 }
 const BEAM = { length: 500, spread: 1.6, startOpacity: 0.5, swingFactor: 15 }
 
@@ -44,7 +47,7 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath()
 }
 
-export default function NorbieLoader({ dark = false, scale = 0.1, className = '' }) {
+export default function NorbieLoader({ dark = false, scale = 0.08, className = '' }) {
   const canvasRef = useRef(null)
   const darkRef = useRef(dark)
   darkRef.current = dark
@@ -83,6 +86,12 @@ export default function NorbieLoader({ dark = false, scale = 0.1, className = ''
       const centerX = width / 2
       const centerY = height / 2
       const floatY = Math.sin(Date.now() * FLOAT.speed) * FLOAT.range
+      // The studies place the body and its shadow in screen pixels, at their
+      // own scale; k carries that composition to whatever size this is drawn
+      // at, and LIFT centres the pair — head and shadow — in the canvas
+      // rather than leaving the head high and the shadow off the bottom.
+      const k = scale / 0.2
+      const LIFT = ((BODY_Y + SHADOW_Y) / 2) * k
 
       const target = LOOK_SEQUENCE[step]
       const dx = target.x - lookX
@@ -94,12 +103,9 @@ export default function NorbieLoader({ dark = false, scale = 0.1, className = ''
         waited = 0
       }
 
-      // Shadow on the ground — a fixed spot just under the sphere, so the head
-      // rises and falls against it. Measured from the body, not the canvas:
-      // scaled down far enough, a fixed offset lands inside the head and the
-      // shadow disappears behind it.
+      // Shadow on the ground, a fixed spot the head rises and falls over.
       ctx.save()
-      ctx.translate(centerX, centerY + (50 + SPHERE_RADIUS * 1.12) * scale)
+      ctx.translate(centerX, centerY + SHADOW_Y * k - LIFT)
       ctx.scale(scale, scale)
       const sink = (floatY + FLOAT.range) / (FLOAT.range * 2)
       ctx.scale(1 + sink * 0.2, 1 + sink * 0.2)
@@ -113,7 +119,7 @@ export default function NorbieLoader({ dark = false, scale = 0.1, className = ''
       ctx.restore()
 
       ctx.save()
-      ctx.translate(centerX, centerY + floatY * scale + 50 * scale)
+      ctx.translate(centerX, centerY + (floatY + BODY_Y) * k - LIFT)
       ctx.scale(scale, scale)
 
       ctx.beginPath()
