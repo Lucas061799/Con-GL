@@ -45,9 +45,11 @@ export default function ApplicationShell({
       <div className="flex-1 flex min-h-0">
         {/* Once it is submitted there is nowhere to navigate — the steps are
             behind you and you cannot go back — so the rail goes and only its
-            bottom cards stay, floating. */}
+            bottom cards stay, floating. No dark toggle among them: the
+            receipt keeps whatever theme the application was filled in under,
+            and the page is a record now, not somewhere to change settings. */}
         {submitted ? (
-          <RailFooter floating {...railExtras} />
+          <RailFooter floating {...railExtras} onToggleDark={undefined} />
         ) : (
           <Sidebar
             productName="Contractor General Liability"
