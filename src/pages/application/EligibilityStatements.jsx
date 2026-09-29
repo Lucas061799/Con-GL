@@ -7,6 +7,9 @@ import {
 } from '../../data/coverageOptions'
 
 const codeLabel = (code) => CLASS_CODES.find(c => c.code === code)?.label ?? code
+// The classifications step prints the code beside the trade, so this page
+// names them the same way — it is the same choice being read back.
+const codeTag = (code) => `${codeLabel(code)} [${code}]`
 
 // The order the meeting settled on: what the chosen classes cover, then the
 // eligibility statements in general, then the questions those classes pull in
@@ -37,6 +40,11 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
   // here rather than while the market is still being shopped.
   const rules = rulesForCodes(codes)
   const underwriterReview = needsUnderwriterReview(rules, form)
+  // Which of the chosen classes asked for a question. Mostly one, but the
+  // high value homes question hangs off eighteen class codes, so a mix of
+  // trades can pull the same question in twice over — it is named once, with
+  // every class that wanted it, rather than repeated under each.
+  const askedBy = (rule) => [...new Set(codes)].filter(c => rule.classCodes.includes(c))
 
   return (
     <div className="space-y-6">
@@ -48,7 +56,7 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
           <div className="space-y-5">
             {codes.map(code => (
               <div key={code}>
-                <p className="text-[13px] font-bold mb-3" style={{ color: 'var(--ink)' }}>{codeLabel(code)}</p>
+                <p className="text-[13px] font-bold mb-3" style={{ color: 'var(--ink)' }}>{codeTag(code)}</p>
                 <div className="space-y-3 pl-1">
                   <div>
                     <p className="text-[12.5px] font-semibold mb-2" style={{ color: 'var(--ink)' }}>
@@ -90,6 +98,13 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
           <div className="space-y-2">
             {rules.map(rule => (
               <QuestionCard key={rule.id}>
+                <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
+                  {askedBy(rule).map(c => (
+                    <span key={c} className="class-pill text-[10px] font-bold px-2 py-0.5 rounded-full">
+                      {codeTag(c)}
+                    </span>
+                  ))}
+                </div>
                 <ToggleQuestion
                   label={rule.question}
                   value={form[rule.id]}
