@@ -47,7 +47,7 @@ export default function ApplicationFlow({
   // Stands in for the carrier's rate call until there is one to wait on. Long
   // enough to see, because theirs will be: nobody yet knows whether RLI comes
   // back in two seconds or fifteen.
-  const RATE_CALL_MS = 1800
+  const RATE_CALL_MS = 2400
   const setPriced = (key) => (value) => {
     set(key)(value)
     if (!PRICED_KEYS.has(key)) return
@@ -297,12 +297,9 @@ export default function ApplicationFlow({
           role="status"
           aria-live="polite"
         >
-          <div className="w-[190px] h-[190px]">
+          <div className="w-[150px] h-[150px]">
             <NorbieLoader dark={railExtras?.dark} />
           </div>
-          <p className="text-[13px] font-semibold -mt-2" style={{ color: 'var(--ink-2)' }}>
-            Pricing your cover…
-          </p>
         </div>
       )}
 

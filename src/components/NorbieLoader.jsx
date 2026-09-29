@@ -23,14 +23,14 @@ const BEAM = { length: 500, spread: 1.6, startOpacity: 0.5, swingFactor: 15 }
 // about six seconds to come round; a rate call is over long before that, so
 // the circuit is paced to finish inside one — a loader nobody sees complete
 // reads as a loader that is stuck.
-const EASE = 0.3
+const EASE = 0.2
 const LOOK_SEQUENCE = [
-  { x: 0, y: 0, wait: 4 },
-  { x: -40, y: -40, wait: 4 },
-  { x: 40, y: -40, wait: 4 },
-  { x: 40, y: 40, wait: 4 },
-  { x: -40, y: 40, wait: 4 },
-  { x: 0, y: 0, wait: 3 },
+  { x: 0, y: 0, wait: 7 },
+  { x: -40, y: -40, wait: 7 },
+  { x: 40, y: -40, wait: 7 },
+  { x: 40, y: 40, wait: 6 },
+  { x: -40, y: 40, wait: 6 },
+  { x: 0, y: 0, wait: 5 },
 ]
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -45,7 +45,7 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath()
 }
 
-export default function NorbieLoader({ dark = false, scale = 0.13, className = '' }) {
+export default function NorbieLoader({ dark = false, scale = 0.1, className = '' }) {
   const canvasRef = useRef(null)
   const darkRef = useRef(dark)
   darkRef.current = dark
