@@ -232,7 +232,9 @@ export default function ApplicationFlow({
         // reader is still up in the statements the button waits.
         // Nothing is submitted mid-rate-call either.
         submitDisabled: pricing || (stage === 'form' && activeStep === 'eligibility'),
-        submitHint: pricing ? '' : 'Read through the eligibility statements first.',
+        // The overlay lost its caption, so the card carries the line: under a
+        // greyed-out Submit is where someone looks for the reason anyway.
+        submitHint: pricing ? 'Pricing your cover…' : 'Read through the eligibility statements first.',
       }}
       summaryReady
       // Legacy offers the quote alongside the coverage, and the application
