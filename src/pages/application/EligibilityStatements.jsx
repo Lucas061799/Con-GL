@@ -110,10 +110,13 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
                       {/* The notice is what this answer did, so it sits with
                           the answer. Outside the card it took the same eight
                           pixels that separate one question from the next, and
-                          read as a third question. */}
+                          read as a third question. It is padded and spaced
+                          like the Yes pill above it — px-3, a 3.5 mark, gap-2
+                          — so its icon lands on the radio's column and its
+                          text on the label's. */}
                       {rule.sub.underwriterReviewOnYes && form[subKey(rule)] === 'yes' && (
-                        <div className="notice-brand rounded-xl p-4 flex items-start gap-3 mt-4">
-                          <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" strokeWidth="1.8" viewBox="0 0 24 24">
+                        <div className="notice-brand rounded-xl px-3 py-3.5 flex items-start gap-2 mt-4">
+                          <svg className="w-3.5 h-3.5 shrink-0 mt-px" fill="none" strokeWidth="1.8" viewBox="0 0 24 24">
                             <defs>
                               {/* userSpaceOnUse, or the stroke on the "!" vanishes: a
                                   vertical line has a zero-width bounding box, and an
