@@ -163,20 +163,26 @@ export default function RightPanel({
                     return (
                       <div
                         key={q.id}
-                        className="w-full rounded-xl px-3 py-3 flex items-center gap-3"
-                        style={{ background: idleFill, border: `1px solid ${idleLine}` }}
+                        className="w-full rounded-xl px-3 py-3 flex items-center gap-3 text-left"
+                        style={{ background: idleFill, border: `1.5px solid ${idleLine}` }}
                       >
+                        {/* At this size the lockups are unreadable, so the row
+                            prints the names the way Builder's Risk does. */}
                         <CarrierMark
                           carrier={q.carrier} product={q.product} logo={q.logo}
                           size="sm"
                         />
-                        <div className="flex-1 flex items-center justify-between gap-2">
-                          <span className="text-[11px] text-gray-500">Annual Premium</span>
-                          {stale ? (
-                            <span className="text-base font-bold text-gray-300 tracking-[0.08em]">---</span>
-                          ) : (
-                            <span className="text-base font-bold text-gradient">{formatUSD(q.premium)}</span>
-                          )}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[12px] font-semibold truncate" style={{ color: dark ? '#F9FAFB' : '#374151' }}>
+                            {q.product}
+                          </p>
+                          <p className="text-[10px] text-gray-400 truncate">{q.carrier}</p>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <div className="text-sm font-bold leading-tight" style={{ color: stale ? '#D1D5DB' : (dark ? '#F9FAFB' : '#111827') }}>
+                            {stale ? '---' : formatUSD(q.premium)}
+                          </div>
+                          <div className="text-[9px] text-gray-400">per year</div>
                         </div>
                       </div>
                     )
