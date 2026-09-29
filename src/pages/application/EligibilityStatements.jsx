@@ -1,6 +1,5 @@
 import { Textarea, YesNo, ToggleQuestion } from '../../components/FormField'
 import { FieldGroup, QuestionCard } from '../../components/Section'
-import { EditButton } from '../../components/SummaryPanel'
 import { rulesForCodes, subKey, needsUnderwriterReview } from '../../data/conditionalQuestions'
 import { CLASS_CODES } from '../../data/classCodes'
 import {
@@ -15,17 +14,12 @@ const codeTag = (code) => `${codeLabel(code)} [${code}]`
 // The order the meeting settled on: what the chosen classes cover, then the
 // eligibility statements in general, then the questions those classes pull in
 // — and only after all three, the terms and whether the applicant agrees.
-// Small uppercase label, no rule — the section title already has one. An
-// `action` sits at the right of the label, where the summary panels keep
-// their pencil.
-function Heading({ children, action }) {
+// Small uppercase label, no rule — the section title already has one.
+function Heading({ children }) {
   return (
-    <div className="flex items-center justify-between gap-3 mb-2.5">
-      <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-400 pl-0.5">
-        {children}
-      </h3>
-      {action}
-    </div>
+    <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-400 mb-2.5 pl-0.5">
+      {children}
+    </h3>
   )
 }
 
@@ -39,7 +33,7 @@ function PlaceholderLines({ widths }) {
   )
 }
 
-export default function EligibilityStatements({ form, set, errorFor, rows = [], onEdit }) {
+export default function EligibilityStatements({ form, set, errorFor, rows = [] }) {
   const codes = rows.map(r => r.code).filter(Boolean)
   const declined = form.agreeTerms === 'no'
   // The trade-specific questions belong to the carrier, so they are asked
@@ -55,11 +49,10 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [], 
   return (
     <div className="space-y-6">
       <div>
-        {/* The classes are chosen three steps back, so changing them here
-            means going back there — the pencil the summary panels use. */}
-        <Heading action={onEdit && <EditButton onClick={() => onEdit('classes')} label="Classification(s)" />}>
-          Classification Statements
-        </Heading>
+        {/* Read-back only. By this point the classes have been rated and a
+            carrier chosen on them; changing one here would quietly invalidate
+            both, so the way back is the classifications step itself. */}
+        <Heading>Classification Statements</Heading>
         {codes.length === 0 ? (
           <p className="text-[12.5px] text-gray-400">Pick a classification to see its statements.</p>
         ) : (
