@@ -9,10 +9,10 @@ function SkeletonRow() {
       className="rounded-xl px-3 py-3 flex items-center gap-3"
       style={{ background: 'var(--surface-softer)', border: '1px solid var(--line-soft)' }}
     >
-      <div className="skel w-9 h-9 rounded-xl shrink-0" />
+      <div className="skel w-10 h-10 rounded-xl shrink-0" />
       <div className="flex-1 flex items-center justify-between gap-2">
+        <div className="skel h-3 rounded w-20" />
         <div className="skel h-3 rounded w-14" />
-        <div className="skel h-3 rounded w-12" />
       </div>
     </div>
   )
@@ -146,16 +146,41 @@ export default function RightPanel({
             {/* On the application the rail carries the premium breakdown where
                 the quote card sits during the quick quote. */}
             {premium && <PremiumBreakdown {...premium} dark={dark} />}
-            {/* No best-choice badge any more, so no hero card either: every
-                carrier gets the same card and shows its own price. */}
+            {/* No best-choice badge any more, so no hero card either. The
+                rail is a price preview while the quick quote is filled in —
+                two compact rows — the same shape as the placeholders they
+                replace — with nothing picked; the carrier is chosen on the
+                indication page. */}
             {!premium && (
-              <div className="space-y-3">
+              <div className={inCompare ? '' : 'space-y-2'}>
                 {(inCompare ? [top] : quotes).map(q => {
-                  const isSelected = selectedCarrier === q.id
+                  const isSelected = inCompare && selectedCarrier === q.id
                   // Once the carrier can no longer be changed there is no
                   // handler, and a card that hovers and lifts claims otherwise.
-                  const pickable = typeof onSelectCarrier === 'function'
+                  const pickable = inCompare && typeof onSelectCarrier === 'function'
                   const Tag = pickable ? 'button' : 'div'
+                  if (!inCompare) {
+                    return (
+                      <div
+                        key={q.id}
+                        className="w-full rounded-xl px-3 py-3 flex items-center gap-3"
+                        style={{ background: idleFill, border: `1px solid ${idleLine}` }}
+                      >
+                        <CarrierMark
+                          carrier={q.carrier} product={q.product} logo={q.logo}
+                          size="sm"
+                        />
+                        <div className="flex-1 flex items-center justify-between gap-2">
+                          <span className="text-[11px] text-gray-500">Annual Premium</span>
+                          {stale ? (
+                            <span className="text-base font-bold text-gray-300 tracking-[0.08em]">---</span>
+                          ) : (
+                            <span className="text-base font-bold text-gradient">{formatUSD(q.premium)}</span>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  }
                   return (
                     <Tag
                       key={q.id}
