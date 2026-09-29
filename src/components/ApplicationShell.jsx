@@ -47,9 +47,10 @@ export default function ApplicationShell({
             behind you and you cannot go back — so the rail goes and only its
             bottom cards stay, floating. No dark toggle among them: the
             receipt keeps whatever theme the application was filled in under,
-            and the page is a record now, not somewhere to change settings. */}
+            and no Quick Jump either — the page is a record now, not somewhere
+            to change settings or skip to another one. Norbie stays. */}
         {submitted ? (
-          <RailFooter floating {...railExtras} onToggleDark={undefined} />
+          <RailFooter floating {...railExtras} onToggleDark={undefined} demoJumps={undefined} />
         ) : (
           <Sidebar
             productName="Contractor General Liability"

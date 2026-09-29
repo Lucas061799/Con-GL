@@ -121,12 +121,29 @@ export function RailFooter({ dark = false, onToggleDark, demoJumps, demoActive, 
           tooltip. */}
       <div className={floating ? 'relative z-10' : 'px-3 pb-2 relative z-10'}>
         {floating ? (
-          <div
-            title="Chat with Norbie"
-            className="w-12 h-12 rounded-full flex items-center justify-center"
-            style={{ background: 'var(--glass)', border: '1.5px solid var(--line)', backdropFilter: 'blur(6px)' }}
-          >
-            <img src={norbieface} alt="Chat with Norbie" className="w-7 h-7 rounded-full object-cover" />
+          <div className="group relative w-12">
+            <div
+              className="w-12 h-12 rounded-full flex items-center justify-center"
+              style={{ background: 'var(--glass)', border: '1.5px solid var(--line)', backdropFilter: 'blur(6px)' }}
+            >
+              <img src={norbieface} alt="Chat with Norbie" className="w-7 h-7 rounded-full object-cover" />
+            </div>
+            {/* The name, alongside rather than inside: the circle keeps its
+                place instead of growing and shoving the icon sideways. */}
+            <span
+              className="absolute left-full top-1/2 -translate-y-1/2 ml-2 whitespace-nowrap rounded-lg px-3 py-1.5
+                         opacity-0 -translate-x-1 pointer-events-none transition-all duration-150
+                         group-hover:opacity-100 group-hover:translate-x-0"
+              style={{
+                background: 'var(--surface-card)',
+                border: '1px solid var(--line)',
+                boxShadow: '0 6px 20px rgba(17,24,39,0.12)',
+                fontSize: '12.5px',
+                color: 'var(--ink-2)',
+              }}
+            >
+              Chat with Norbie
+            </span>
           </div>
         ) : (
           <div
