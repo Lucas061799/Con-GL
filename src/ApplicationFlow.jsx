@@ -240,9 +240,10 @@ export default function ApplicationFlow({
         submitHint: pricing ? 'Pricing your cover…' : 'Read through the eligibility statements first.',
       }}
       summaryReady
-      // Legacy offers the quote alongside the coverage, and the application
-      // itself once you are on the payment page.
-      downloadLabel={stage === 'form' ? 'Download Quick Quote' : 'Download Application Summary'}
+      // One download, not two. Legacy handed over the quote on one page and
+      // the application on another; what anyone actually needs is the pair,
+      // so both go in the same document whichever page it is asked for on.
+      downloadLabel="Download Binding Application"
       onFormReview={() => setTimeout(() => window.print(), 50)}
       scrollRef={scrollRef}
     >
@@ -277,17 +278,16 @@ export default function ApplicationFlow({
         </Section>
       ))}
 
-      {/* Print target for the rail's download. The first page hands over the
-          quote; the payment page hands over the application itself. */}
+      {/* Print target for the rail's download: the proposal, then the
+          application it belongs to. */}
       <div id="submission-print-area" className="print-summary">
-        {stage === 'form' ? (
-          <QuoteSummary
-            form={form} quote={quote} amount={amount}
-            submissionNumber={applicationNumber}
-          />
-        ) : (
+        <QuoteSummary
+          form={form} quote={quote} amount={amount}
+          submissionNumber={applicationNumber}
+        />
+        <div className="mt-4">
           <ApplicationSummary form={form} rows={rows} />
-        )}
+        </div>
       </div>
 
       {/* The rate call blocks the screen, the way the current system's spinner
@@ -313,6 +313,8 @@ export default function ApplicationFlow({
           form={form}
           rows={rows}
           onClose={() => setPreview(false)}
+          // A pencil closes the sheet on the way to the field it points at.
+          onEdit={(key) => { setPreview(false); edit(key) }}
           // Submitting the application is where it gets approved or referred.
           // A referral never reaches the payment and bind steps — an
           // underwriter has it, and the receipt says so.

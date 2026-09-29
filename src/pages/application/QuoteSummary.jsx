@@ -8,8 +8,8 @@ import {
 
 const labelOf = (options, value) => options.find(o => (o.value ?? o) === value)?.label ?? ''
 
-// What "Download Quick Quote" hands over: the cover as it stands and what it
-// costs — not the whole application, which is the other download.
+// The first half of the binding application: the cover as it stands and what
+// it costs. The application's own answers follow it in the same document.
 export default function QuoteSummary({ form = {}, quote, amount = 0, submissionNumber }) {
   const { glPremium, brokerFee, grossTotal, totalDue, pending } = computeBreakdown(form, amount)
   const picked = [
@@ -22,7 +22,7 @@ export default function QuoteSummary({ form = {}, quote, amount = 0, submissionN
     <div className="space-y-3">
       <div className="flex items-start justify-between gap-4 pb-1">
         <div>
-          <p className="text-[13px] font-bold" style={{ color: 'var(--ink)' }}>Quick Quote</p>
+          <p className="text-[13px] font-bold" style={{ color: 'var(--ink)' }}>Proposal</p>
           <p className="text-[10px]" style={{ color: '#9CA3AF' }}>
             {[form.dba || form.legalName, quote?.carrier].filter(Boolean).join(' · ')}
           </p>

@@ -106,7 +106,7 @@ export default function SignAndBind({ form, set, errorFor, files = [], setFiles,
                     className="ml-[26px] inline-flex items-center gap-2 h-10 px-5 rounded-xl text-[13px] font-semibold text-white transition hover:opacity-90"
                     style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.25)' }}
                   >
-                    Download binding application
+                    Download Binding Application
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M12 3v12m0 0l-4-4m4 4 4-4M5 21h14" />
                     </svg>

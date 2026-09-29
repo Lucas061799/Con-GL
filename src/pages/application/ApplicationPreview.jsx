@@ -3,7 +3,7 @@ import ApplicationSummary from './ApplicationSummary'
 
 // Commercial Auto's Application Preview: everything entered so far in one
 // scrolling sheet, with a way back to edit and the real submit at the foot.
-export default function ApplicationPreview({ form, rows = [], onClose, onSubmit }) {
+export default function ApplicationPreview({ form, rows = [], onClose, onSubmit, onEdit }) {
   return (
     <div
       className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
@@ -55,7 +55,9 @@ export default function ApplicationPreview({ form, rows = [], onClose, onSubmit 
         </div>
 
         <div className="flex-1 overflow-y-auto custom-scroll px-4 py-4" style={{ background: 'var(--surface-soft)' }}>
-          <ApplicationSummary form={form} rows={rows} />
+          {/* Each panel keeps the pencil it has on the review page: the
+              preview is for catching a mistake, so it has to be a way in. */}
+          <ApplicationSummary form={form} rows={rows} onEdit={onEdit} />
         </div>
 
         <div

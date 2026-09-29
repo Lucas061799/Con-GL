@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { BRAND_GRADIENT } from '../../components/FormField'
 import sellMoreBg from '../../assets/sell-more-bg.png'
 import Confetti from '../../components/Confetti'
@@ -10,7 +10,7 @@ import { computeBreakdown } from '../../components/PremiumBreakdown'
 import { CLASS_CODES } from '../../data/classCodes'
 import { rulesForCodes, needsUnderwriterReview, ruleAnswers } from '../../data/conditionalQuestions'
 import {
-  STRUCTURE_OF_BUSINESS, STRUCTURE_TYPES, CONSTRUCTION_TYPES,
+  STRUCTURE_OF_BUSINESS,
   APP_LIMITS, APP_DEDUCTIBLES,
 } from '../../data/applicationOptions'
 import {
@@ -65,10 +65,26 @@ const money = (v) => (String(v ?? '').trim() ? `$${Number(String(v).replace(/\D/
 // The submission receipt, laid out the way Builder's Risk does it: no rails,
 // one headed card, then the application read back in panels.
 export default function Submitted({ submissionNumber, quote, amount, form = {}, rows = [], onStartOver, dark = false }) {
+  // Where the submission came from, so the banner sends it back there rather
+  // than always to Norbielink. A referrer from another origin is the page the
+  // agent was on — Legacy, the marketplace, wherever. With none (a direct
+  // visit, or a link that stripped it) there is nowhere to return to, so the
+  // banner keeps its old job of starting the quote over.
+  const cameFrom = useMemo(() => {
+    try {
+      const ref = document.referrer
+      if (!ref) return null
+      const url = new URL(ref)
+      if (url.origin === window.location.origin) return null
+      return { href: ref, host: url.hostname.replace(/^www\./, '') }
+    } catch {
+      return null
+    }
+  }, [])
+
   const printIdle = dark
     ? { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }
     : { background: 'white', border: '1px solid #E5E7EB' }
-  const pct = form.workPct || {}
   const trades = form.subTrades || []
   // Everything ticked on Coverage Customization, which is where the covers
   // are actually chosen now.
@@ -297,12 +313,6 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                     <Row label="Trades" value={[...trades, form.subTradesOther].filter(Boolean).join(', ')} />
                   </Panel>
 
-                  <Panel title="Work Breakdown" icon="doc">
-                    {[...STRUCTURE_TYPES, ...CONSTRUCTION_TYPES]
-                      .filter(r => pct[r.key])
-                      .map(r => <Row key={r.key} label={r.label} value={`${pct[r.key]}%`} />)}
-                  </Panel>
-
                   <Panel title="Optional Coverages" icon="shield">
                     {picked.length === 0
                       ? <Row label="Selected" value="None" />
@@ -315,18 +325,6 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                               : 'Yes'}
                           />
                         ))}
-                  </Panel>
-
-                  <Panel title="General Questions" icon="clock">
-                    <Row label="Works Out of State" value={yesNo(form.worksOutOfState)} />
-                    {form.worksOutOfState === 'yes' && <Row label="States" value={form.outOfStateList} />}
-                    <Row label="Other Entity" value={yesNo(form.otherEntity)} />
-                    {form.otherEntity === 'yes' && <Row label="Other Entity Detail" value={form.otherEntityDetail} />}
-                    <Row label="Prior Claims" value={yesNo(form.priorClaims)} />
-                    <Row
-                      label="Disclosures"
-                      value={(form.disclosures || {}).none ? 'None' : Object.values(form.disclosures || {}).filter(Boolean).length || ''}
-                    />
                   </Panel>
 
                   {/* The eligibility step was missing from the receipt
@@ -353,17 +351,20 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
       <CrossSell dark={dark} />
 
       {/* Builder's Risk closes on this rather than a button: the jungle banner
-          back to Norbielink. */}
+          out. It names wherever the submission came in from. */}
       <div
         className="screen-only rounded-2xl relative cursor-pointer hover:opacity-95 transition overflow-hidden mb-8"
-        onClick={onStartOver}
+        onClick={() => (cameFrom ? window.location.assign(cameFrom.href) : onStartOver && onStartOver())}
         style={{ minHeight: 100 }}
       >
         <img src={sellMoreBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
         <div className="px-8 py-6 relative z-10">
           <p className="text-lg font-bold mb-1" style={{ color: '#111827' }}>Return to the Jungle?</p>
           <p className="text-xs text-gray-400">
-            Head back to <span className="font-semibold text-gradient underline underline-offset-2">Norbielink</span>
+            Head back to{' '}
+            <span className="font-semibold text-gradient underline underline-offset-2">
+              {cameFrom ? cameFrom.host : 'Norbielink'}
+            </span>
           </p>
         </div>
       </div>
