@@ -1,24 +1,46 @@
 import iconWorkersComp from '../assets/icon-workers-comp.png'
+import iconBuildersRisk from '../assets/icon-builders-risk.png'
+import iconBusinessOwners from '../assets/icon-business-owners.png'
 
 // The cross-sell block Commercial Auto closes its submission on, brought over
-// to the receipt. The pitch is the prefill: the client's details are already
-// on file, so the next product is minutes rather than another intake.
+// to the receipt. Every product in the house runs the same three rows and
+// drops whichever one the customer has just bought — Builder's Risk offers
+// GL, WC and BOP; this one has just sold the GL, so Builder's Risk takes its
+// place and its toolbox.
 //
-// `price` is Commercial Auto's own demo figure for the same product. Nothing
-// here rates workers' compensation, so it is a stand-in and has to be
-// replaced before this goes in front of anyone who would act on it.
+// Only workers' compensation came out of the meeting. The other two are house
+// products picked so the block has the three rows the pattern expects; each
+// is one line to swap, including for Access once I know what it is.
+//
+// The prices are the house's own demo figures, carried across every product.
+// Nothing here rates any of them, so they are stand-ins and have to go before
+// this reaches anyone who would act on them.
 const PRODUCTS = [
   {
     name: "Workers' Compensation",
-    desc: 'Required coverage for employees',
+    desc: 'Required coverage for the crew',
     price: '$1,200/year',
     badge: 'TOP PICK',
     icon: iconWorkersComp,
   },
+  {
+    name: "Builder's Risk",
+    desc: 'Cover the projects themselves — materials and work in progress',
+    price: '$850/year',
+    badge: 'RECOMMENDED',
+    badgeColor: '#73C9B7',
+    icon: iconBuildersRisk,
+  },
+  {
+    name: 'Business Owners Policy',
+    desc: 'Bundle the office and its property, and save',
+    price: '$450/year',
+    badge: 'BEST VALUE',
+    badgeColor: '#73C9B7',
+    icon: iconBusinessOwners,
+  },
 ]
 
-// Commercial Auto tints the icon tile with the brand rather than a neutral,
-// in both themes. These are its values.
 const ICON_TILE = { light: 'rgba(92,46,212,0.06)', dark: 'rgba(92,46,212,0.15)' }
 
 function Bolt() {
@@ -75,7 +97,12 @@ export default function CrossSell({ onQuote, dark = false }) {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
                   <p className="text-sm font-bold text-navy leading-tight">{item.name}</p>
-                  <span className="btn-gradient text-[8px] font-bold px-1.5 py-0.5 rounded-md text-white shrink-0">
+                  {/* The lead product wears the brand gradient; the rest
+                      take the house teal, as they do everywhere else. */}
+                  <span
+                    className={`text-[8px] font-bold px-1.5 py-0.5 rounded-md text-white shrink-0 ${item.badgeColor ? '' : 'btn-gradient'}`}
+                    style={item.badgeColor ? { background: item.badgeColor } : undefined}
+                  >
                     {item.badge}
                   </span>
                 </div>
