@@ -232,7 +232,7 @@ export default function ApplicationFlow({
         // reader is still up in the statements the button waits.
         // Nothing is submitted mid-rate-call either.
         submitDisabled: pricing || (stage === 'form' && activeStep === 'eligibility'),
-        submitHint: pricing ? 'Pricing your cover…' : 'Read through the eligibility statements first.',
+        submitHint: pricing ? '' : 'Read through the eligibility statements first.',
       }}
       summaryReady
       // Legacy offers the quote alongside the coverage, and the application
@@ -297,10 +297,10 @@ export default function ApplicationFlow({
           role="status"
           aria-live="polite"
         >
-          <div className="w-[260px] h-[260px]">
+          <div className="w-[190px] h-[190px]">
             <NorbieLoader dark={railExtras?.dark} />
           </div>
-          <p className="text-[13px] font-semibold -mt-4" style={{ color: 'var(--ink-2)' }}>
+          <p className="text-[13px] font-semibold -mt-2" style={{ color: 'var(--ink-2)' }}>
             Pricing your cover…
           </p>
         </div>

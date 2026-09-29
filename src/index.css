@@ -141,7 +141,15 @@ html[data-dark="true"] .cb-info-pop-close {
    figures visibly belong to an answer that is still being priced. It stops the
    moment the new price lands. The button's own pulse is separate: that one
    means the coverage is ready to submit. */
-.pb-pricing { position: relative; overflow: hidden; border-color: transparent !important; }
+/* Lifted over the blocking overlay while it runs, so the sweep is visible and
+   the card is plainly the thing being waited on. Both stop together. */
+.pb-pricing {
+  position: relative;
+  overflow: hidden;
+  border-color: transparent !important;
+  z-index: 80;
+  pointer-events: none;
+}
 .pb-pricing::before {
   content: '';
   position: absolute;
@@ -152,7 +160,7 @@ html[data-dark="true"] .cb-info-pop-close {
      not on reads as a normal border rather than a gap. */
   background-color: var(--line);
   background-image: conic-gradient(from 0turn, transparent 0 60%, #5C2ED4 78%, #E879F9 90%, transparent 97%);
-  animation: pbOrbit 3.2s linear infinite;
+  animation: pbOrbit 1.6s linear infinite;
 }
 .pb-pricing::after {
   content: '';

@@ -19,14 +19,18 @@ const SPHERE_RADIUS = 280
 const FLOAT = { speed: 0.0012, range: 15 }
 const BEAM = { length: 500, spread: 1.6, startOpacity: 0.5, swingFactor: 15 }
 
-// Where the head looks, and how long it holds each look.
+// Where the head looks, and how long it holds each look. The studies took
+// about six seconds to come round; a rate call is over long before that, so
+// the circuit is paced to finish inside one — a loader nobody sees complete
+// reads as a loader that is stuck.
+const EASE = 0.3
 const LOOK_SEQUENCE = [
-  { x: 0, y: 0, wait: 60 },
-  { x: -40, y: -40, wait: 60 },
-  { x: 40, y: -40, wait: 60 },
-  { x: 40, y: 40, wait: 50 },
-  { x: -40, y: 40, wait: 50 },
-  { x: 0, y: 0, wait: 40 },
+  { x: 0, y: 0, wait: 4 },
+  { x: -40, y: -40, wait: 4 },
+  { x: 40, y: -40, wait: 4 },
+  { x: 40, y: 40, wait: 4 },
+  { x: -40, y: 40, wait: 4 },
+  { x: 0, y: 0, wait: 3 },
 ]
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -41,7 +45,7 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath()
 }
 
-export default function NorbieLoader({ dark = false, scale = 0.2, className = '' }) {
+export default function NorbieLoader({ dark = false, scale = 0.13, className = '' }) {
   const canvasRef = useRef(null)
   const darkRef = useRef(dark)
   darkRef.current = dark
@@ -84,8 +88,8 @@ export default function NorbieLoader({ dark = false, scale = 0.2, className = ''
       const target = LOOK_SEQUENCE[step]
       const dx = target.x - lookX
       const dy = target.y - lookY
-      lookX += dx * 0.04
-      lookY += dy * 0.04
+      lookX += dx * EASE
+      lookY += dy * EASE
       if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && ++waited > target.wait) {
         step = (step + 1) % LOOK_SEQUENCE.length
         waited = 0
