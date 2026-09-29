@@ -349,11 +349,27 @@ export default function App() {
     setAppReturn({ stage: 'bind', step: 'bind', submitted: true })
   }
 
+  // The two ways a submission can go, each parked on the coverage step with
+  // everything else answered — one click on Submit shows which one it is.
+  const demoFlow = (referred) => () => {
+    demoApplication()
+    setForm(f => ({
+      ...f,
+      agreeTerms: referred ? 'no' : 'yes',
+      agreeExplanation: referred
+        ? 'The applicant performs occasional work above the stated receipts threshold and asks for a review.'
+        : '',
+    }))
+    setAppReturn({ stage: 'form', step: 'coverage' })
+  }
+
   const demoJumps = [
     { key: 'landing', label: 'Landing', go: startOver },
     { key: 'form', label: 'Form', go: demoForm },
     { key: 'indication', label: 'Indication', go: demoIndication },
     { key: 'application', label: 'Application', go: demoApplication },
+    { key: 'flow-approved', label: 'Flow 1 · Approved', go: demoFlow(false) },
+    { key: 'flow-referred', label: 'Flow 2 · Referred', go: demoFlow(true) },
     { key: 'submitted', label: 'Submitted', go: demoSubmitted },
   ]
 

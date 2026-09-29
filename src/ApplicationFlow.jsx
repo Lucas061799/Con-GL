@@ -2,7 +2,7 @@ import { useState, useMemo, useRef, useEffect } from 'react'
 import ApplicationShell from './components/ApplicationShell'
 import Section from './components/Section'
 import { BRAND_GRADIENT } from './components/FormField'
-import { QuoteApproved } from './components/QuoteHandoff'
+import { QuoteApproved, QuoteReferred } from './components/QuoteHandoff'
 import { rulesForCodes, needsUnderwriterReview } from './data/conditionalQuestions'
 import { ALL_STEPS, APPLICATION_STEPS, STAGE_OF, isIntakeStep } from './data/flowSteps'
 import { applicationMissing } from './lib/applicationValidation'
@@ -26,6 +26,7 @@ export default function ApplicationFlow({
   const [stage, setStage] = useState(resumeAt?.stage ?? 'form')
   const [submitted, setSubmitted] = useState(!!resumeAt?.submitted)
   const [approved, setApproved] = useState(false)
+  const [referred, setReferred] = useState(false)
   const [preview, setPreview] = useState(false)
   // Errors belong to the page you have actually tried to submit — arriving on
   // the payment page should not flag choices you have not reached yet.
@@ -267,7 +268,14 @@ export default function ApplicationFlow({
           form={form}
           rows={rows}
           onClose={() => setPreview(false)}
-          onSubmit={() => { setPreview(false); setApproved(true) }}
+          // Submitting the application is where it gets approved or referred.
+          // A referral never reaches the payment and bind steps — an
+          // underwriter has it, and the receipt says so.
+          onSubmit={() => {
+            setPreview(false)
+            if (underwriterReview) setReferred(true)
+            else setApproved(true)
+          }}
         />
       )}
 
@@ -276,6 +284,14 @@ export default function ApplicationFlow({
           quote={quote}
           onContinue={() => { setApproved(false); jumpTo('review') }}
           onDismiss={() => setApproved(false)}
+        />
+      )}
+
+      {referred && (
+        <QuoteReferred
+          quote={quote}
+          onContinue={() => { setReferred(false); setSubmitted(true) }}
+          onDismiss={() => setReferred(false)}
         />
       )}
     </ApplicationShell>

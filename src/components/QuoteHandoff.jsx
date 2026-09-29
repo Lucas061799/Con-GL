@@ -25,6 +25,24 @@ export function QuoteApproved({ quote, onContinue, onDismiss }) {
   )
 }
 
+// The other outcome of that same submit: an underwriter has to look at it, so
+// there is no payment and no bind to go on to.
+export function QuoteReferred({ quote, onContinue, onDismiss }) {
+  return (
+    <Modal title="YOUR SUBMISSION HAS BEEN REFERRED" width={540} onDismiss={onDismiss} footer={
+      <>
+        <span />
+        <ModalButton onClick={onContinue}>Continue</ModalButton>
+      </>
+    }>
+      <p className="text-[14px] text-gray-600 leading-relaxed">
+        {quote?.carrier ?? 'The carrier'} needs an underwriter to look at this one before it can
+        be quoted. You&rsquo;ll hear back from us shortly — there is nothing else to do here.
+      </p>
+    </Modal>
+  )
+}
+
 export function QuoteReady({ quote, onGo, onCancel }) {
   return (
     <Modal title="YOUR QUOTE IS READY" onDismiss={onCancel} footer={

@@ -210,7 +210,9 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                 </div>
                 <div className="text-right">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                    Total Due
+                    {/* Nothing is due on a referral — the underwriter has not
+                        priced it yet, so the figure is still an indication. */}
+                    {outcome === 'review' ? 'Indicated Total' : 'Total Due'}
                   </div>
                   <div className="text-xl font-bold" style={{ color: 'var(--ink)' }}>{formatUSD(totalDue)}</div>
                 </div>
