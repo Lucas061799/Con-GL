@@ -53,11 +53,13 @@ function CarrierRow({ quote, terms, onTermsChange, selected, best, onSelect }) {
 
   return (
     <div
-      className="rounded-lg overflow-hidden transition"
+      className={`rounded-lg overflow-hidden transition ${selected ? 'edge-brand' : ''}`}
       style={{
         background: 'var(--surface-card)',
-        border: `1.5px solid ${selected || best ? '#7C3AED' : 'var(--line)'}`,
-        boxShadow: selected || best ? '0 2px 12px rgba(92,46,212,0.12)' : 'none',
+        borderWidth: 1.5,
+        borderStyle: 'solid',
+        ...(selected ? {} : { borderColor: 'var(--line)' }),
+        boxShadow: selected ? '0 2px 12px rgba(92,46,212,0.12)' : 'none',
       }}
     >
       <div className="px-4 py-3.5 cursor-pointer" onClick={() => setOpen(o => !o)}>

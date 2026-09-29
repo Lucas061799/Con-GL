@@ -83,6 +83,10 @@ html[data-dark="true"] .cc-row:hover { background: rgba(255,255,255,0.04); }
 .pay-rec { border: 1.5px solid rgba(92,46,212,0.40); }
 html[data-dark="true"] .pay-rec { border-color: rgba(167,139,250,0.50); }
 
+/* A card edge that marks the chosen one — same reasoning as .yn-on below. */
+.edge-brand { border-color: #7C3AED; }
+html[data-dark="true"] .edge-brand { border-color: #A78BFA; }
+
 /* Selected states that were painted in the deep brand purple: legible on
    white, all but invisible on navy, so dark takes the light pair. */
 .yn-on {

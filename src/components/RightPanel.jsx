@@ -50,7 +50,7 @@ const COMPARE_STEPS = [
 // you are in the hand-off.
 function WhereYouAre({ activeIndex }) {
   return (
-    <div className="mb-6">
+    <div className="mt-5">
       <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-400 mb-4 pl-0.5">
         Where you are
       </div>
@@ -100,9 +100,10 @@ export default function RightPanel({
     : { background: '#FAFAFB', color: '#9CA3AF', border: '1px solid #E5E7EB' }
   const hasQuotes = quotes.length > 0
   const chosen = quotes.find(q => q.id === selectedCarrier)
-  // On the comparison page the rail echoes the one being looked at; in the
-  // intake it lists them all, the same size.
-  const top = inCompare ? (chosen ?? quotes[0]) : quotes[0]
+  // The rail only promotes a carrier once one has been chosen. Until then —
+  // through the whole quick quote and the indication page's first look — it
+  // lists them all, the same size.
+  const hero = inCompare && chosen
 
   return (
     <aside
@@ -146,20 +147,19 @@ export default function RightPanel({
             {/* On the application the rail carries the premium breakdown where
                 the quote card sits during the quick quote. */}
             {premium && <PremiumBreakdown {...premium} dark={dark} />}
-            {/* No best-choice badge any more, so no hero card either. The
-                rail is a price preview while the quick quote is filled in —
-                two compact rows — the same shape as the placeholders they
-                replace — with nothing picked; the carrier is chosen on the
-                indication page. */}
+            {/* No best-choice badge any more, so no hero card until one is
+                picked: until then the rail is a price preview, two compact
+                rows in the shape of the placeholders they replace. Choosing
+                a carrier is what promotes it to the tall card. */}
             {!premium && (
-              <div className={inCompare ? '' : 'space-y-2'}>
-                {(inCompare ? [top] : quotes).map(q => {
-                  const isSelected = inCompare && selectedCarrier === q.id
+              <div className={hero ? '' : 'space-y-2'}>
+                {(hero ? [chosen] : quotes).map(q => {
+                  const isSelected = selectedCarrier === q.id
                   // Once the carrier can no longer be changed there is no
                   // handler, and a card that hovers and lifts claims otherwise.
-                  const pickable = inCompare && typeof onSelectCarrier === 'function'
+                  const pickable = hero && typeof onSelectCarrier === 'function'
                   const Tag = pickable ? 'button' : 'div'
-                  if (!inCompare) {
+                  if (!hero) {
                     return (
                       <div
                         key={q.id}
@@ -196,8 +196,8 @@ export default function RightPanel({
                       }`}
                       style={{
                         background: idleFill,
-                        border: `1.5px solid ${isSelected ? (dark ? 'rgba(124,58,237,0.55)' : '#5C2ED4') : idleLine}`,
-                        boxShadow: isSelected ? '0 6px 24px rgba(92,46,212,0.22)' : 'none',
+                        border: `1.5px solid ${isSelected ? (dark ? '#A78BFA' : '#5C2ED4') : idleLine}`,
+                        boxShadow: isSelected ? (dark ? '0 6px 24px rgba(167,139,250,0.28)' : '0 6px 24px rgba(92,46,212,0.22)') : 'none',
                       }}
                     >
                       {isSelected && (

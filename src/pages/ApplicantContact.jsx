@@ -141,7 +141,7 @@ const ApplicantContact = forwardRef(function ApplicantContact({ form, set, error
                 value={form.licenseNumber || ''}
                 onChange={(e) => set('licenseNumber')(e.target.value)}
                 placeholder="License or app. fee number"
-                className="w-full border border-gray-200 rounded-lg pl-3.5 pr-10 py-2.5 text-sm text-gray-800 placeholder-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/10 focus:border-[#7C3AED]/40 hover:border-gray-300 transition-all"
+                className="w-full border border-gray-200 rounded-lg pl-3.5 pr-10 py-2.5 text-sm text-gray-800 placeholder-gray-300 field-fill focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/10 focus:border-[#7C3AED]/40 hover:border-gray-300 transition-all"
               />
               <button
                 type="button"

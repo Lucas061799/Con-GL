@@ -221,10 +221,10 @@ function CheckMark({ id }) {
   )
 }
 
-const triggerCls = 'w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg border text-sm text-left transition-all'
+const triggerCls = 'w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg border text-sm text-left transition-all field-fill'
 
+// No background here: .field-fill gives every control on the page one fill.
 const triggerStyle = (open, error, hasValue) => ({
-  background: 'var(--surface-card)',
   borderColor: error ? '#FCA5A5' : open ? '#7C3AED' : 'var(--line)',
   boxShadow: error ? '0 0 0 2px rgba(252,165,165,0.3)' : open ? '0 0 0 2px rgba(124,58,237,0.1)' : 'none',
   color: hasValue ? 'var(--ink)' : '#9CA3AF',
@@ -716,9 +716,9 @@ export function Checkbox({ label, checked, onChange, className = '' }) {
       className={`flex items-center gap-2.5 cursor-pointer select-none ${className}`}
     >
       <span
-        className="w-[18px] h-[18px] rounded-[5px] flex items-center justify-center shrink-0 transition-all"
+        className={`w-[18px] h-[18px] rounded-[5px] flex items-center justify-center shrink-0 transition-all ${checked ? '' : 'field-fill'}`}
         style={{
-          background: checked ? BRAND_GRADIENT : 'var(--surface-card)',
+          ...(checked ? { background: BRAND_GRADIENT } : {}),
           border: checked ? 'none' : '1.5px solid var(--line-strong)',
         }}
       >

@@ -78,7 +78,7 @@ const ClassificationsStep = forwardRef(function ClassificationsStep(
         <div className="flex items-center justify-end gap-3 mt-5">
           <span className="text-[13px] font-bold text-navy">Total:</span>
           <div
-            className="w-[140px] rounded-lg px-3.5 py-2.5 text-sm font-bold flex items-center justify-between bg-white"
+            className="w-[140px] rounded-lg px-3.5 py-2.5 text-sm font-bold flex items-center justify-between field-fill"
             style={{
               boxShadow: total === 100 ? '0 0 0 1px var(--line)' : '0 0 0 1.5px #FCA5A5',
               color: total === 100 ? 'var(--ink)' : '#EF4444',

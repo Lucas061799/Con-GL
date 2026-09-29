@@ -287,9 +287,12 @@ export default function App() {
     startApplication({ form: DEMO_INTAKE, quotes: rateAll(DEMO_INTAKE) }, true)
   }
 
-  // Leaves the application too, or a jump from phase two lands nowhere.
+  // Leaves the application too, or a jump from phase two lands nowhere. The
+  // carrier goes with it: the choice belonged to the application just left,
+  // so the indication page is reached with nothing picked.
   const leaveApplication = () => {
     setInApplication(false)
+    setSelectedCarrier(null)
     setApplicationNumber('')
     setAppFiles([])
     setAppReturn({ stage: 'form', step: 'eligibility' })
