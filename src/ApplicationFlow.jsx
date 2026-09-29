@@ -59,7 +59,10 @@ export default function ApplicationFlow({
 
   /* ── Validation ─────────────────────────────────────────────────── */
 
-  const missingBySection = useMemo(() => applicationMissing(form, files), [form, files])
+  const missingBySection = useMemo(
+    () => applicationMissing(form, files, rows.map(r => r.code).filter(Boolean)),
+    [form, files, rows],
+  )
 
   // The rail's eight: the intake's four came in done, and these four answer
   // for themselves.

@@ -1,22 +1,21 @@
 import { forwardRef } from 'react'
 import {
-  CurrencyInput, Input, Select, DateInput, TreeSelect, Textarea, PercentInput,
+  CurrencyInput, Input, Select, DateInput, TreeSelect, PercentInput,
   ToggleQuestion, InfoTip,
 } from '../components/FormField'
 import Section, { FieldGroup, QuestionCard } from '../components/Section'
 import { FIELD_HELP } from '../data/fieldHelp'
 import { ENTITY_TYPES } from '../data/applicantOptions'
 import { YEARS_OF_EXPERIENCE, YEARS_IN_BUSINESS, PRIOR_INSURANCE_TREE, PRIOR_INSURANCE_LEAVES } from '../data/intakeOptions'
-import { rulesForCodes, subKey, needsUnderwriterReview } from '../data/conditionalQuestions'
 
 // Business Operations, following the legacy step: the business itself, then
 // its experience, then the exposure figures and the three branching questions.
+//
+// The questions a class code pulls in are not here: this screen is part of
+// shopping the market, and those belong to whichever carrier is chosen.
 const BusinessOperations = forwardRef(function BusinessOperations(
-  { form, set, errorFor, splitTotal, classCodes = [], footer }, ref
+  { form, set, errorFor, splitTotal, footer }, ref
 ) {
-  // Trades on the submission decide which underwriting questions apply.
-  const rules = rulesForCodes(classCodes)
-  const underwriterReview = needsUnderwriterReview(rules, form)
 
   return (
     <Section ref={ref} id="operations" title="Business Operations">
@@ -184,52 +183,6 @@ const BusinessOperations = forwardRef(function BusinessOperations(
           </ToggleQuestion>
         </QuestionCard>
       </>
-
-      {rules.length > 0 && (
-        <>
-          {rules.map(rule => (
-            <QuestionCard key={rule.id}>
-              <ToggleQuestion
-                label={rule.question}
-                value={form[rule.id]}
-                onChange={set(rule.id)}
-              >
-                {rule.sub.type === 'yesno' ? (
-                  <ToggleQuestion
-                    label={rule.sub.question}
-                    value={form[subKey(rule)]}
-                    onChange={set(subKey(rule))}
-                  />
-                ) : (
-                  <Textarea
-                    label={rule.sub.question} required
-                    rows={2}
-                    value={form[subKey(rule)]} onChange={set(subKey(rule))}
-                    placeholder="Add the details here."
-                    error={errorFor(subKey(rule))}
-                  />
-                )}
-              </ToggleQuestion>
-            </QuestionCard>
-          ))}
-
-          {underwriterReview && (
-            <div
-              className="rounded-xl p-4 flex items-start gap-3"
-              style={{ background: 'rgba(92,46,212,0.05)', border: '1px solid rgba(92,46,212,0.18)' }}
-            >
-              <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" stroke="#5C2ED4" strokeWidth="1.8" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="9" /><path d="M12 8v5" strokeLinecap="round" /><circle cx="12" cy="16.5" r="0.6" fill="#5C2ED4" />
-              </svg>
-              <p className="text-[12.5px] text-gray-600 leading-relaxed">
-                <span className="font-bold text-navy">This submission needs underwriter review.</span>{' '}
-                High value home work above the 15% threshold can't be bound automatically — an
-                underwriter will pick it up after you submit.
-              </p>
-            </div>
-          )}
-        </>
-      )}
 
       {/* The step's own action, inside the section — where Commercial Auto and
           GL-BOP keep theirs, rather than floating below every section. */}

@@ -1,7 +1,9 @@
 // What the application is still missing, by step. It lives here rather than in
 // ApplicationFlow because the intake's rail shows the application's steps too,
 // and both sides have to agree on which are done.
-export function applicationMissing(form = {}, files = []) {
+import { rulesForCodes, subKey } from '../data/conditionalQuestions'
+
+export function applicationMissing(form = {}, files = [], codes = []) {
   const blank = (k) => !String(form[k] ?? '').trim()
   const words = (k) => String(form[k] ?? '').trim().split(/\s+/).filter(Boolean).length
   const out = { eligibility: [], coverage: [], review: [], bind: [] }
@@ -10,6 +12,12 @@ export function applicationMissing(form = {}, files = []) {
   // Both free-text answers carry the legacy ten-word minimum.
   if (form.agreeTerms === 'no' && words('agreeExplanation') < 10) out.eligibility.push('agreeExplanation')
   if (words('operationsDescription') < 10) out.eligibility.push('operationsDescription')
+  // Every trade question the chosen classes pull in has to be answered, and a
+  // yes needs its follow-up too.
+  rulesForCodes(codes).forEach(rule => {
+    if (blank(rule.id)) out.eligibility.push(rule.id)
+    else if (form[rule.id] === 'yes' && blank(subKey(rule))) out.eligibility.push(subKey(rule))
+  })
 
   out.coverage.push(...['ccDeductible', 'ccGlLimits', 'ccDamagesToPremises', 'ccMedicalLimit'].filter(blank))
   // The tools cover needs its claims question answered, and a limit unless

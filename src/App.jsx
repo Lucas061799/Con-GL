@@ -12,7 +12,6 @@ import { APP_LIMITS, APP_DEDUCTIBLES } from './data/applicationOptions'
 import { todayMDY, BRAND_GRADIENT } from './components/FormField'
 import { rateAll } from './lib/rating'
 import { defaultTermsFor } from './data/carrierTerms'
-import { rulesForCodes, subKey } from './data/conditionalQuestions'
 import DemoBar from './demo/DemoBar'
 import { useDarkMode } from './theme'
 import { DEMO_INTAKE, demoPhaseOne, demoPhaseTwo } from './demo/demoData'
@@ -153,15 +152,9 @@ export default function App() {
     if (!blank('legalName') && form.legalName.trim().length < 5) operations.push('legalName')
     if (form.hasEmployees === 'yes') operations.push(...['employeeCount', 'employeePayroll'].filter(blank))
     if (form.hiresSubs === 'yes') operations.push(...['subContractingCosts', 'subDwellingPct'].filter(blank))
-    // Every trade question that applies has to be answered, and a yes needs
-    // its follow-up too.
-    rulesForCodes(classifications.map(r => r.code).filter(Boolean)).forEach(rule => {
-      if (blank(rule.id)) operations.push(rule.id)
-      else if (form[rule.id] === 'yes' && blank(subKey(rule))) operations.push(subKey(rule))
-    })
 
     return { applicant, operations }
-  }, [form, classifications])
+  }, [form])
 
   const classificationsValid =
     classifications.every(r => r.code) &&
@@ -177,7 +170,7 @@ export default function App() {
 
   // The rail lists the application's steps here too, so it has to know how far
   // they are — the same check the application itself runs.
-  const appMissing = useMemo(() => applicationMissing(form, appFiles), [form, appFiles])
+  const appMissing = useMemo(() => applicationMissing(form, appFiles, classCodes), [form, appFiles, classCodes])
   const completed = {
     ...intakeCompleted,
     eligibility: !!applicationNumber && appMissing.eligibility.length === 0,
@@ -465,7 +458,6 @@ export default function App() {
           <BusinessOperations
             ref={sectionRefs.operations}
             form={form} set={set} errorFor={errorFor} splitTotal={splitTotal}
-            classCodes={classCodes}
             footer={
               <button
                 type="button"
