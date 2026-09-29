@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { BRAND_GRADIENT } from '../../components/FormField'
 import sellMoreBg from '../../assets/sell-more-bg.png'
 import Confetti from '../../components/Confetti'
+import CrossSell from '../../components/CrossSell'
 import CarrierMark from '../../components/CarrierMark'
 import { formatUSD } from '../../lib/rating'
 import { CARRIER_TERMS } from '../../data/carrierTerms'
@@ -346,6 +347,10 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
               </div>
             </div>
           </div>
+
+      {/* Commercial Auto closes its submission on the cross-sell, above the
+          banner out. Same place here. */}
+      <CrossSell />
 
       {/* Builder's Risk closes on this rather than a button: the jungle banner
           back to Norbielink. */}
