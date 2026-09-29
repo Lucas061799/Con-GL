@@ -7,6 +7,7 @@ import { rulesForCodes, needsUnderwriterReview } from './data/conditionalQuestio
 import { ALL_STEPS, APPLICATION_STEPS, STAGE_OF, isIntakeStep } from './data/flowSteps'
 import { applicationMissing } from './lib/applicationValidation'
 import { PRICED_KEYS } from './data/coverageOptions'
+import NorbieLoader from './components/NorbieLoader'
 import EligibilityStatements from './pages/application/EligibilityStatements'
 import CoverageCustomization from './pages/application/CoverageCustomization'
 import ReviewSelectPayment from './pages/application/ReviewSelectPayment'
@@ -283,6 +284,27 @@ export default function ApplicationFlow({
           <ApplicationSummary form={form} rows={rows} />
         )}
       </div>
+
+      {/* The rate call blocks the screen, the way the current system's spinner
+          does — one answer in flight at a time. */}
+      {pricing && (
+        <div
+          className="fixed inset-0 z-[70] flex flex-col items-center justify-center"
+          style={{
+            background: railExtras?.dark ? 'rgba(19,22,41,0.82)' : 'rgba(255,255,255,0.82)',
+            backdropFilter: 'blur(3px)',
+          }}
+          role="status"
+          aria-live="polite"
+        >
+          <div className="w-[260px] h-[260px]">
+            <NorbieLoader dark={railExtras?.dark} />
+          </div>
+          <p className="text-[13px] font-semibold -mt-4" style={{ color: 'var(--ink-2)' }}>
+            Pricing your cover…
+          </p>
+        </div>
+      )}
 
       {preview && (
         <ApplicationPreview
