@@ -218,7 +218,6 @@ export default function ApplicationFlow({
       downloadLabel={stage === 'form' ? 'Download Quick Quote' : 'Download Application Summary'}
       onFormReview={() => setTimeout(() => window.print(), 50)}
       scrollRef={scrollRef}
-      bare
     >
       {steps.filter(s => STAGE_OF[s.key] === stage).map(s => (
         <Section
@@ -228,27 +227,28 @@ export default function ApplicationFlow({
           ref={el => { sectionRefs.current[s.key] = el }}
         >
           {pages[s.key]}
+
+          {/* The step's own action, inside the step and sized like the one
+              that ends the intake — it was floating below every section, out
+              of line with the content column. */}
+          {s.key === 'bind' && (
+            <button
+              type="button"
+              onClick={submit}
+              className="inline-flex items-center gap-2 px-7 py-2.5 rounded-xl text-sm font-semibold text-white transition hover:opacity-90"
+              style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.25)' }}
+            >
+              {/* Not "submit" — the application went in at the end of the
+                  coverage. This asks the carrier to bind, and nothing is bound
+                  until the insured signs or the signed copy comes back. */}
+              {underwriterReview ? 'Submit for Underwriter Review' : 'Request to Bind'}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
+          )}
         </Section>
       ))}
-
-      {stage === 'bind' && (
-      <div className="px-4 md:px-10 pb-10 flex justify-start">
-        <button
-          type="button"
-          onClick={submit}
-          className="flex items-center gap-2 px-8 py-3 rounded-xl text-[13.5px] font-bold text-white transition hover:opacity-90"
-          style={{ background: BRAND_GRADIENT, boxShadow: '0 4px 14px rgba(92,46,212,0.22)' }}
-        >
-          {/* Not "submit" — the application went in at the end of the coverage.
-              This asks the carrier to bind, and nothing is bound until the
-              insured signs or the signed copy comes back. */}
-          {underwriterReview ? 'Submit for Underwriter Review' : 'Request to Bind'}
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
-      )}
 
       {/* Print target for the rail's download. The first page hands over the
           quote; the payment page hands over the application itself. */}

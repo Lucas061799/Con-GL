@@ -11,7 +11,7 @@ export default function ApplicationShell({
   submissionNumber, steps, activeStep, completed, onStepClick,
   progress,
   quote, quoteAmount, onFormReview, summaryReady = false, submitted = false,
-  bare = false, scrollRef, railExtras, premium, downloadLabel,
+  scrollRef, railExtras, premium, downloadLabel,
   children,
 }) {
   // The rail follows the applicant across the hand-off — same quote, same
@@ -61,9 +61,7 @@ export default function ApplicationShell({
         )}
 
         <main ref={scrollRef} className="flex-1 min-w-0 overflow-y-auto custom-scroll">
-          <div className={`mx-auto max-w-5xl 2xl:max-w-6xl ${
-            bare ? '' : 'px-4 md:px-10 py-6 md:py-8 space-y-6 md:space-y-8'
-          }`}>
+          <div className="mx-auto max-w-5xl 2xl:max-w-6xl px-4 md:px-10 py-6 md:py-8 space-y-6 md:space-y-8">
             {children}
           </div>
         </main>
