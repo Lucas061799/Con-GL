@@ -19,18 +19,17 @@ const SPHERE_RADIUS = 280
 const FLOAT = { speed: 0.0012, range: 15 }
 const BEAM = { length: 500, spread: 1.6, startOpacity: 0.5, swingFactor: 15 }
 
-// Where the head looks, and how long it holds each look. The studies took
-// about six seconds to come round; a rate call is over long before that, so
-// the circuit is paced to finish inside one — a loader nobody sees complete
-// reads as a loader that is stuck.
-const EASE = 0.2
+// Where the head looks, and how long it holds each look — the studies' own
+// pace, unhurried. A rate call ends part way round, which is fine: the loop
+// reads as looking about, not as a progress bar that must reach the end.
+const EASE = 0.04
 const LOOK_SEQUENCE = [
-  { x: 0, y: 0, wait: 7 },
-  { x: -40, y: -40, wait: 7 },
-  { x: 40, y: -40, wait: 7 },
-  { x: 40, y: 40, wait: 6 },
-  { x: -40, y: 40, wait: 6 },
-  { x: 0, y: 0, wait: 5 },
+  { x: 0, y: 0, wait: 60 },
+  { x: -40, y: -40, wait: 60 },
+  { x: 40, y: -40, wait: 60 },
+  { x: 40, y: 40, wait: 50 },
+  { x: -40, y: 40, wait: 50 },
+  { x: 0, y: 0, wait: 40 },
 ]
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -95,9 +94,12 @@ export default function NorbieLoader({ dark = false, scale = 0.1, className = ''
         waited = 0
       }
 
-      // Shadow on the ground, heavier as he sinks.
+      // Shadow on the ground — a fixed spot just under the sphere, so the head
+      // rises and falls against it. Measured from the body, not the canvas:
+      // scaled down far enough, a fixed offset lands inside the head and the
+      // shadow disappears behind it.
       ctx.save()
-      ctx.translate(centerX, centerY + 180 * scale)
+      ctx.translate(centerX, centerY + (50 + SPHERE_RADIUS * 1.12) * scale)
       ctx.scale(scale, scale)
       const sink = (floatY + FLOAT.range) / (FLOAT.range * 2)
       ctx.scale(1 + sink * 0.2, 1 + sink * 0.2)
