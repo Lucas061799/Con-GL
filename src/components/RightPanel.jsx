@@ -240,7 +240,10 @@ export default function RightPanel({
 
             {/* The application's own rail already lists the steps, so the
                 two-step summary only belongs on the indication page. */}
-            {inCompare && !premium && <WhereYouAre activeIndex={compareStep ?? (selectedCarrier ? 1 : 0)} />}
+            {/* Picking a carrier finishes step one, it does not start step
+                two — that happens on Go to Quote, and the application passes
+                its own step in. */}
+            {inCompare && !premium && <WhereYouAre activeIndex={compareStep ?? 0} />}
 
             {/* Answers that move the price were edited — prices stay blank
                 until the applicant asks for a fresh set. */}
