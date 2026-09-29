@@ -114,20 +114,19 @@ export function RailFooter({ dark = false, onToggleDark, demoJumps, demoActive, 
       )}
 
       {/* In the rail it is furniture and can afford two lines. Floating on the
-          receipt there is no rail around it, and the two-line card read as a
-          piece of one that had been taken away — so there it takes Quick
-          Jump's shape exactly: same chip, same glass, same icon slot, so the
-          labels line up and the two read as a deliberate pair. */}
+          receipt there is no rail around it, and a full-width card read as a
+          piece of one that had been taken away — so there it shrinks to the
+          avatar alone, the shape a page of its own gives an assistant. Its
+          height matches the Quick Jump chip above it; the name moves to the
+          tooltip. */}
       <div className={floating ? 'relative z-10' : 'px-3 pb-2 relative z-10'}>
         {floating ? (
           <div
-            className="flex items-center gap-3 rounded-xl px-4 py-3"
+            title="Chat with Norbie"
+            className="w-12 h-12 rounded-full flex items-center justify-center"
             style={{ background: 'var(--glass)', border: '1.5px solid var(--line)', backdropFilter: 'blur(6px)' }}
           >
-            <span className="w-10 h-5 flex items-center justify-center shrink-0">
-              <img src={norbieface} alt="Norbie" className="w-5 h-5 rounded-full object-cover" />
-            </span>
-            <span style={{ fontSize: '14.5px', fontWeight: 400, color: 'var(--ink-2)' }}>Chat with Norbie</span>
+            <img src={norbieface} alt="Chat with Norbie" className="w-7 h-7 rounded-full object-cover" />
           </div>
         ) : (
           <div
