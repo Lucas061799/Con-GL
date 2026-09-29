@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Input, Checkbox, BRAND_GRADIENT } from '../../components/FormField'
+import { QuestionCard } from '../../components/Section'
 import ChoiceCard from '../../components/ChoiceCard'
 import { SIGN_OPTIONS } from '../../data/coverageOptions'
 
@@ -202,7 +203,9 @@ export default function SignAndBind({ form, set, errorFor, files = [], setFiles,
         )}
       </div>
 
-      <div>
+      {/* The attestation is the last thing asked for, so it gets a card of its
+          own rather than sitting loose under the signature choices. */}
+      <QuestionCard>
         <Checkbox
           label="As an agent, I agree that information entered in this application is correct to my knowledge."
           checked={!!form.attested}
@@ -216,7 +219,7 @@ export default function SignAndBind({ form, set, errorFor, files = [], setFiles,
             ? 'Nothing binds until the signed application is checked.'
             : 'Nothing binds until the insured signs.'}
         </p>
-      </div>
+      </QuestionCard>
     </div>
   )
 }
