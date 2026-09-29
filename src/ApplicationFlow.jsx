@@ -47,7 +47,7 @@ export default function ApplicationFlow({
   // Stands in for the carrier's rate call until there is one to wait on. Long
   // enough to see, because theirs will be: nobody yet knows whether RLI comes
   // back in two seconds or fifteen.
-  const RATE_CALL_MS = 2400
+  const RATE_CALL_MS = 3000
   const setPriced = (key) => (value) => {
     set(key)(value)
     if (!PRICED_KEYS.has(key)) return
