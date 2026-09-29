@@ -113,21 +113,37 @@ export function RailFooter({ dark = false, onToggleDark, demoJumps, demoActive, 
         </div>
       )}
 
+      {/* In the rail it is furniture and can afford two lines. Floating on the
+          receipt there is no rail around it, and the two-line card read as a
+          piece of one that had been taken away — so there it takes Quick
+          Jump's shape exactly: same chip, same glass, same icon slot, so the
+          labels line up and the two read as a deliberate pair. */}
       <div className={floating ? 'relative z-10' : 'px-3 pb-2 relative z-10'}>
-        <div
-          className="flex items-center gap-3 rounded-xl px-4 py-3"
-          style={{
-            background: dark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.55)',
-            border: dark ? '1.5px solid transparent' : '1.5px solid #E5E7EB',
-            backdropFilter: floating ? 'blur(6px)' : undefined,
-          }}
-        >
-          <img src={norbieface} alt="Norbie" className="w-8 h-8 rounded-full shrink-0 object-cover" />
-          <div>
-            <p className="text-sm font-normal" style={{ color: dark ? '#F9FAFB' : '#374151' }}>Chat with Norbie</p>
-            <p className="text-xs" style={{ color: '#9CA3AF' }}>AI Assistant</p>
+        {floating ? (
+          <div
+            className="flex items-center gap-3 rounded-xl px-4 py-3"
+            style={{ background: 'var(--glass)', border: '1.5px solid var(--line)', backdropFilter: 'blur(6px)' }}
+          >
+            <span className="w-10 h-5 flex items-center justify-center shrink-0">
+              <img src={norbieface} alt="Norbie" className="w-5 h-5 rounded-full object-cover" />
+            </span>
+            <span style={{ fontSize: '14.5px', fontWeight: 400, color: 'var(--ink-2)' }}>Chat with Norbie</span>
           </div>
-        </div>
+        ) : (
+          <div
+            className="flex items-center gap-3 rounded-xl px-4 py-3"
+            style={{
+              background: dark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.55)',
+              border: dark ? '1.5px solid transparent' : '1.5px solid #E5E7EB',
+            }}
+          >
+            <img src={norbieface} alt="Norbie" className="w-8 h-8 rounded-full shrink-0 object-cover" />
+            <div>
+              <p className="text-sm font-normal" style={{ color: dark ? '#F9FAFB' : '#374151' }}>Chat with Norbie</p>
+              <p className="text-xs" style={{ color: '#9CA3AF' }}>AI Assistant</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {onToggleDark && (
