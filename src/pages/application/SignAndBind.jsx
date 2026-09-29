@@ -214,7 +214,9 @@ export default function SignAndBind({ form, set, errorFor, files = [], setFiles,
         {errorFor('attested') && (
           <p className="text-[11px] text-red-500 mt-2">Tick this to submit the application.</p>
         )}
-        <p className="text-xs text-gray-400 mt-3">
+        {/* Indented past the box and its gap so the note starts where the
+            agreement it qualifies starts. */}
+        <p className="text-xs text-gray-400 mt-3 pl-[28px]">
           {isUpload
             ? 'Nothing binds until the signed application is checked.'
             : 'Nothing binds until the insured signs.'}
