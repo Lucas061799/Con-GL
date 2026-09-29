@@ -178,6 +178,15 @@ const CC_PRODUCT_OPTIONS = [
   },
 ]
 
+// Answers that move the premium. Touching one of these is what sends the rate
+// call, which is what the price card's sweep is reporting.
+export const PRICED_KEYS = new Set([
+  ...CC_RECOMMENDED, ...CC_ADDITIONAL_INSUREDS, ...CC_OPTIONAL, ...CC_PRODUCT_OPTIONS,
+].map(o => o.key).concat([
+  'ccDeductible', 'ccGlLimits', 'ccDamagesToPremises', 'ccMedicalLimit',
+  'imLimit', 'toolFloaterLimit', 'employeeBenefitsLimit',
+]))
+
 // Stop Gap is only written where workers compensation is state-administered,
 // so every screen that lists or reads back these covers asks here.
 export const productOptionsFor = (state) =>

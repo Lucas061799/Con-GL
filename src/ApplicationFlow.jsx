@@ -6,6 +6,7 @@ import { QuoteApproved, QuoteReferred } from './components/QuoteHandoff'
 import { rulesForCodes, needsUnderwriterReview } from './data/conditionalQuestions'
 import { ALL_STEPS, APPLICATION_STEPS, STAGE_OF, isIntakeStep } from './data/flowSteps'
 import { applicationMissing } from './lib/applicationValidation'
+import { PRICED_KEYS } from './data/coverageOptions'
 import EligibilityStatements from './pages/application/EligibilityStatements'
 import CoverageCustomization from './pages/application/CoverageCustomization'
 import ReviewSelectPayment from './pages/application/ReviewSelectPayment'
@@ -27,6 +28,11 @@ export default function ApplicationFlow({
   const [submitted, setSubmitted] = useState(!!resumeAt?.submitted)
   const [approved, setApproved] = useState(false)
   const [referred, setReferred] = useState(false)
+  // A priced answer sends a rate call. Until it comes back the figures are
+  // stale, so the card says so and the page stops taking clicks — the same
+  // reason the current system blocks the screen behind its spinner.
+  const [pricing, setPricing] = useState(false)
+  const pricingTimer = useRef(null)
   const [preview, setPreview] = useState(false)
   // Errors belong to the page you have actually tried to submit — arriving on
   // the payment page should not flag choices you have not reached yet.
@@ -36,6 +42,19 @@ export default function ApplicationFlow({
 
   // The rail shows the whole submission; this page renders its own four.
   const steps = APPLICATION_STEPS
+
+  // Stands in for the carrier's rate call until there is one to wait on. Long
+  // enough to see, because theirs will be: nobody yet knows whether RLI comes
+  // back in two seconds or fifteen.
+  const RATE_CALL_MS = 1800
+  const setPriced = (key) => (value) => {
+    set(key)(value)
+    if (!PRICED_KEYS.has(key)) return
+    setPricing(true)
+    clearTimeout(pricingTimer.current)
+    pricingTimer.current = setTimeout(() => setPricing(false), RATE_CALL_MS)
+  }
+  useEffect(() => () => clearTimeout(pricingTimer.current), [])
 
   /* ── Validation ─────────────────────────────────────────────────── */
 
@@ -146,7 +165,7 @@ export default function ApplicationFlow({
 
   const pages = {
     eligibility: <EligibilityStatements form={form} set={set} errorFor={errorFor} rows={rows} />,
-    coverage: <CoverageCustomization form={form} set={set} errorFor={errorFor} />,
+    coverage: <CoverageCustomization form={form} set={setPriced} errorFor={errorFor} busy={pricing} />,
     review: (
       <ReviewSelectPayment
         form={form} set={set} errorFor={errorFor}
@@ -205,12 +224,14 @@ export default function ApplicationFlow({
       premium={{
         form, amount, quote,
         onBrokerFee: set('brokerFee'),
+        pricing,
         // Legacy submits from under the breakdown, and only on the first page.
         onSubmit: stage === 'form' ? submitCoverage : null,
         // Legacy submits at the foot of Coverage Customization, so while the
         // reader is still up in the statements the button waits.
-        submitDisabled: stage === 'form' && activeStep === 'eligibility',
-        submitHint: 'Read through the eligibility statements first.',
+        // Nothing is submitted mid-rate-call either.
+        submitDisabled: pricing || (stage === 'form' && activeStep === 'eligibility'),
+        submitHint: pricing ? 'Pricing your cover…' : 'Read through the eligibility statements first.',
       }}
       summaryReady
       // Legacy offers the quote alongside the coverage, and the application

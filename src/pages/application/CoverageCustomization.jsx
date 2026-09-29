@@ -75,7 +75,7 @@ function CoverageRow({ label, help, status, price, included, checked, pricing, o
 
 // The premium breakdown that sits beside this step on the legacy screen lives
 // in the right rail here, so this page is just the coverage choices.
-export default function CoverageCustomization({ form, set, errorFor }) {
+export default function CoverageCustomization({ form, set, errorFor, busy = false }) {
   // Ticking a cover shows it as Included straight away; the figure lands once
   // the premium comes back, which is how the legacy screen behaves.
   const [pricing, setPricing] = useState(() => new Set())
@@ -94,7 +94,12 @@ export default function CoverageCustomization({ form, set, errorFor }) {
   const toolsDeclined = toolsPicked && form.imClaims === 'yes'
 
   return (
-    <div className="space-y-6">
+    // Nothing else can be touched until the rate comes back — two answers in
+    // flight at once is two rate calls and a figure nobody can trust.
+    <div
+      className={`space-y-6 transition-opacity ${busy ? 'pointer-events-none opacity-70' : ''}`}
+      aria-busy={busy}
+    >
       {/* An input cluster, so it takes the house box. */}
       <FieldGroup label="Limits and Recommended Options">
         <div className="cc-limits grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">

@@ -38,15 +38,16 @@ function Row({ label, value, bold = false, dark }) {
   )
 }
 
-export default function PremiumBreakdown({ form = {}, amount = 0, quote, onBrokerFee, onSubmit, submitDisabled = false, submitHint, dark = false }) {
+export default function PremiumBreakdown({ form = {}, amount = 0, quote, onBrokerFee, onSubmit, submitDisabled = false, submitHint, pricing = false, dark = false }) {
   const { glPremium, brokerFee, grossTotal, totalDue, pending } = computeBreakdown(form, amount)
 
-  // Armed once the coverage is actually submittable.
+  // The sweep reports a rate call in flight; the button's pulse still means
+  // the coverage is ready to submit.
   const armed = !!onSubmit && !submitDisabled
 
   return (
     <div
-      className={`rounded-2xl p-5 mb-3 ${armed ? 'pb-armed' : ''}`}
+      className={`rounded-2xl p-5 mb-3 ${pricing ? 'pb-pricing' : ''}`}
       style={{
         background: dark ? 'rgba(255,255,255,0.04)' : 'white',
         border: `1px solid ${dark ? 'rgba(255,255,255,0.08)' : 'var(--line)'}`,

@@ -137,11 +137,12 @@ html[data-dark="true"] .cb-info-pop-close {
   color: #E9D5FF !important;
 }
 
-/* The moment the coverage can be submitted, the price card lights up: a stroke
-   runs round the border and the button breathes, so the eye goes to the rail
-   rather than hunting for what to do next. */
-.pb-armed { position: relative; overflow: hidden; border-color: transparent !important; }
-.pb-armed::before {
+/* While a rate call is in flight a stroke runs round the price card, so the
+   figures visibly belong to an answer that is still being priced. It stops the
+   moment the new price lands. The button's own pulse is separate: that one
+   means the coverage is ready to submit. */
+.pb-pricing { position: relative; overflow: hidden; border-color: transparent !important; }
+.pb-pricing::before {
   content: '';
   position: absolute;
   left: 50%; top: 50%;
@@ -153,17 +154,17 @@ html[data-dark="true"] .cb-info-pop-close {
   background-image: conic-gradient(from 0turn, transparent 0 60%, #5C2ED4 78%, #E879F9 90%, transparent 97%);
   animation: pbOrbit 3.2s linear infinite;
 }
-.pb-armed::after {
+.pb-pricing::after {
   content: '';
   position: absolute;
   inset: 1.5px;
   border-radius: 14.5px;
   background: var(--surface-card);
 }
-html[data-dark="true"] .pb-armed::before {
+html[data-dark="true"] .pb-pricing::before {
   background-image: conic-gradient(from 0turn, transparent 0 60%, #A78BFA 78%, #E879F9 90%, transparent 97%);
 }
-.pb-armed > * { position: relative; z-index: 1; }
+.pb-pricing > * { position: relative; z-index: 1; }
 @keyframes pbOrbit { to { rotate: 1turn; } }
 
 .pb-cta-armed { animation: pbCta 2.4s ease-in-out infinite; }
@@ -174,7 +175,7 @@ html[data-dark="true"] .pb-armed::before {
 
 /* Anyone who asked for less motion gets the lit border without the movement. */
 @media (prefers-reduced-motion: reduce) {
-  .pb-armed::before { animation: none; background-image: linear-gradient(88.09deg, #5C2ED4 0%, #A614C3 100%); }
+  .pb-pricing::before { animation: none; background-image: linear-gradient(88.09deg, #5C2ED4 0%, #A614C3 100%); }
   .pb-cta-armed { animation: none; }
 }
 
