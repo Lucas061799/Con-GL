@@ -40,11 +40,6 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
   // here rather than while the market is still being shopped.
   const rules = rulesForCodes(codes)
   const underwriterReview = needsUnderwriterReview(rules, form)
-  // Which of the chosen classes asked for a question. Mostly one, but the
-  // high value homes question hangs off eighteen class codes, so a mix of
-  // trades can pull the same question in twice over — it is named once, with
-  // every class that wanted it, rather than repeated under each.
-  const askedBy = (rule) => [...new Set(codes)].filter(c => rule.classCodes.includes(c))
 
   return (
     <div className="space-y-6">
@@ -101,13 +96,6 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
           <div className="space-y-2">
             {rules.map(rule => (
               <QuestionCard key={rule.id}>
-                <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
-                  {askedBy(rule).map(c => (
-                    <span key={c} className="class-pill text-[10px] font-bold px-2 py-0.5 rounded-full">
-                      {codeTag(c)}
-                    </span>
-                  ))}
-                </div>
                 <ToggleQuestion
                   label={rule.question}
                   value={form[rule.id]}
@@ -136,7 +124,10 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
               <div className="notice-brand rounded-xl p-4 flex items-start gap-3">
                 <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" strokeWidth="1.8" viewBox="0 0 24 24">
                   <defs>
-                    <linearGradient id="uwNoteG" x1="0%" y1="0%" x2="100%" y2="0%">
+                    {/* userSpaceOnUse, or the stroke on the "!" vanishes: a
+                        vertical line has a zero-width bounding box, and an
+                        objectBoundingBox gradient over one paints nothing. */}
+                    <linearGradient id="uwNoteG" gradientUnits="userSpaceOnUse" x1="3" y1="12" x2="21" y2="12">
                       <stop offset="0%" stopColor="#5C2ED4" className="grad-stop-0" />
                       <stop offset="100%" stopColor="#A614C3" className="grad-stop-1" />
                     </linearGradient>

@@ -3,13 +3,15 @@
 // its own rules.
 import { todayMDY } from '../components/FormField'
 
-// Matches the reference case: Carpentry - Framer in Saratoga.
+// Paint Exterior in Saratoga. The trade is chosen so the demo exercises the
+// class-specific questions: 98304 pulls in both the special coatings one and
+// the high value homes one, which no other single class does.
 export const DEMO_INTAKE = {
   dba: 'Sierra Ridge Builders',
   subContractingCosts: '5000',
   postalCode: '95070',
   yearsOfExperience: '5',
-  mainClassCode: '91346',
+  mainClassCode: '98304',
   yearsInBusiness: '5',
   grossReceipts: '500000',
   priorInsurance: 'nl-4plus',
@@ -39,7 +41,7 @@ export const demoPhaseOne = () => ({
   employeeCount: '4',
   activeOwners: '2',
   operationsDescription:
-    'Residential framing, siding and finish carpentry for custom single family homes in the South Bay.',
+    'Exterior repainting of single family homes in the South Bay, prep, priming and two finish coats.',
   hiresSubs: 'yes',
   subDwellingPct: '100',
 })

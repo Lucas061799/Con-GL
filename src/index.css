@@ -216,14 +216,6 @@ html[data-dark="true"] .info-dot[data-open="true"] { background: rgba(167,139,25
 
 /* Admitted / Non-Admitted, in Builder's Risk's colours. Theirs are inline and
    stay dark-red on navy, so the dark pair is ours. */
-/* The class a conditional question came from. Same tint as .info-dot: it
-   labels the question, it does not compete with it. */
-.class-pill {
-  background: linear-gradient(88.09deg, rgba(92,46,212,0.14) 0%, rgba(166,20,195,0.14) 100%);
-  color: #7C3AED;
-}
-html[data-dark="true"] .class-pill { background: rgba(167,139,250,0.20); color: #E9D5FF; }
-
 .paper-pill-admitted { background: rgba(115,201,183,0.18); color: #0D8B73; }
 .paper-pill-non      { background: rgba(252,165,165,0.18); color: #B91C1C; }
 /* A red tint over navy just reads as mud, so dark takes the neutral fill the
