@@ -187,11 +187,13 @@ export default function App() {
   }
 
   // Nothing past the price can be opened before the application is started.
-  const railSteps = ALL_STEPS.map(s =>
-    (applicationNumber || isIntakeStep(s.key) ? s : { ...s, locked: true }))
+  // While the market is being shopped there is no application yet, so the rail
+  // lists the four steps that exist; the carrier's own steps appear once one
+  // has been chosen and the application opened.
+  const railSteps = applicationNumber ? ALL_STEPS : ALL_STEPS.filter(s => isIntakeStep(s.key))
 
   const progress = Math.round(
-    (ALL_STEPS.filter(s => completed[s.key]).length / ALL_STEPS.length) * 100
+    (railSteps.filter(s => completed[s.key]).length / railSteps.length) * 100
   )
 
   const allMissing = [
