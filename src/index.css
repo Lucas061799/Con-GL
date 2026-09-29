@@ -160,7 +160,7 @@ html[data-dark="true"] .cb-info-pop-close {
      not on reads as a normal border rather than a gap. */
   background-color: var(--line);
   background-image: conic-gradient(from 0turn, transparent 0 60%, #5C2ED4 78%, #E879F9 90%, transparent 97%);
-  animation: pbOrbit 1.6s linear infinite;
+  animation: pbOrbit 3.2s linear infinite;
 }
 .pb-pricing::after {
   content: '';
