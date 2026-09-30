@@ -41,7 +41,10 @@ const PRODUCTS = [
   },
 ]
 
-const ICON_TILE = { light: 'rgba(92,46,212,0.06)', dark: 'rgba(92,46,212,0.15)' }
+// The icon tile is white in both themes, the way CarrierMark frames the
+// carrier logos. These are full-colour illustrations drawn for a light
+// ground, and Commercial Auto's brand tint turns them muddy on navy — the
+// one place this block parts from it.
 
 function Bolt() {
   return (
@@ -57,7 +60,7 @@ function Bolt() {
   )
 }
 
-export default function CrossSell({ onQuote, dark = false }) {
+export default function CrossSell({ onQuote }) {
   return (
     <div
       className="screen-only rounded-2xl px-4 md:px-10 py-6 md:py-8 mb-6"
@@ -89,7 +92,7 @@ export default function CrossSell({ onQuote, dark = false }) {
             <div className="flex items-center gap-3 px-4 py-4">
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                style={{ background: dark ? ICON_TILE.dark : ICON_TILE.light }}
+                style={{ background: 'white', border: '1px solid var(--line)' }}
               >
                 <img src={item.icon} alt="" className="w-6 h-6 object-contain" />
               </div>

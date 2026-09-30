@@ -318,7 +318,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
 
       {/* Commercial Auto closes its submission on the cross-sell, above the
           banner out. Same place here. */}
-      <CrossSell dark={dark} />
+      <CrossSell />
 
       {/* Builder's Risk closes on this rather than a button: the jungle banner
           out. It names wherever the submission came in from. */}
