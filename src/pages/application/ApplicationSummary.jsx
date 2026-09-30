@@ -71,7 +71,7 @@ export default function ApplicationSummary({ form = {}, rows = [], onEdit }) {
       {/* Named after the step it reads back, the way the other panels are,
           so everything answered there — the agreement, the description and
           the questions the classes pulled in — has a place to land. */}
-      <Panel title="Eligibility Statements" icon="clock" action={edit('eligibility', 'Eligibility Statements')}>
+      <Panel title="Eligibility Statements" icon="checklist" action={edit('eligibility', 'Eligibility Statements')}>
         <Row label="Terms Agreement Response" value={yesNo(form.agreeTerms)} />
         {form.agreeTerms === 'no' && <Row label="Explanation" value={form.agreeExplanation} />}
         <Row label="Description of Operations" value={form.operationsDescription} />
@@ -89,7 +89,7 @@ export default function ApplicationSummary({ form = {}, rows = [], onEdit }) {
 
       <Panel
         title="Additional Insureds and Optional Coverages"
-        icon="tools"
+        icon="addon"
         action={edit('coverage', 'Additional Insureds and Optional Coverages')}
       >
         <Row label="Owners, Lessees or Contractors: Completed Operations CG 2037" value="Available upon request" />

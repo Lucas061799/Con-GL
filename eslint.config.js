@@ -38,4 +38,10 @@ export default [
       'react-hooks/refs': 'warn',
     },
   },
+  // The config files run in Node, not the browser, so `process` is a global
+  // there and nowhere else.
+  {
+    files: ['*.config.js'],
+    languageOptions: { globals: { ...globals.node } },
+  },
 ]
