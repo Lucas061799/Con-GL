@@ -11,8 +11,10 @@ const SUMMARY_ICONS = {
   tools: 'M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z',
   // Statements you read and agree to.
   checklist: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
-  // Covers added on top of the policy.
-  addon: 'M12 9v6m3-3H9m9 0a9 9 0 11-18 0 9 9 0 0118 0z',
+  // Covers stacked on top of the base policy. Layers rather than a plus in a
+  // circle: the chip behind it is already a circle, and two concentric rings
+  // read as a target, not an addition.
+  addon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
 }
 
 export function Panel({ title, icon = 'shield', action, children }) {

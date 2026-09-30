@@ -109,7 +109,14 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
             <div className="flex items-start gap-4 px-6 pt-5 pb-4">
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-                style={{ background: 'linear-gradient(88.09deg, rgba(92,46,212,0.12) 0%, rgba(166,20,195,0.12) 100%)' }}
+                // A 12% deep purple all but disappears on navy. Dark takes
+                // the lavender pair the rest of the dark UI uses, and enough
+                // of it to read as a chip.
+                style={{
+                  background: dark
+                    ? 'linear-gradient(88.09deg, rgba(167,139,250,0.22) 0%, rgba(232,121,249,0.22) 100%)'
+                    : 'linear-gradient(88.09deg, rgba(92,46,212,0.12) 0%, rgba(166,20,195,0.12) 100%)',
+                }}
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24">
                   <defs>
