@@ -96,6 +96,12 @@ html[data-dark="true"] .edge-brand { border-color: #A78BFA; }
 }
 .yn-ring { border-color: #A614C3; }
 .yn-dot { background: linear-gradient(88.09deg, #5C2ED4 0%, #A614C3 100%); }
+/* A brand dot beside text that is itself the brand gradient. Painted with
+   BRAND_GRADIENT it started on the deep purple while the letter next to it
+   started on the lavender, so the two never matched in dark. */
+.dot-brand { background: linear-gradient(88.09deg, #5C2ED4 0%, #A614C3 100%); }
+html[data-dark="true"] .dot-brand { background: linear-gradient(88.09deg, #A78BFA 0%, #E879F9 100%); }
+
 html[data-dark="true"] .yn-on {
   border-color: #A78BFA;
   color: #FFFFFF;

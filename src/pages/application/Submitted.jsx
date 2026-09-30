@@ -174,7 +174,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                   Status
                 </p>
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: BRAND_GRADIENT }} />
+                  <span className="w-1.5 h-1.5 rounded-full dot-brand" />
                   <span className="text-sm font-bold text-gradient">{statusLabel}</span>
                 </span>
               </div>

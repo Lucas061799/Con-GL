@@ -65,7 +65,7 @@ function CarrierRow({ quote, terms, onTermsChange, selected, best, onSelect }) {
       <div className="px-4 py-3.5 cursor-pointer" onClick={() => setOpen(o => !o)}>
         <div className="flex items-center justify-between gap-3 mb-2.5">
           <div className="flex items-center gap-2.5 min-w-0 flex-wrap">
-            <span className="rounded-full shrink-0" style={{ width: 8, height: 8, background: BRAND_GRADIENT }} />
+            <span className="rounded-full shrink-0 dot-brand" style={{ width: 8, height: 8 }} />
             <span className="text-sm font-semibold text-gray-800 truncate">{quote.carrier}</span>
             <span className="text-[10px] font-bold tracking-widest uppercase text-gray-400">{quote.product}</span>
             {best && (
