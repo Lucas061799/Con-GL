@@ -6,26 +6,35 @@ import { BRAND_GRADIENT } from './FormField'
 // would take in our shell. Nothing is posted anywhere.
 //
 // It has a column of its own beside the receipt, so it is not something you
-// scroll past, and it stretches the height of that column with the send
-// button at the foot. The questions are the three worth asking the moment an
-// agent finishes: how it went, how long it took, and what got in the way.
+// scroll past, and it stretches the height of that column. Five questions an
+// agent can answer in half a minute without typing, then one they can type in
+// if they want to.
+//
+// Every option group is a grid, two columns or three, so the pills line up on
+// both edges. Wrapping them freely left a ragged block that read as a mistake
+// next to the even rows above it.
 const STAR = 'M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.42l-5.8 3.05 1.1-6.47-4.69-4.58 6.49-.94z'
 const SCORES = [1, 2, 3, 4, 5]
+const AGAINST_LEGACY = ['Faster', 'Same', 'Slower']
 const DURATIONS = ['Under 5 min', '5–10 min', '10–20 min', 'Over 20 min']
 const FRICTION = [
   'Classifications',
-  'Eligibility questions',
-  'Coverage options',
+  'Eligibility',
+  'Coverages',
   'Payment',
   'Signing',
   'Nothing',
 ]
+const AGAIN = ['Yes', 'No', 'Not sure']
 
-function Label({ children }) {
+function Question({ children, label }) {
   return (
-    <p className="text-[12px] font-semibold mb-2 leading-snug" style={{ color: 'var(--ink)' }}>
+    <div className="mt-4">
+      <p className="text-[12px] font-semibold mb-2 leading-snug" style={{ color: 'var(--ink)' }}>
+        {label}
+      </p>
       {children}
-    </p>
+    </div>
   )
 }
 
@@ -33,7 +42,7 @@ function Pill({ on, children, ...rest }) {
   return (
     <button
       type="button"
-      className="px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition text-left"
+      className="px-2 py-1.5 rounded-lg text-[11px] font-medium transition truncate"
       style={on
         ? { background: BRAND_GRADIENT, color: 'white', border: '1px solid transparent' }
         : { background: 'var(--surface-soft)', color: 'var(--ink-2)', border: '1px solid var(--line)' }}
@@ -47,11 +56,15 @@ function Pill({ on, children, ...rest }) {
 export default function Survey() {
   const [score, setScore] = useState(null)
   const [hover, setHover] = useState(null)
+  const [pace, setPace] = useState(null)
   const [duration, setDuration] = useState(null)
   const [friction, setFriction] = useState([])
+  const [again, setAgain] = useState(null)
   const [comment, setComment] = useState('')
   const [sent, setSent] = useState(false)
   const shown = hover ?? score ?? 0
+
+  const pick = (current, set) => (value) => set(current === value ? null : value)
 
   // "Nothing" is the answer that cancels the others, and they cancel it.
   const toggleFriction = (label) =>
@@ -97,9 +110,11 @@ export default function Survey() {
             Quick Survey
           </span>
 
-          <div className="mt-3" onMouseLeave={() => setHover(null)}>
-            <Label>How was that?</Label>
-            <div className="flex items-center gap-1 -ml-0.5">
+          <Question label="How was that?">
+            {/* Spread to the column's edges so the row ends where the pill
+                grids below it end; the negative margin cancels each button's
+                own padding so the outer glyphs sit flush. */}
+            <div className="flex items-center justify-between -mx-0.5" onMouseLeave={() => setHover(null)}>
               {SCORES.map(n => (
                 <button
                   key={n}
@@ -123,40 +138,52 @@ export default function Survey() {
                 </button>
               ))}
             </div>
-          </div>
+          </Question>
 
-          <div className="mt-4">
-            <Label>How long did it take?</Label>
+          <Question label="Against the system you use today?">
+            <div className="grid grid-cols-3 gap-1.5">
+              {AGAINST_LEGACY.map(p => (
+                <Pill key={p} on={pace === p} onClick={() => pick(pace, setPace)(p)}>{p}</Pill>
+              ))}
+            </div>
+          </Question>
+
+          <Question label="How long did it take?">
             <div className="grid grid-cols-2 gap-1.5">
               {DURATIONS.map(d => (
-                <Pill key={d} on={duration === d} onClick={() => setDuration(duration === d ? null : d)}>
-                  {d}
-                </Pill>
+                <Pill key={d} on={duration === d} onClick={() => pick(duration, setDuration)(d)}>{d}</Pill>
               ))}
             </div>
-          </div>
+          </Question>
 
-          <div className="mt-4">
-            <Label>Anything slow you down?</Label>
-            <div className="flex flex-wrap gap-1.5">
+          <Question label="Anything slow you down?">
+            <div className="grid grid-cols-2 gap-1.5">
               {FRICTION.map(f => (
-                <Pill key={f} on={friction.includes(f)} onClick={() => toggleFriction(f)}>
-                  {f}
-                </Pill>
+                <Pill key={f} on={friction.includes(f)} onClick={() => toggleFriction(f)}>{f}</Pill>
               ))}
             </div>
-          </div>
+          </Question>
+
+          <Question label="Would you quote your next one here?">
+            <div className="grid grid-cols-3 gap-1.5">
+              {AGAIN.map(a => (
+                <Pill key={a} on={again === a} onClick={() => pick(again, setAgain)(a)}>{a}</Pill>
+              ))}
+            </div>
+          </Question>
 
           {/* The last question takes whatever height the column has left, so
               matching the column beside it buys room to write rather than a
               gap above the button. */}
           <div className="mt-4 flex-1 flex flex-col min-h-0">
-            <Label>Anything we should change?</Label>
+            <p className="text-[12px] font-semibold mb-2 leading-snug" style={{ color: 'var(--ink)' }}>
+              Anything we should change?
+            </p>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Optional"
-              className="w-full flex-1 min-h-[76px] border rounded-lg px-3 py-2.5 text-[12.5px] text-gray-800 placeholder-gray-300 field-fill border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/10 focus:border-[#7C3AED]/40 resize-none"
+              className="w-full flex-1 min-h-[72px] border rounded-lg px-3 py-2.5 text-[12.5px] text-gray-800 placeholder-gray-300 field-fill border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/10 focus:border-[#7C3AED]/40 resize-none"
             />
           </div>
 
