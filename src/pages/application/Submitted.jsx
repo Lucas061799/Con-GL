@@ -388,7 +388,15 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
           className={EXIT_HALF}
           style={{ borderLeft: '1px solid rgba(17,24,39,0.08)' }}
         >
-          <img src={exitLegacy} alt="" className="absolute inset-0 w-full h-full object-cover" />
+          {/* The legacy picture is drawn smaller inside its own frame — 540px of
+              content against the marketplace's 585 — so it comes up to match
+              rather than sitting a size down beside it. */}
+          <img
+            src={exitLegacy}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ transform: 'scale(1.08)' }}
+          />
           <span className={EXIT_WORDS}>
             <span className="block text-sm md:text-lg font-bold leading-snug mb-1" style={{ color: '#111827' }}>
               Back to the Legacy view?
