@@ -30,7 +30,11 @@ const LEGACY_URL = 'https://my.btisinc.com/submissionslegacy'
 // Each way out is one supplied artwork — vines and a look at the screen it
 // leads to — with its words set over the clear half on the left, so they
 // stay real text rather than pixels.
-const EXIT_HALF = 'relative block w-full text-left transition hover:opacity-90 cursor-pointer'
+// The artwork is delivered with a white band top and bottom — measured at
+// about 6% on the marketplace and 8–11% on the legacy one. The half crops to
+// a shorter box so the picture fills it instead of floating in white; what
+// comes off is that band, not the card inside it.
+const EXIT_HALF = 'relative block w-full text-left overflow-hidden aspect-[2000/555] transition hover:opacity-90 cursor-pointer'
 const EXIT_WORDS = 'absolute inset-y-0 left-0 w-[42%] flex flex-col justify-center px-5 md:px-7'
 
 const labelOf = (options, value) => options.find(o => o.value === value)?.label ?? ''
@@ -367,7 +371,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
         style={{ background: '#ffffff' }}
       >
         <button type="button" onClick={() => leave(NORBIELINK_URL)} className={EXIT_HALF}>
-          <img src={exitMarketplace} alt="" className="w-full block" />
+          <img src={exitMarketplace} alt="" className="absolute inset-0 w-full h-full object-cover" />
           <span className={EXIT_WORDS}>
             <span className="block text-sm md:text-lg font-bold leading-snug mb-1" style={{ color: '#111827' }}>
               Return to the Marketplace?
@@ -384,7 +388,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
           className={EXIT_HALF}
           style={{ borderLeft: '1px solid rgba(17,24,39,0.08)' }}
         >
-          <img src={exitLegacy} alt="" className="w-full block" />
+          <img src={exitLegacy} alt="" className="absolute inset-0 w-full h-full object-cover" />
           <span className={EXIT_WORDS}>
             <span className="block text-sm md:text-lg font-bold leading-snug mb-1" style={{ color: '#111827' }}>
               Back to the Legacy view?
