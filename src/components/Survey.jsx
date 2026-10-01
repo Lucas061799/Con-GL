@@ -6,11 +6,9 @@ import { BRAND_GRADIENT } from './FormField'
 // would take in our shell: one score, one optional line, a thank you.
 // Nothing is posted anywhere.
 //
-// A full-width band directly under the receipt rather than a card off to one
-// side: it is the only thing on this page we want back, and the page is
-// otherwise finished business. Stars on the left, the written answer on the
-// right and open from the start — folded away it read as one more line of
-// the receipt, and the writing is the half worth having.
+// A column of its own beside the receipt, so it is not something you scroll
+// past. The box is open from the start — folded away it read as one more
+// line of the receipt, and the writing is the half worth having.
 const STAR = 'M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.42l-5.8 3.05 1.1-6.47-4.69-4.58 6.49-.94z'
 const SCORES = [1, 2, 3, 4, 5]
 
@@ -52,8 +50,8 @@ export default function Survey() {
           </p>
         </div>
       ) : (
-        <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-          <div className="min-w-0 md:w-[300px] md:shrink-0" onMouseLeave={() => setHover(null)}>
+        <div onMouseLeave={() => setHover(null)}>
+          <div>
             <span className="text-[10px] font-bold tracking-widest uppercase text-gradient">
               Quick Survey
             </span>
@@ -87,7 +85,7 @@ export default function Survey() {
           {/* The box is open from the start: folded away it read as one more
               line of the receipt, and the written answer is the half of this
               worth having. */}
-          <div className="flex-1 min-w-0 flex flex-col">
+          <div className="mt-4 flex flex-col">
             <textarea
               rows={3}
               value={comment}

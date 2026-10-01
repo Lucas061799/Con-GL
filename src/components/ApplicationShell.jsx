@@ -64,7 +64,11 @@ export default function ApplicationShell({
         )}
 
         <main ref={scrollRef} className="flex-1 min-w-0 overflow-y-auto custom-scroll">
-          <div className="mx-auto max-w-5xl 2xl:max-w-6xl px-4 md:px-10 py-6 md:py-8 space-y-6 md:space-y-8">
+          {/* The form steps keep a reading measure. The receipt has no rails
+              either side and runs in two columns, so it takes the width. */}
+          <div className={`mx-auto px-4 md:px-10 py-6 md:py-8 space-y-6 md:space-y-8 ${
+            submitted ? 'max-w-7xl' : 'max-w-5xl 2xl:max-w-6xl'
+          }`}>
             {children}
           </div>
         </main>
