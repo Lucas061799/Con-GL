@@ -30,18 +30,19 @@ function Heading({ children, action }) {
   )
 }
 
-// Stand-in copy for the class guide, the same for every class because none
-// of it is RLI's — it is here so the block reads as prose rather than as
-// grey bars. Lighter than the statements below it, and the note under the
-// list says what it is. Replace wholesale when the real guide arrives.
-const SAMPLE_INCLUDED = [
-  'Preparation, installation and finishing work performed at the job site.',
-  'Incidental repair, adjustment and clean-up arising from those operations.',
+// Lorem, deliberately. Plausible English here would be read as the class
+// guide and screenshotted as if it were RLI's, and it is not — nobody has
+// sent the copy yet. Nonsense at the right length holds the shape of the
+// block without ever being mistaken for content. Replace wholesale when the
+// real guide arrives.
+const LOREM_INCLUDED = [
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.',
+  'Tempor incididunt ut labore et dolore magna aliqua ut enim ad minim.',
 ]
-const SAMPLE_EXCLUDED = [
-  'Any operation that carries a classification code of its own.',
-  'Work at heights, or in conditions, the class guide places outside this class.',
-  'Materials or installations supplied but not installed by the applicant.',
+const LOREM_EXCLUDED = [
+  'Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea.',
+  'Commodo consequat duis aute irure dolor in reprehenderit in voluptate.',
+  'Velit esse cillum dolore eu fugiat nulla pariatur excepteur sint.',
 ]
 
 function PlaceholderLines({ lines }) {
@@ -116,22 +117,25 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [], 
                 <div className="space-y-3 pl-1">
                   <div>
                     <p className="text-[12.5px] font-semibold mb-2" style={{ color: 'var(--ink)' }}>
-                      The following operations are included in this classification:
+                      The following operations are included in this classification:{' '}
+                      {/* Said at the list as well as under it: the lorem is
+                          obvious up close, less so in a screenshot. */}
+                      <span className="font-normal" style={{ color: '#9CA3AF' }}>(Placeholder)</span>
                     </p>
-                    <PlaceholderLines lines={SAMPLE_INCLUDED} />
+                    <PlaceholderLines lines={LOREM_INCLUDED} />
                   </div>
                   <div>
                     <p className="text-[12.5px] font-semibold mb-2" style={{ color: 'var(--ink)' }}>
-                      The following operations are not included in this classification:
+                      The following operations are not included in this classification:{' '}
+                      {/* Said at the list as well as under it: the lorem is
+                          obvious up close, less so in a screenshot. */}
+                      <span className="font-normal" style={{ color: '#9CA3AF' }}>(Placeholder)</span>
                     </p>
-                    <PlaceholderLines lines={SAMPLE_EXCLUDED} />
+                    <PlaceholderLines lines={LOREM_EXCLUDED} />
                   </div>
                 </div>
               </div>
             ))}
-            <p className="text-[11px] text-gray-400">
-              Placeholder — the class guide copy is not wired up yet.
-            </p>
           </div>
         )}
       </div>
