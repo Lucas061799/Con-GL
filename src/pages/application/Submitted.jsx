@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { BRAND_GRADIENT } from '../../components/FormField'
-import sellMoreBg from '../../assets/sell-more-bg.png'
+import exitMarketplace from '../../assets/exit-marketplace.webp'
+import exitLegacy from '../../assets/exit-legacy.webp'
 import Confetti from '../../components/Confetti'
 import CrossSell from '../../components/CrossSell'
 import Survey from '../../components/Survey'
@@ -26,12 +27,9 @@ import {
 const NORBIELINK_URL = 'https://norbielink.btisinc.com/'
 const LEGACY_URL = 'https://my.btisinc.com/submissionslegacy'
 
-// Both halves of the way out: same padding, same hover, the jungle behind
-// them washed out from the left so the words stay readable over it.
-const EXIT_HALF = 'text-left px-8 py-6 transition hover:opacity-80 cursor-pointer'
-const EXIT_SCRIM = {
-  background: 'linear-gradient(90deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.72) 55%, rgba(255,255,255,0) 100%)',
-}
+// Each way out is one supplied artwork — vines, the line, and a look at the
+// screen it leads to. Text and all, so there is nothing to lay over them.
+const EXIT_HALF = 'block w-full transition hover:opacity-90 cursor-pointer'
 
 const labelOf = (options, value) => options.find(o => o.value === value)?.label ?? ''
 const codeLabel = (code) => CLASS_CODES.find(c => c.code === code)?.label ?? code
@@ -358,37 +356,25 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
         </div>
       </div>
 
-      {/* Builder's Risk closes on this rather than a button, and here it is
-          two ways out rather than one: the marketplace, or the screens the
-          agent had before. The jungle runs behind both and each half washes
-          it out under its own words, or the gorilla sits where the right
-          half's text goes. */}
+      {/* Two ways out, each its own artwork: the marketplace on the left and
+          the screens the agent had before on the right, both showing where
+          they land. White behind them, so the half with the shorter image
+          fills rather than showing a seam. */}
       <div
-        className="screen-only rounded-2xl relative overflow-hidden mb-8"
-        style={{ minHeight: 100 }}
+        className="screen-only rounded-2xl overflow-hidden mb-8 grid grid-cols-1 sm:grid-cols-2"
+        style={{ background: '#ffffff' }}
       >
-        <img src={sellMoreBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2">
-          <button type="button" onClick={() => leave(NORBIELINK_URL)} className={EXIT_HALF} style={EXIT_SCRIM}>
-            <p className="text-lg font-bold mb-1" style={{ color: '#111827' }}>Return to the Marketplace?</p>
-            <p className="text-xs text-gray-500">
-              Head back to{' '}
-              <span className="font-semibold text-gradient underline underline-offset-2">Norbielink</span>
-            </p>
-          </button>
-          <button
-            type="button"
-            onClick={() => leave(LEGACY_URL)}
-            className={EXIT_HALF}
-            style={{ ...EXIT_SCRIM, borderLeft: '1px solid rgba(17,24,39,0.10)' }}
-          >
-            <p className="text-lg font-bold mb-1" style={{ color: '#111827' }}>Back to the Legacy view?</p>
-            <p className="text-xs text-gray-500">
-              The screens you had{' '}
-              <span className="font-semibold text-gradient underline underline-offset-2">before</span>
-            </p>
-          </button>
-        </div>
+        <button type="button" onClick={() => leave(NORBIELINK_URL)} className={EXIT_HALF}>
+          <img src={exitMarketplace} alt="Return to the Marketplace — head back to Norbielink" className="w-full block" />
+        </button>
+        <button
+          type="button"
+          onClick={() => leave(LEGACY_URL)}
+          className={EXIT_HALF}
+          style={{ borderLeft: '1px solid rgba(17,24,39,0.08)' }}
+        >
+          <img src={exitLegacy} alt="Back to the Legacy view — the screens you had before" className="w-full block" />
+        </button>
       </div>
     </div>
   )
