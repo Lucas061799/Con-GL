@@ -35,7 +35,7 @@ const LEGACY_URL = 'https://my.btisinc.com/submissionslegacy'
 // a shorter box so the picture fills it instead of floating in white; what
 // comes off is that band, not the card inside it.
 const EXIT_HALF = 'relative block w-full text-left overflow-hidden aspect-[2000/555] transition hover:opacity-90 cursor-pointer'
-const EXIT_WORDS = 'absolute inset-y-0 left-0 w-[42%] flex flex-col justify-center px-5 md:px-7'
+const EXIT_WORDS = 'absolute inset-y-0 left-0 w-[48%] flex flex-col justify-center px-5 md:px-7'
 
 const labelOf = (options, value) => options.find(o => o.value === value)?.label ?? ''
 const codeLabel = (code) => CLASS_CODES.find(c => c.code === code)?.label ?? code
@@ -373,7 +373,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
         <button type="button" onClick={() => leave(NORBIELINK_URL)} className={EXIT_HALF}>
           <img src={exitMarketplace} alt="" className="absolute inset-0 w-full h-full object-cover" />
           <span className={EXIT_WORDS}>
-            <span className="block text-sm md:text-lg font-bold leading-snug mb-1" style={{ color: '#111827' }}>
+            <span className="block text-sm md:text-base font-bold leading-snug md:leading-snug mb-0.5" style={{ color: '#111827' }}>
               Return to the Marketplace?
             </span>
             <span className="block text-[11px] md:text-xs text-gray-500">
@@ -398,7 +398,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
             style={{ transform: 'scale(1.08)' }}
           />
           <span className={EXIT_WORDS}>
-            <span className="block text-sm md:text-lg font-bold leading-snug mb-1" style={{ color: '#111827' }}>
+            <span className="block text-sm md:text-base font-bold leading-snug md:leading-snug mb-0.5" style={{ color: '#111827' }}>
               Back to the Legacy view?
             </span>
             <span className="block text-[11px] md:text-xs text-gray-500">
