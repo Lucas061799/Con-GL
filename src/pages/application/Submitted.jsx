@@ -402,8 +402,8 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
               Back to the Legacy view?
             </span>
             <span className="block text-[11px] md:text-xs text-gray-500">
-              The screens you had{' '}
-              <span className="font-semibold text-gradient underline underline-offset-2">before</span>
+              Head back to{' '}
+              <span className="font-semibold text-gradient underline underline-offset-2">BTIS Marketplace</span>
             </span>
           </span>
         </button>
