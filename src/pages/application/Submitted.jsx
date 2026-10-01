@@ -3,6 +3,7 @@ import { BRAND_GRADIENT } from '../../components/FormField'
 import sellMoreBg from '../../assets/sell-more-bg.png'
 import Confetti from '../../components/Confetti'
 import CrossSell from '../../components/CrossSell'
+import Survey from '../../components/Survey'
 import CarrierMark from '../../components/CarrierMark'
 // The same panels the review step reads back with — one copy, so the two
 // cannot drift. The receipt shows no pencils, so it passes no action.
@@ -317,8 +318,14 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
           </div>
 
       {/* Commercial Auto closes its submission on the cross-sell, above the
-          banner out. Same place here. */}
-      <CrossSell />
+          banner out. Same place here, with the survey beside it — the
+          survey takes a fixed 260 — the width of its five score buttons and
+          no more — and the cross-sell takes the rest, because its rows have
+          to hold a name, a badge, a price and a button on one line. */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-4 mb-6">
+        <CrossSell />
+        <Survey />
+      </div>
 
       {/* Builder's Risk closes on this rather than a button: the jungle banner
           out. It names wherever the submission came in from. */}

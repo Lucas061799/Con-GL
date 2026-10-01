@@ -73,7 +73,7 @@ function Bolt() {
 export default function CrossSell({ onQuote }) {
   return (
     <div
-      className="screen-only rounded-2xl px-4 md:px-10 py-6 md:py-8 mb-6"
+      className="screen-only rounded-2xl px-4 md:px-8 py-6 md:py-8 h-full"
       style={{ background: 'var(--surface-card)', border: '1px solid var(--line-soft)' }}
     >
       <div className="text-center mb-6">
