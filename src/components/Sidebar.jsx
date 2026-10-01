@@ -181,7 +181,11 @@ export default function Sidebar({
       style={{ background: 'var(--surface-rail)', borderRight: dark ? '1px solid rgba(255,255,255,0.12)' : '1px solid #F3F4F6' }}
     >
       <div className="px-5 pt-5 pb-3 relative z-10">
-        <h2 className="text-base font-bold leading-tight text-navy">{productName}</h2>
+        {/* "Contractor General Liability" wants 229px at 16px and the rail
+            gives it 215, so it broke over two lines. 14.5px fits with room to
+            spare, and the wider rail at 2xl takes the full size. A longer
+            product name still wraps rather than spilling. */}
+        <h2 className="text-[14.5px] 2xl:text-base font-bold leading-tight text-navy">{productName}</h2>
         <p className="text-[11px] mt-0.5 text-gray-400 whitespace-nowrap">Submission Number: {submissionNumber}</p>
 
         {progress != null && (
