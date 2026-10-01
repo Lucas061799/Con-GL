@@ -386,7 +386,6 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
           type="button"
           onClick={() => leave(LEGACY_URL)}
           className={EXIT_HALF}
-          style={{ borderLeft: '1px solid rgba(17,24,39,0.08)' }}
         >
           {/* The legacy picture is drawn smaller inside its own frame — 540px of
               content against the marketplace's 585 — so it comes up to match
