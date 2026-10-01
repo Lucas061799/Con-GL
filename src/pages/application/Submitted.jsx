@@ -27,9 +27,11 @@ import {
 const NORBIELINK_URL = 'https://norbielink.btisinc.com/'
 const LEGACY_URL = 'https://my.btisinc.com/submissionslegacy'
 
-// Each way out is one supplied artwork — vines, the line, and a look at the
-// screen it leads to. Text and all, so there is nothing to lay over them.
-const EXIT_HALF = 'block w-full transition hover:opacity-90 cursor-pointer'
+// Each way out is one supplied artwork — vines and a look at the screen it
+// leads to — with its words set over the clear half on the left, so they
+// stay real text rather than pixels.
+const EXIT_HALF = 'relative block w-full text-left transition hover:opacity-90 cursor-pointer'
+const EXIT_WORDS = 'absolute inset-y-0 left-0 w-[42%] flex flex-col justify-center px-5 md:px-7'
 
 const labelOf = (options, value) => options.find(o => o.value === value)?.label ?? ''
 const codeLabel = (code) => CLASS_CODES.find(c => c.code === code)?.label ?? code
@@ -356,16 +358,25 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
         </div>
       </div>
 
-      {/* Two ways out, each its own artwork: the marketplace on the left and
-          the screens the agent had before on the right, both showing where
-          they land. White behind them, so the half with the shorter image
-          fills rather than showing a seam. */}
+      {/* Two ways out, each its own artwork showing where it lands: the
+          marketplace on the left, the legacy submissions list on the right.
+          Both pictures leave their left side clear, which is where the words
+          go. White behind the row so nothing shows through the gap. */}
       <div
         className="screen-only rounded-2xl overflow-hidden mb-8 grid grid-cols-1 sm:grid-cols-2"
         style={{ background: '#ffffff' }}
       >
         <button type="button" onClick={() => leave(NORBIELINK_URL)} className={EXIT_HALF}>
-          <img src={exitMarketplace} alt="Return to the Marketplace — head back to Norbielink" className="w-full block" />
+          <img src={exitMarketplace} alt="" className="w-full block" />
+          <span className={EXIT_WORDS}>
+            <span className="block text-sm md:text-lg font-bold leading-snug mb-1" style={{ color: '#111827' }}>
+              Return to the Marketplace?
+            </span>
+            <span className="block text-[11px] md:text-xs text-gray-500">
+              Head back to{' '}
+              <span className="font-semibold text-gradient underline underline-offset-2">Norbielink</span>
+            </span>
+          </span>
         </button>
         <button
           type="button"
@@ -373,7 +384,16 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
           className={EXIT_HALF}
           style={{ borderLeft: '1px solid rgba(17,24,39,0.08)' }}
         >
-          <img src={exitLegacy} alt="Back to the Legacy view — the screens you had before" className="w-full block" />
+          <img src={exitLegacy} alt="" className="w-full block" />
+          <span className={EXIT_WORDS}>
+            <span className="block text-sm md:text-lg font-bold leading-snug mb-1" style={{ color: '#111827' }}>
+              Back to the Legacy view?
+            </span>
+            <span className="block text-[11px] md:text-xs text-gray-500">
+              The screens you had{' '}
+              <span className="font-semibold text-gradient underline underline-offset-2">before</span>
+            </span>
+          </span>
         </button>
       </div>
     </div>
