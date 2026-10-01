@@ -21,10 +21,10 @@ import {
   CC_RECOMMENDED, CC_ADDITIONAL_INSUREDS, CC_OPTIONAL, productOptionsFor,
 } from '../../data/coverageOptions'
 
-// NorbieLink itself, not the marketing page the logo opens — this half is
-// "take me back", not "what is this".
+// The three places the receipt could send someone. The banner takes the first
+// one; the other two are kept against the day the way out splits again.
+const BTIS_MARKETPLACE_URL = 'https://my.btisinc.com/submissions'
 const NORBIELINK_URL = 'https://norbielink.btisinc.com/'
-// Kept for whenever the legacy way out returns; nothing points at it today.
 const LEGACY_URL = 'https://my.btisinc.com/submissionslegacy'
 
 // Each way out is one supplied artwork — vines and a look at the screen it
@@ -360,7 +360,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
           banner out, back to the marketplace. */}
       <div
         className="screen-only rounded-2xl relative cursor-pointer hover:opacity-95 transition overflow-hidden mb-8"
-        onClick={() => leave(NORBIELINK_URL)}
+        onClick={() => leave(BTIS_MARKETPLACE_URL)}
         style={{ minHeight: 100 }}
       >
         <img src={sellMoreBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
@@ -368,7 +368,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
           <p className="text-lg font-bold mb-1" style={{ color: '#111827' }}>Return to the Marketplace?</p>
           <p className="text-xs text-gray-500">
             Head back to{' '}
-            <span className="font-semibold text-gradient underline underline-offset-2">Norbielink</span>
+            <span className="font-semibold text-gradient underline underline-offset-2">BTIS Marketplace</span>
           </p>
         </div>
       </div>
