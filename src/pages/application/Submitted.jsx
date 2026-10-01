@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { BRAND_GRADIENT } from '../../components/FormField'
-import exitMarketplace from '../../assets/exit-marketplace.webp'
-import exitLegacy from '../../assets/exit-legacy.webp'
+import sellMoreBg from '../../assets/sell-more-bg.png'
 import Confetti from '../../components/Confetti'
 import CrossSell from '../../components/CrossSell'
 import Survey from '../../components/Survey'
@@ -25,17 +24,12 @@ import {
 // NorbieLink itself, not the marketing page the logo opens — this half is
 // "take me back", not "what is this".
 const NORBIELINK_URL = 'https://norbielink.btisinc.com/'
+// Kept for whenever the legacy way out returns; nothing points at it today.
 const LEGACY_URL = 'https://my.btisinc.com/submissionslegacy'
 
 // Each way out is one supplied artwork — vines and a look at the screen it
 // leads to — with its words set over the clear half on the left, so they
 // stay real text rather than pixels.
-// The artwork is delivered with a white band top and bottom — measured at
-// about 6% on the marketplace and 8–11% on the legacy one. The half crops to
-// a shorter box so the picture fills it instead of floating in white; what
-// comes off is that band, not the card inside it.
-const EXIT_HALF = 'relative block w-full text-left overflow-hidden aspect-[2000/555] transition hover:opacity-90 cursor-pointer'
-const EXIT_WORDS = 'absolute inset-y-0 left-0 w-[48%] flex flex-col justify-center px-5 md:px-7'
 
 const labelOf = (options, value) => options.find(o => o.value === value)?.label ?? ''
 const codeLabel = (code) => CLASS_CODES.find(c => c.code === code)?.label ?? code
@@ -362,50 +356,21 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
         </div>
       </div>
 
-      {/* Two ways out, each its own artwork showing where it lands: the
-          marketplace on the left, the legacy submissions list on the right.
-          Both pictures leave their left side clear, which is where the words
-          go. White behind the row so nothing shows through the gap. */}
+      {/* Builder's Risk closes on this rather than a button: the jungle
+          banner out, back to the marketplace. */}
       <div
-        className="screen-only rounded-2xl overflow-hidden mb-8 grid grid-cols-1 sm:grid-cols-2"
-        style={{ background: '#ffffff' }}
+        className="screen-only rounded-2xl relative cursor-pointer hover:opacity-95 transition overflow-hidden mb-8"
+        onClick={() => leave(NORBIELINK_URL)}
+        style={{ minHeight: 100 }}
       >
-        <button type="button" onClick={() => leave(NORBIELINK_URL)} className={EXIT_HALF}>
-          <img src={exitMarketplace} alt="" className="absolute inset-0 w-full h-full object-cover" />
-          <span className={EXIT_WORDS}>
-            <span className="block text-sm md:text-base font-bold leading-snug md:leading-snug mb-0.5" style={{ color: '#111827' }}>
-              Return to the Marketplace?
-            </span>
-            <span className="block text-[11px] md:text-xs text-gray-500">
-              Head back to{' '}
-              <span className="font-semibold text-gradient underline underline-offset-2">Norbielink</span>
-            </span>
-          </span>
-        </button>
-        <button
-          type="button"
-          onClick={() => leave(LEGACY_URL)}
-          className={EXIT_HALF}
-        >
-          {/* The legacy picture is drawn smaller inside its own frame — 540px of
-              content against the marketplace's 585 — so it comes up to match
-              rather than sitting a size down beside it. */}
-          <img
-            src={exitLegacy}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ transform: 'scale(1.08)' }}
-          />
-          <span className={EXIT_WORDS}>
-            <span className="block text-sm md:text-base font-bold leading-snug md:leading-snug mb-0.5" style={{ color: '#111827' }}>
-              Back to the Legacy view?
-            </span>
-            <span className="block text-[11px] md:text-xs text-gray-500">
-              Head back to{' '}
-              <span className="font-semibold text-gradient underline underline-offset-2">BTIS Marketplace</span>
-            </span>
-          </span>
-        </button>
+        <img src={sellMoreBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="px-8 py-6 relative z-10">
+          <p className="text-lg font-bold mb-1" style={{ color: '#111827' }}>Return to the Marketplace?</p>
+          <p className="text-xs text-gray-500">
+            Head back to{' '}
+            <span className="font-semibold text-gradient underline underline-offset-2">Norbielink</span>
+          </p>
+        </div>
       </div>
     </div>
   )
