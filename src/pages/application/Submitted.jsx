@@ -21,7 +21,9 @@ import {
   CC_RECOMMENDED, CC_ADDITIONAL_INSUREDS, CC_OPTIONAL, productOptionsFor,
 } from '../../data/coverageOptions'
 
-const NORBIELINK_URL = 'https://marketplace.btisinc.com/norbielink/'
+// NorbieLink itself, not the marketing page the logo opens — this half is
+// "take me back", not "what is this".
+const NORBIELINK_URL = 'https://norbielink.btisinc.com/'
 const LEGACY_URL = 'https://my.btisinc.com/submissionslegacy'
 
 // Both halves of the way out: same padding, same hover, the jungle behind
