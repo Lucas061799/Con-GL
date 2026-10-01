@@ -11,9 +11,10 @@ const codeLabel = (code) => CLASS_CODES.find(c => c.code === code)?.label ?? cod
 // names them the same way — it is the same choice being read back.
 const codeTag = (code) => `${codeLabel(code)} [${code}]`
 
-// The order the meeting settled on: what the chosen classes cover, then the
-// eligibility statements in general, then the questions those classes pull in
-// — and only after all three, the terms and whether the applicant agrees.
+// The classes first — what they cover, then the questions they pull in, so
+// everything that hangs off the chosen classifications reads as one block.
+// The general eligibility statements follow, and only then the terms and
+// whether the applicant agrees.
 // Small uppercase label, no rule — the section title already has one.
 function Heading({ children }) {
   return (
@@ -75,18 +76,6 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
             </p>
           </div>
         )}
-      </div>
-
-      <div>
-        <Heading>Policy Eligibility Statement</Heading>
-        <ul className="space-y-2.5 pl-1">
-          {POLICY_ELIGIBILITY.map((line, i) => (
-            <li key={i} className="flex gap-2.5 text-[12.5px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
-              <span className="shrink-0 mt-[7px] w-1 h-1 rounded-full" style={{ background: '#9CA3AF' }} />
-              <span>{line}</span>
-            </li>
-          ))}
-        </ul>
       </div>
 
       {rules.length > 0 && (
@@ -154,6 +143,18 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
           </div>
         </div>
       )}
+
+      <div>
+        <Heading>Policy Eligibility Statement</Heading>
+        <ul className="space-y-2.5 pl-1">
+          {POLICY_ELIGIBILITY.map((line, i) => (
+            <li key={i} className="flex gap-2.5 text-[12.5px] leading-relaxed" style={{ color: 'var(--ink-2)' }}>
+              <span className="shrink-0 mt-[7px] w-1 h-1 rounded-full" style={{ background: '#9CA3AF' }} />
+              <span>{line}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div>
         <Heading>Terms &amp; Conditions</Heading>

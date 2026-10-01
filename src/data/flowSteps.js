@@ -9,7 +9,7 @@ export const INTAKE_STEPS = [
 ]
 
 export const APPLICATION_STEPS = [
-  { key: 'eligibility', label: 'Eligibility Statements' },
+  { key: 'eligibility', label: 'Eligibility Information' },
   { key: 'coverage',    label: 'Coverage Customization' },
   { key: 'review',      label: 'Review & Select Payment' },
   { key: 'bind',        label: 'Sign and Request to Bind' },

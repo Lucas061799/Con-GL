@@ -146,7 +146,7 @@ export default function App() {
     const operations = [
       'effectiveDate', 'dba', 'legalName', 'entityType',
       'yearsOfExperience', 'yearsInBusiness', 'priorInsurance',
-      // Description of Operations is asked once, in Eligibility Statements.
+      // Description of Operations is asked once, in Eligibility Information.
       'grossReceipts', 'activeOwners',
     ].filter(blank)
     if (!blank('legalName') && form.legalName.trim().length < 5) operations.push('legalName')

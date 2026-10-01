@@ -237,7 +237,7 @@ export default function ApplicationFlow({
         submitDisabled: pricing || (stage === 'form' && activeStep === 'eligibility'),
         // The overlay lost its caption, so the card carries the line: under a
         // greyed-out Submit is where someone looks for the reason anyway.
-        submitHint: pricing ? 'Pricing your cover…' : 'Read through the eligibility statements first.',
+        submitHint: pricing ? 'Pricing your cover…' : 'Read through the eligibility information first.',
       }}
       summaryReady
       // One download, not two. Legacy handed over the quote on one page and

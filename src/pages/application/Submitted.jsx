@@ -301,7 +301,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
                       altogether — neither the agreement nor the description
                       was printed. Same rows as the review panel, from the
                       same place. */}
-                  <Panel title="Eligibility Statements" icon="checklist">
+                  <Panel title="Eligibility Information" icon="checklist">
                     <Row label="Terms Agreement Response" value={yesNo(form.agreeTerms)} />
                     {form.agreeTerms === 'no' && <Row label="Explanation" value={form.agreeExplanation} />}
                     <Row label="Description of Operations" value={form.operationsDescription} />
