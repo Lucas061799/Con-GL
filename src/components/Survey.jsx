@@ -17,14 +17,9 @@ const STAR = 'M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.42l-5.8 3.05 1.1
 const SCORES = [1, 2, 3, 4, 5]
 const AGAINST_LEGACY = ['Faster', 'Same', 'Slower']
 const DURATIONS = ['Under 5 min', '5–10 min', '10–20 min', 'Over 20 min']
-const FRICTION = [
-  'Classifications',
-  'Eligibility',
-  'Coverages',
-  'Payment',
-  'Signing',
-  'Nothing',
-]
+// The five steps, then Other with a box of its own. "Nothing" is kept out of
+// the grid and given the full width: it is the opt-out, not a sixth step.
+const FRICTION = ['Classifications', 'Eligibility', 'Coverages', 'Payment', 'Signing', 'Other']
 const AGAIN = ['Yes', 'No', 'Not sure']
 
 function Question({ children, label }) {
@@ -38,11 +33,11 @@ function Question({ children, label }) {
   )
 }
 
-function Pill({ on, children, ...rest }) {
+function Pill({ on, children, className = '', ...rest }) {
   return (
     <button
       type="button"
-      className="px-2 py-1.5 rounded-lg text-[11px] font-medium transition truncate"
+      className={`px-2 py-1.5 rounded-lg text-[11px] font-medium transition truncate ${className}`}
       style={on
         ? { background: BRAND_GRADIENT, color: 'white', border: '1px solid transparent' }
         : { background: 'var(--surface-soft)', color: 'var(--ink-2)', border: '1px solid var(--line)' }}
@@ -59,6 +54,7 @@ export default function Survey() {
   const [pace, setPace] = useState(null)
   const [duration, setDuration] = useState(null)
   const [friction, setFriction] = useState([])
+  const [frictionOther, setFrictionOther] = useState('')
   const [again, setAgain] = useState(null)
   const [comment, setComment] = useState('')
   const [sent, setSent] = useState(false)
@@ -161,7 +157,25 @@ export default function Survey() {
               {FRICTION.map(f => (
                 <Pill key={f} on={friction.includes(f)} onClick={() => toggleFriction(f)}>{f}</Pill>
               ))}
+              <div className="col-span-2">
+                <Pill
+                  on={friction.includes('Nothing')}
+                  onClick={() => toggleFriction('Nothing')}
+                  className="w-full text-center"
+                >
+                  Nothing
+                </Pill>
+              </div>
             </div>
+            {friction.includes('Other') && (
+              <input
+                type="text"
+                value={frictionOther}
+                onChange={(e) => setFrictionOther(e.target.value)}
+                placeholder="What was it?"
+                className="w-full mt-1.5 border rounded-lg px-2.5 py-1.5 text-[11px] text-gray-800 placeholder-gray-300 field-fill border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/10 focus:border-[#7C3AED]/40"
+              />
+            )}
           </Question>
 
           <Question label="Would you quote your next one here?">
