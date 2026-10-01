@@ -21,7 +21,7 @@ import Submitted from './pages/application/Submitted'
 // back into phase one to fix something keeps every answer on both sides.
 export default function ApplicationFlow({
   form, set, rows = [], files = [], setFiles,
-  applicationNumber, resumeAt, onEditIntake, intakeCompleted = {},
+  applicationNumber, resumeAt, onEditIntake, intakeCompleted = {}, setClassifications,
   quote, amount, onExit, onStartOver, railExtras,
 }) {
   const [activeStep, setActiveStep] = useState(resumeAt?.step ?? 'eligibility')
@@ -168,7 +168,7 @@ export default function ApplicationFlow({
   /* ── Render ─────────────────────────────────────────────────────── */
 
   const pages = {
-    eligibility: <EligibilityStatements form={form} set={set} errorFor={errorFor} rows={rows} onEdit={edit} />,
+    eligibility: <EligibilityStatements form={form} set={set} errorFor={errorFor} rows={rows} setClassifications={setClassifications} />,
     coverage: <CoverageCustomization form={form} set={setPriced} errorFor={errorFor} busy={pricing} />,
     review: (
       <ReviewSelectPayment

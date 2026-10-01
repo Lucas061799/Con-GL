@@ -413,6 +413,7 @@ export default function App() {
         form={form}
         set={set}
         rows={classifications}
+        setClassifications={setClassifications}
         files={appFiles}
         setFiles={setAppFiles}
         applicationNumber={applicationNumber}

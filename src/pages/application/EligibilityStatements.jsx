@@ -2,6 +2,7 @@ import { Textarea, YesNo, ToggleQuestion } from '../../components/FormField'
 import { FieldGroup, QuestionCard } from '../../components/Section'
 import { rulesForCodes, subKey } from '../../data/conditionalQuestions'
 import { CLASS_CODES } from '../../data/classCodes'
+import ClassificationRows from '../../components/ClassificationRows'
 import {
   POLICY_ELIGIBILITY, TERMS_AND_CONDITIONS, AGREE_QUESTION, OPERATIONS_NOTE,
 } from '../../data/coverageOptions'
@@ -55,7 +56,7 @@ function PlaceholderLines({ lines }) {
   )
 }
 
-export default function EligibilityStatements({ form, set, errorFor, rows = [], onEdit }) {
+export default function EligibilityStatements({ form, set, errorFor, rows = [], setClassifications }) {
   const codes = rows.map(r => r.code).filter(Boolean)
   const declined = form.agreeTerms === 'no'
   // The trade-specific questions belong to the carrier, so they are asked
@@ -66,24 +67,18 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [], 
     <div className="space-y-6">
       <div>
         {/* Reading the statements is exactly when someone works out they
-            picked the wrong class, so there has to be a way to act on it. The
-            classes themselves are not edited here — they have been rated and
-            a carrier chosen on them — so this is a labelled trip back to the
-            step that owns them, not a bare pencil that looks like it edits
-            the statements. */}
-        <Heading
-          action={onEdit && (
-            <button
-              type="button"
-              onClick={() => onEdit('classes')}
-              className="shrink-0 text-[11px] font-semibold transition hover:opacity-70 text-accent"
-            >
-              Change or remove &rarr;
-            </button>
-          )}
-        >
-          Classification Statements
-        </Heading>
+            picked the wrong class, so the rows are editable right here rather
+            than three screens back. Same list, same component as the
+            classifications step — the statements below redraw as it changes. */}
+        <Heading>Classification Statements</Heading>
+        {setClassifications && (
+          <div className="mb-5">
+            <ClassificationRows
+              classifications={rows}
+              setClassifications={setClassifications}
+            />
+          </div>
+        )}
         {codes.length === 0 ? (
           <p className="text-[12.5px] text-gray-400">Pick a classification to see its statements.</p>
         ) : (
