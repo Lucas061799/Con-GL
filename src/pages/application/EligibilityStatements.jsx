@@ -15,26 +15,47 @@ const codeTag = (code) => `${codeLabel(code)} [${code}]`
 // everything that hangs off the chosen classifications reads as one block.
 // The general eligibility statements follow, and only then the terms and
 // whether the applicant agrees.
-// Small uppercase label, no rule — the section title already has one.
-function Heading({ children }) {
+// Small uppercase label, no rule — the section title already has one. An
+// `action` sits at the right of the label.
+function Heading({ children, action }) {
   return (
-    <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-400 mb-2.5 pl-0.5">
-      {children}
-    </h3>
-  )
-}
-
-function PlaceholderLines({ widths }) {
-  return (
-    <div className="space-y-1.5 pl-3">
-      {widths.map((w, i) => (
-        <div key={i} className="h-2.5 rounded-full" style={{ width: w, background: 'var(--fill-subtle)' }} />
-      ))}
+    <div className="flex items-center justify-between gap-3 mb-2.5">
+      <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-400 pl-0.5">
+        {children}
+      </h3>
+      {action}
     </div>
   )
 }
 
-export default function EligibilityStatements({ form, set, errorFor, rows = [] }) {
+// Stand-in copy for the class guide, the same for every class because none
+// of it is RLI's — it is here so the block reads as prose rather than as
+// grey bars. Lighter than the statements below it, and the note under the
+// list says what it is. Replace wholesale when the real guide arrives.
+const SAMPLE_INCLUDED = [
+  'Preparation, installation and finishing work performed at the job site.',
+  'Incidental repair, adjustment and clean-up arising from those operations.',
+]
+const SAMPLE_EXCLUDED = [
+  'Any operation that carries a classification code of its own.',
+  'Work at heights, or in conditions, the class guide places outside this class.',
+  'Materials or installations supplied but not installed by the applicant.',
+]
+
+function PlaceholderLines({ lines }) {
+  return (
+    <ul className="space-y-1.5 pl-1">
+      {lines.map((line, i) => (
+        <li key={i} className="flex gap-2.5 text-[12.5px] leading-relaxed" style={{ color: '#9CA3AF' }}>
+          <span className="shrink-0 mt-[7px] w-1 h-1 rounded-full" style={{ background: 'var(--line-strong)' }} />
+          <span>{line}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+export default function EligibilityStatements({ form, set, errorFor, rows = [], onEdit }) {
   const codes = rows.map(r => r.code).filter(Boolean)
   const declined = form.agreeTerms === 'no'
   // The trade-specific questions belong to the carrier, so they are asked
@@ -44,10 +65,25 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
   return (
     <div className="space-y-6">
       <div>
-        {/* Read-back only. By this point the classes have been rated and a
-            carrier chosen on them; changing one here would quietly invalidate
-            both, so the way back is the classifications step itself. */}
-        <Heading>Classification Statements</Heading>
+        {/* Reading the statements is exactly when someone works out they
+            picked the wrong class, so there has to be a way to act on it. The
+            classes themselves are not edited here — they have been rated and
+            a carrier chosen on them — so this is a labelled trip back to the
+            step that owns them, not a bare pencil that looks like it edits
+            the statements. */}
+        <Heading
+          action={onEdit && (
+            <button
+              type="button"
+              onClick={() => onEdit('classes')}
+              className="shrink-0 text-[11px] font-semibold transition hover:opacity-70 text-accent"
+            >
+              Change or remove &rarr;
+            </button>
+          )}
+        >
+          Classification Statements
+        </Heading>
         {codes.length === 0 ? (
           <p className="text-[12.5px] text-gray-400">Pick a classification to see its statements.</p>
         ) : (
@@ -60,13 +96,13 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [] }
                     <p className="text-[12.5px] font-semibold mb-2" style={{ color: 'var(--ink)' }}>
                       The following operations are included in this classification:
                     </p>
-                    <PlaceholderLines widths={['84%', '66%']} />
+                    <PlaceholderLines lines={SAMPLE_INCLUDED} />
                   </div>
                   <div>
                     <p className="text-[12.5px] font-semibold mb-2" style={{ color: 'var(--ink)' }}>
                       The following operations are not included in this classification:
                     </p>
-                    <PlaceholderLines widths={['72%', '88%', '58%']} />
+                    <PlaceholderLines lines={SAMPLE_EXCLUDED} />
                   </div>
                 </div>
               </div>

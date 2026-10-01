@@ -168,7 +168,7 @@ export default function ApplicationFlow({
   /* ── Render ─────────────────────────────────────────────────────── */
 
   const pages = {
-    eligibility: <EligibilityStatements form={form} set={set} errorFor={errorFor} rows={rows} />,
+    eligibility: <EligibilityStatements form={form} set={set} errorFor={errorFor} rows={rows} onEdit={edit} />,
     coverage: <CoverageCustomization form={form} set={setPriced} errorFor={errorFor} busy={pricing} />,
     review: (
       <ReviewSelectPayment
