@@ -111,7 +111,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
           can still come second — below the result, above the cross-sell —
           instead of falling to the bottom of the page. The banner out spans
           both, underneath. */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5 md:gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5 md:gap-6">
         <div className="order-1 min-w-0 lg:col-start-1 lg:row-start-1">
           <div id="submission-print-area" className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface-card)', border: '1px solid var(--line-soft)' }}>
             <div className="h-1" style={{ background: BRAND_GRADIENT }} />
@@ -328,7 +328,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
 
         </div>
 
-        <div className="order-2 lg:col-start-2 lg:row-start-1">
+        <div className="order-2 lg:col-start-2 lg:row-start-1 lg:row-span-2">
           <Survey />
         </div>
 
