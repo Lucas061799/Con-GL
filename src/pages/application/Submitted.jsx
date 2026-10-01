@@ -317,15 +317,14 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
             </div>
           </div>
 
-      {/* Commercial Auto closes its submission on the cross-sell, above the
-          banner out. Same place here, with the survey beside it — the
-          survey takes a fixed 260 — the width of its five score buttons and
-          no more — and the cross-sell takes the rest, because its rows have
-          to hold a name, a badge, a price and a button on one line. */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-4 mb-6">
-        <CrossSell />
+      {/* The survey goes straight under the receipt, full width — it is the
+          only thing on this page we want back, so it comes before the
+          cross-sell rather than beside it. Commercial Auto closes on the
+          cross-sell, and that still sits above the banner out. */}
+      <div className="mb-4">
         <Survey />
       </div>
+      <CrossSell />
 
       {/* Builder's Risk closes on this rather than a button: the jungle banner
           out. It names wherever the submission came in from. */}
