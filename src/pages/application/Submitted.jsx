@@ -22,9 +22,7 @@ import {
 } from '../../data/coverageOptions'
 
 const NORBIELINK_URL = 'https://marketplace.btisinc.com/norbielink/'
-// Nobody has given the legacy address yet; until they do, that half falls
-// back to wherever the submission came in from, or to starting over.
-const LEGACY_URL = ''
+const LEGACY_URL = 'https://my.btisinc.com/submissionslegacy'
 
 // Both halves of the way out: same padding, same hover, the jungle behind
 // them washed out from the left so the words stay readable over it.
@@ -58,6 +56,9 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
     }
   }, [])
 
+  // Both ways out are real addresses now. The referrer is the fallback only
+  // if one of them is ever blanked out again, and starting over is what the
+  // demo gets when there is nowhere to go back to.
   const leave = (url) => {
     if (url) { window.location.assign(url); return }
     if (cameFrom) { window.location.assign(cameFrom.href); return }
