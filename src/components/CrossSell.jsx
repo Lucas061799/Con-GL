@@ -1,15 +1,15 @@
 import iconWorkersComp from '../assets/icon-workers-comp.png'
-import iconBusinessOwners from '../assets/icon-business-owners.png'
 
 // The cross-sell block Commercial Auto closes its submission on, brought over
 // to the receipt. Every product in the house runs the same three rows and
 // drops whichever one the customer has just bought — Builder's Risk offers
 // GL, WC and BOP; this one has just sold the GL.
 //
-// Workers' compensation and Access are the two the meeting named. Access has
-// no logo here and no copy yet, so it wears the grey picture glyph and says
-// so; Business Owners Policy fills the third row, a house product picked so
-// the block has the three the pattern expects.
+// Workers' compensation and Access are the two the meeting named, and only
+// workers' comp has a mark and a line of copy. Everything still missing wears
+// the grey picture glyph and says "Placeholder" rather than borrowing another
+// product's name or artwork — the third row is held open because the pattern
+// runs three, not because a third product has been chosen.
 //
 // The prices are the house's own demo figures, carried across every product.
 // Nothing here rates any of them, so they are stand-ins and have to go before
@@ -32,12 +32,11 @@ const PRODUCTS = [
     // glyph rather than borrowing another product's artwork.
   },
   {
-    name: 'Business Owners Policy',
-    desc: 'Bundle the office and its property, and save',
+    name: 'Placeholder',
+    desc: 'Placeholder — third product not chosen yet',
     price: '$450/year',
     badge: 'BEST VALUE',
     badgeColor: '#73C9B7',
-    icon: iconBusinessOwners,
   },
 ]
 
