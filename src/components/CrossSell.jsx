@@ -1,16 +1,15 @@
 import iconWorkersComp from '../assets/icon-workers-comp.png'
-import iconBuildersRisk from '../assets/icon-builders-risk.png'
 import iconBusinessOwners from '../assets/icon-business-owners.png'
 
 // The cross-sell block Commercial Auto closes its submission on, brought over
 // to the receipt. Every product in the house runs the same three rows and
 // drops whichever one the customer has just bought — Builder's Risk offers
-// GL, WC and BOP; this one has just sold the GL, so Builder's Risk takes its
-// place and its toolbox.
+// GL, WC and BOP; this one has just sold the GL.
 //
-// Only workers' compensation came out of the meeting. The other two are house
-// products picked so the block has the three rows the pattern expects; each
-// is one line to swap, including for Access once I know what it is.
+// Workers' compensation and Access are the two the meeting named. Access has
+// no logo here and no copy yet, so it wears the grey picture glyph and says
+// so; Business Owners Policy fills the third row, a house product picked so
+// the block has the three the pattern expects.
 //
 // The prices are the house's own demo figures, carried across every product.
 // Nothing here rates any of them, so they are stand-ins and have to go before
@@ -24,12 +23,13 @@ const PRODUCTS = [
     icon: iconWorkersComp,
   },
   {
-    name: "Builder's Risk",
-    desc: 'Cover the projects themselves — materials and work in progress',
+    name: 'Access',
+    desc: 'Placeholder — product description to come',
     price: '$850/year',
     badge: 'RECOMMENDED',
     badgeColor: '#73C9B7',
-    icon: iconBuildersRisk,
+    // No icon: nobody has sent the mark, so the row shows the grey picture
+    // glyph rather than borrowing another product's artwork.
   },
   {
     name: 'Business Owners Policy',
@@ -45,6 +45,17 @@ const PRODUCTS = [
 // carrier logos. These are full-colour illustrations drawn for a light
 // ground, and Commercial Auto's brand tint turns them muddy on navy — the
 // one place this block parts from it.
+
+// Stands in for a product mark nobody has supplied yet.
+function NoMark() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="#9CA3AF" strokeWidth="1.5" viewBox="0 0 24 24">
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <circle cx="8.5" cy="9.5" r="1.5" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M21 15l-5-5L5 20" />
+    </svg>
+  )
+}
 
 function Bolt() {
   return (
@@ -94,7 +105,9 @@ export default function CrossSell({ onQuote }) {
                 className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                 style={{ background: 'white', border: '1px solid var(--line)' }}
               >
-                <img src={item.icon} alt="" className="w-6 h-6 object-contain" />
+                {item.icon
+                  ? <img src={item.icon} alt="" className="w-6 h-6 object-contain" />
+                  : <NoMark />}
               </div>
 
               <div className="flex-1 min-w-0">
