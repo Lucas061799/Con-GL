@@ -21,6 +21,18 @@ import {
   CC_RECOMMENDED, CC_ADDITIONAL_INSUREDS, CC_OPTIONAL, productOptionsFor,
 } from '../../data/coverageOptions'
 
+const NORBIELINK_URL = 'https://marketplace.btisinc.com/norbielink/'
+// Nobody has given the legacy address yet; until they do, that half falls
+// back to wherever the submission came in from, or to starting over.
+const LEGACY_URL = ''
+
+// Both halves of the way out: same padding, same hover, the jungle behind
+// them washed out from the left so the words stay readable over it.
+const EXIT_HALF = 'text-left px-8 py-6 transition hover:opacity-80 cursor-pointer'
+const EXIT_SCRIM = {
+  background: 'linear-gradient(90deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.72) 55%, rgba(255,255,255,0) 100%)',
+}
+
 const labelOf = (options, value) => options.find(o => o.value === value)?.label ?? ''
 const codeLabel = (code) => CLASS_CODES.find(c => c.code === code)?.label ?? code
 const yesNo = (v) => (v === 'yes' ? 'Yes' : v === 'no' ? 'No' : '')
@@ -45,6 +57,12 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
       return null
     }
   }, [])
+
+  const leave = (url) => {
+    if (url) { window.location.assign(url); return }
+    if (cameFrom) { window.location.assign(cameFrom.href); return }
+    onStartOver && onStartOver()
+  }
 
   const printIdle = dark
     ? { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }
@@ -337,22 +355,36 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
         </div>
       </div>
 
-      {/* Builder's Risk closes on this rather than a button: the jungle banner
-          out. It names wherever the submission came in from. */}
+      {/* Builder's Risk closes on this rather than a button, and here it is
+          two ways out rather than one: the marketplace, or the screens the
+          agent had before. The jungle runs behind both and each half washes
+          it out under its own words, or the gorilla sits where the right
+          half's text goes. */}
       <div
-        className="screen-only rounded-2xl relative cursor-pointer hover:opacity-95 transition overflow-hidden mb-8"
-        onClick={() => (cameFrom ? window.location.assign(cameFrom.href) : onStartOver && onStartOver())}
+        className="screen-only rounded-2xl relative overflow-hidden mb-8"
         style={{ minHeight: 100 }}
       >
         <img src={sellMoreBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="px-8 py-6 relative z-10">
-          <p className="text-lg font-bold mb-1" style={{ color: '#111827' }}>Return to the Jungle?</p>
-          <p className="text-xs text-gray-400">
-            Head back to{' '}
-            <span className="font-semibold text-gradient underline underline-offset-2">
-              {cameFrom ? cameFrom.host : 'Norbielink'}
-            </span>
-          </p>
+        <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2">
+          <button type="button" onClick={() => leave(NORBIELINK_URL)} className={EXIT_HALF} style={EXIT_SCRIM}>
+            <p className="text-lg font-bold mb-1" style={{ color: '#111827' }}>Return to the Marketplace?</p>
+            <p className="text-xs text-gray-500">
+              Head back to{' '}
+              <span className="font-semibold text-gradient underline underline-offset-2">Norbielink</span>
+            </p>
+          </button>
+          <button
+            type="button"
+            onClick={() => leave(LEGACY_URL)}
+            className={EXIT_HALF}
+            style={{ ...EXIT_SCRIM, borderLeft: '1px solid rgba(17,24,39,0.10)' }}
+          >
+            <p className="text-lg font-bold mb-1" style={{ color: '#111827' }}>Back to the Legacy view?</p>
+            <p className="text-xs text-gray-500">
+              The screens you had{' '}
+              <span className="font-semibold text-gradient underline underline-offset-2">before</span>
+            </p>
+          </button>
         </div>
       </div>
     </div>

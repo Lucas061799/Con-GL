@@ -111,10 +111,10 @@ export default function Survey() {
           </span>
 
           <Question label="How was that?">
-            {/* Spread to the column's edges so the row ends where the pill
-                grids below it end; the negative margin cancels each button's
-                own padding so the outer glyphs sit flush. */}
-            <div className="flex items-center justify-between -mx-0.5" onMouseLeave={() => setHover(null)}>
+            {/* Packed, not spread. Stretching five stars to the column's
+                edges put daylight between them and they stopped reading as
+                one rating. */}
+            <div className="flex items-center gap-1 -ml-0.5" onMouseLeave={() => setHover(null)}>
               {SCORES.map(n => (
                 <button
                   key={n}
