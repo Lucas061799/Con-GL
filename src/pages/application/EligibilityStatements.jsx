@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Textarea, YesNo, ToggleQuestion } from '../../components/FormField'
 import { FieldGroup, QuestionCard } from '../../components/Section'
 import { rulesForCodes, subKey } from '../../data/conditionalQuestions'
@@ -63,6 +64,18 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [], 
   // here rather than while the market is still being shopped.
   const rules = rulesForCodes(codes)
 
+  // The rows are a read-back until someone needs them otherwise, so the
+  // editor is folded away. It opens on its own when the split will not do —
+  // a class with no code, or percentages that miss 100 — because then there
+  // is nothing to read and something to fix.
+  const [editing, setEditing] = useState(false)
+  const rowsValid =
+    rows.length > 0 &&
+    rows.every(r => r.code) &&
+    rows.reduce((sum, r) => sum + (Number(r.percentage) || 0), 0) === 100
+  const canEdit = typeof setClassifications === 'function'
+  const showEditor = canEdit && (editing || !rowsValid)
+
   return (
     <div className="space-y-6">
       <div>
@@ -70,14 +83,28 @@ export default function EligibilityStatements({ form, set, errorFor, rows = [], 
             picked the wrong class, so the rows are editable right here rather
             than three screens back. Same list, same component as the
             classifications step — the statements below redraw as it changes. */}
-        <Heading>Classification Statements</Heading>
-        {setClassifications && (
-          <div className="mb-5">
+        <Heading
+          action={canEdit && rowsValid && (
+            <button
+              type="button"
+              onClick={() => setEditing(e => !e)}
+              className="shrink-0 text-[11px] font-semibold transition hover:opacity-70 text-accent"
+            >
+              {editing ? 'Done' : 'Change or remove \u2192'}
+            </button>
+          )}
+        >
+          Classification Statements
+        </Heading>
+        {/* Boxed, so an open editor reads as a panel over the statements
+            rather than as the top of them. */}
+        {showEditor && (
+          <QuestionCard className="mb-5">
             <ClassificationRows
               classifications={rows}
               setClassifications={setClassifications}
             />
-          </div>
+          </QuestionCard>
         )}
         {codes.length === 0 ? (
           <p className="text-[12.5px] text-gray-400">Pick a classification to see its statements.</p>
