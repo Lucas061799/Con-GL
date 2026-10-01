@@ -37,7 +37,8 @@ export function QuoteReferred({ quote, onContinue, onDismiss }) {
     }>
       <p className="text-[14px] text-gray-600 leading-relaxed">
         {quote?.carrier ?? 'The carrier'} needs an underwriter to look at this one before it can
-        be quoted. You&rsquo;ll hear back from us shortly — there is nothing else to do here.
+        be quoted. A confirmation email is on its way, and you&rsquo;ll hear back from us
+        shortly — there is nothing else to do here.
       </p>
     </Modal>
   )
