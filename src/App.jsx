@@ -103,7 +103,18 @@ export default function App() {
   // submitted in phase two, so the rail's download stays disabled here.
   const summaryReady = false
 
+  // Every demo jump lands at the top of whatever it lands on. The shell's
+  // <main> is the scroller, and a jump that stays inside phase one keeps
+  // whatever position the last screen was left at; one into phase two mounts
+  // a fresh shell, so this is for the first case and ApplicationFlow handles
+  // the second.
+  const toTop = () => {
+    const root = scrollRef.current
+    if (root) root.scrollTop = 0
+  }
+
   const startOver = () => {
+    toTop()
     setInApplication(false)
     setApplicationNumber('')
     setAppFiles([])
@@ -266,7 +277,9 @@ export default function App() {
     }))
     setApplicationNumber(newApplicationNumber())
     setAppFiles([])
-    setAppReturn({ stage: 'form', step: 'eligibility' })
+    // atTop, not a resume: a jump arrives at the top of the page, where an
+    // edit round-trip arrives at the panel that sent it.
+    setAppReturn({ stage: 'form', step: 'eligibility', atTop: true })
     setInApplication(true)
   }
 
@@ -284,6 +297,7 @@ export default function App() {
   // Every jump lays the demo answers over whatever is already there, so it
   // does not matter how the form got into its current state.
   const demoStart = () => {
+    toTop()
     startApplication({ form: DEMO_INTAKE, quotes: rateAll(DEMO_INTAKE) }, true)
   }
 
@@ -327,7 +341,7 @@ export default function App() {
     }))
     setApplicationNumber(newApplicationNumber())
     setAppFiles([])
-    setAppReturn({ stage: 'form', step: 'eligibility' })
+    setAppReturn({ stage: 'form', step: 'eligibility', atTop: true })
     setInApplication(true)
   }
 
@@ -344,7 +358,7 @@ export default function App() {
       insuredEmail: f.insuredEmail || f.email,
       attested: true,
     }))
-    setAppReturn({ stage: 'bind', step: 'bind', submitted: true })
+    setAppReturn({ stage: 'bind', step: 'bind', submitted: true, atTop: true })
   }
 
   // The two ways a submission can go, each parked on the coverage step with
@@ -358,7 +372,7 @@ export default function App() {
         ? 'The applicant performs occasional work above the stated receipts threshold and asks for a review.'
         : '',
     }))
-    setAppReturn({ stage: 'form', step: 'coverage' })
+    setAppReturn({ stage: 'form', step: 'coverage', atTop: true })
   }
 
   const demoJumps = [

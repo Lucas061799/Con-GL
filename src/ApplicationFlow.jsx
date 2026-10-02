@@ -105,8 +105,19 @@ export default function ApplicationFlow({
     jumpTo(key)
   }
 
-  // Coming back from a phase-one edit, land on the step that sent us there.
+  // Coming back from a phase-one edit, land on the step that sent us there —
+  // but a demo jump is an arrival, not a return, so it starts at the top the
+  // way opening the page does.
   useEffect(() => {
+    if (resumeAt?.atTop) {
+      // Two frames, as below: the shell has to lay out before the scroller
+      // will take a position, and the step that mounts first nudges it a few
+      // pixels on its way in.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (scrollRef.current) scrollRef.current.scrollTop = 0
+      }))
+      return
+    }
     if (!resumeAt?.step) return
     requestAnimationFrame(() => requestAnimationFrame(() =>
       sectionRefs.current[resumeAt.step]?.scrollIntoView({ block: 'start' })))
