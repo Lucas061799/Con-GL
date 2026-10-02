@@ -7,7 +7,9 @@ import iconExcess from '../assets/icon-excess.png'
 // GL, WC and BOP; this one has just sold the GL.
 //
 // Workers' compensation and Excess are the two the meeting named — Excess,
-// not Access; the marketplace tile settles it. The third row is held open
+// not Access; the marketplace tile settles it. Both marks are NorbieLink's
+// own, out of public/insurance-icons, not crops of a screenshot. The third
+// row is held open
 // because the pattern runs three, not because a third product has been
 // chosen, so it wears the grey picture glyph and says Placeholder rather
 // than borrowing another product's name or artwork.
