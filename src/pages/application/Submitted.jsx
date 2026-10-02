@@ -1,6 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { BRAND_GRADIENT } from '../../components/FormField'
-import sellMoreBg from '../../assets/sell-more-bg.png'
 import Confetti from '../../components/Confetti'
 import CrossSell from '../../components/CrossSell'
 import Survey from '../../components/Survey'
@@ -21,15 +20,9 @@ import {
   CC_RECOMMENDED, CC_ADDITIONAL_INSUREDS, CC_OPTIONAL, productOptionsFor,
 } from '../../data/coverageOptions'
 
-// The three places the receipt could send someone. The banner takes the first
-// one; the other two are kept against the day the way out splits again.
-const BTIS_MARKETPLACE_URL = 'https://my.btisinc.com/submissions'
-const NORBIELINK_URL = 'https://norbielink.btisinc.com/'
-const LEGACY_URL = 'https://my.btisinc.com/submissionslegacy'
-
-// Each way out is one supplied artwork — vines and a look at the screen it
-// leads to — with its words set over the clear half on the left, so they
-// stay real text rather than pixels.
+// The jungle banner out went, and with it the receipt's only link away from
+// itself. Nothing here navigates now; the way back to the marketplace is the
+// header's logo, as it is on every other step.
 
 const labelOf = (options, value) => options.find(o => o.value === value)?.label ?? ''
 const codeLabel = (code) => CLASS_CODES.find(c => c.code === code)?.label ?? code
@@ -38,33 +31,7 @@ const money = (v) => (String(v ?? '').trim() ? `$${Number(String(v).replace(/\D/
 
 // The submission receipt, laid out the way Builder's Risk does it: no rails,
 // one headed card, then the application read back in panels.
-export default function Submitted({ submissionNumber, quote, amount, form = {}, rows = [], onStartOver, dark = false }) {
-  // Where the submission came from, so the banner sends it back there rather
-  // than always to Norbielink. A referrer from another origin is the page the
-  // agent was on — Legacy, the marketplace, wherever. With none (a direct
-  // visit, or a link that stripped it) there is nowhere to return to, so the
-  // banner keeps its old job of starting the quote over.
-  const cameFrom = useMemo(() => {
-    try {
-      const ref = document.referrer
-      if (!ref) return null
-      const url = new URL(ref)
-      if (url.origin === window.location.origin) return null
-      return { href: ref, host: url.hostname.replace(/^www\./, '') }
-    } catch {
-      return null
-    }
-  }, [])
-
-  // Both ways out are real addresses now. The referrer is the fallback only
-  // if one of them is ever blanked out again, and starting over is what the
-  // demo gets when there is nowhere to go back to.
-  const leave = (url) => {
-    if (url) { window.location.assign(url); return }
-    if (cameFrom) { window.location.assign(cameFrom.href); return }
-    onStartOver && onStartOver()
-  }
-
+export default function Submitted({ submissionNumber, quote, amount, form = {}, rows = [], dark = false }) {
   const printIdle = dark
     ? { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }
     : { background: 'white', border: '1px solid #E5E7EB' }
@@ -354,20 +321,6 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
         <div className="order-3 min-w-0 lg:col-start-1 lg:row-start-2">
           <CrossSell />
         </div>
-      </div>
-
-      {/* Builder's Risk closes on this rather than a button: the jungle
-          banner out, back to the marketplace. */}
-      <div
-        className="screen-only rounded-2xl relative cursor-pointer hover:opacity-95 transition overflow-hidden mb-8"
-        onClick={() => leave(BTIS_MARKETPLACE_URL)}
-      >
-        {/* The artwork carries it; the words over it went. */}
-        <img
-          src={sellMoreBg}
-          alt="Return to the BTIS Marketplace"
-          className="w-full block"
-        />
       </div>
     </div>
   )
