@@ -361,16 +361,13 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
       <div
         className="screen-only rounded-2xl relative cursor-pointer hover:opacity-95 transition overflow-hidden mb-8"
         onClick={() => leave(BTIS_MARKETPLACE_URL)}
-        style={{ minHeight: 100 }}
       >
-        <img src={sellMoreBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="px-8 py-6 relative z-10">
-          <p className="text-lg font-bold mb-1" style={{ color: '#111827' }}>Return to the Marketplace?</p>
-          <p className="text-xs text-gray-500">
-            Head back to{' '}
-            <span className="font-semibold text-gradient underline underline-offset-2">BTIS Marketplace</span>
-          </p>
-        </div>
+        {/* The artwork carries it; the words over it went. */}
+        <img
+          src={sellMoreBg}
+          alt="Return to the BTIS Marketplace"
+          className="w-full block"
+        />
       </div>
     </div>
   )

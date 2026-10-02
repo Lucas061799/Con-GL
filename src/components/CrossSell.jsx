@@ -1,15 +1,16 @@
 import iconWorkersComp from '../assets/icon-workers-comp.png'
+import iconExcess from '../assets/icon-excess.png'
 
 // The cross-sell block Commercial Auto closes its submission on, brought over
 // to the receipt. Every product in the house runs the same three rows and
 // drops whichever one the customer has just bought — Builder's Risk offers
 // GL, WC and BOP; this one has just sold the GL.
 //
-// Workers' compensation and Access are the two the meeting named, and only
-// workers' comp has a mark and a line of copy. Everything still missing wears
-// the grey picture glyph and says "Placeholder" rather than borrowing another
-// product's name or artwork — the third row is held open because the pattern
-// runs three, not because a third product has been chosen.
+// Workers' compensation and Excess are the two the meeting named — Excess,
+// not Access; the marketplace tile settles it. The third row is held open
+// because the pattern runs three, not because a third product has been
+// chosen, so it wears the grey picture glyph and says Placeholder rather
+// than borrowing another product's name or artwork.
 //
 // The prices are the house's own demo figures, carried across every product.
 // Nothing here rates any of them, so they are stand-ins and have to go before
@@ -23,13 +24,12 @@ const PRODUCTS = [
     icon: iconWorkersComp,
   },
   {
-    name: 'Access',
-    desc: 'Placeholder — product description to come',
+    name: 'Excess',
+    desc: 'Higher limits on top of the GL just bound',
     price: '$850/year',
     badge: 'RECOMMENDED',
     badgeColor: '#73C9B7',
-    // No icon: nobody has sent the mark, so the row shows the grey picture
-    // glyph rather than borrowing another product's artwork.
+    icon: iconExcess,
   },
   {
     name: 'Placeholder',
