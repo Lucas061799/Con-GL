@@ -123,15 +123,15 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
   return (
     <div className="space-y-5 md:space-y-6">
       <Confetti />
-      {/* Two columns: what was submitted and what follows from it on the
-          left, the survey in a column of its own on the right so it is not
-          something you scroll past. All three sit in the grid rather than two
-          of them in a wrapper, so that when the columns collapse the survey
-          can still come second — below the result, above the cross-sell —
-          instead of falling to the bottom of the page. The banner out spans
-          both, underneath. */}
+      {/* The receipt takes the full width — it is the page's subject and the
+          panels inside it are two columns of their own, which a 1fr column
+          squeezed. The cross-sell and the survey share the row under it. All
+          three sit in the one grid rather than two of them in a wrapper, so
+          that when the columns collapse the survey can still come second —
+          below the result, above the cross-sell — instead of falling to the
+          bottom. The banner out spans both, underneath. */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5 md:gap-6">
-        <div className="order-1 min-w-0 lg:col-start-1 lg:row-start-1">
+        <div className="order-1 min-w-0 lg:col-span-2 lg:row-start-1">
           <div id="submission-print-area" className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface-card)', border: '1px solid var(--line-soft)' }}>
             <div className="h-1" style={{ background: BRAND_GRADIENT }} />
 
@@ -347,7 +347,7 @@ export default function Submitted({ submissionNumber, quote, amount, form = {}, 
 
         </div>
 
-        <div className="order-2 lg:col-start-2 lg:row-start-1 lg:row-span-2">
+        <div className="order-2 lg:col-start-2 lg:row-start-2">
           <Survey />
         </div>
 
