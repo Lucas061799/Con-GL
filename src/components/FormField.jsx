@@ -118,7 +118,7 @@ export function InfoTip({ title, children, size = 'sm', label }) {
             role="tooltip"
             className="cb-info-pop rounded-2xl overflow-hidden"
           >
-            <div className="cb-info-pop-head flex items-start justify-between gap-3 px-4 py-3">
+            <div className="cb-info-pop-head flex items-center justify-between gap-3 px-4 py-3">
               <h4 className="text-[13px] font-bold" style={{ color: 'var(--ink)' }}>{title}</h4>
               <button
                 type="button"

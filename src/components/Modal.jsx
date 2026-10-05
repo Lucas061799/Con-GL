@@ -16,7 +16,7 @@ export default function Modal({ title, onDismiss, children, footer, width = 420 
       >
         {title && (
           <div className="px-7 pt-6 pb-4">
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center justify-between gap-4">
               <h3 className="text-[17px] font-bold text-navy tracking-wide">{title}</h3>
               {/* A dialog you can dismiss says so in the corner as well. */}
               {onDismiss && (
