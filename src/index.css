@@ -87,16 +87,17 @@ html[data-dark="true"] .pay-rec { border-color: rgba(167,139,250,0.50); }
 .edge-brand { border-color: #7C3AED; }
 html[data-dark="true"] .edge-brand { border-color: #A78BFA; }
 
-/* Selected states that were painted in the deep brand purple: legible on
-   white, all but invisible on navy, so dark takes the light pair. */
-.yn-on      { border-color: #5C2ED4; color: #5C2ED4; background: rgba(92,46,212,0.08); }
-.yn-on-no   { border-color: #A614C3; color: #A614C3; background: rgba(166,20,195,0.08); }
-.yn-ring    { border-color: #5C2ED4; }
-.yn-ring-no { border-color: #A614C3; }
-.yn-dot     { background: linear-gradient(88.09deg, #5C2ED4 0%, #7C3AED 100%); }
-.yn-dot-no  { background: linear-gradient(88.09deg, #A614C3 0%, #D946EF 100%); }
+/* The chosen pill, drawn as Commercial Auto draws it — values measured off
+   the live app. */
+.yn-on {
+  border-color: #5C2ED4;
+  color: #5C2ED4;
+  background: linear-gradient(88.09deg, rgba(92,46,212,0.08) 0%, rgba(166,20,195,0.08) 100%);
+}
+.yn-ring { border-color: #A614C3; }
+.yn-dot  { background: linear-gradient(88.09deg, #5C2ED4 0%, #A614C3 100%); }
 /* The unchosen pill was left on Tailwind's greys, so the dark shim gave it a
-   0.10 edge and grey text — a brighter edge than the chosen one carried. */
+   0.10 edge and grey text — close to what the chosen one carried. */
 .yn-off       { border-color: #E5E7EB; color: #6B7280; background: transparent; }
 .yn-off:hover { border-color: #D1D5DB; background: #F9FAFB; }
 .yn-off-ring  { border-color: #D1D5DB; }
@@ -106,17 +107,14 @@ html[data-dark="true"] .edge-brand { border-color: #A78BFA; }
 .dot-brand { background: linear-gradient(88.09deg, #5C2ED4 0%, #A614C3 100%); }
 html[data-dark="true"] .dot-brand { background: linear-gradient(88.09deg, #A78BFA 0%, #E879F9 100%); }
 
-html[data-dark="true"] .yn-on,
-html[data-dark="true"] .yn-on-no { color: #FFFFFF; background: rgba(255,255,255,0.08); }
-html[data-dark="true"] .yn-on    { border-color: #5C2ED4; }
-html[data-dark="true"] .yn-on-no { border-color: #A614C3; }
-html[data-dark="true"] .yn-off {
-  border-color: rgba(255,255,255,0.22);
-  color: #FFFFFF;
-  background: transparent;
-}
+/* Commercial Auto holds every brand colour steady across modes — the violet
+   edge, the magenta ring and the gradient dot are the same on navy as on
+   white. Only the text goes white and the unchosen pill's greys become white
+   at low alpha. The lavender pair this took in dark was ours, not theirs. */
+html[data-dark="true"] .yn-on  { color: #FFFFFF; }
+html[data-dark="true"] .yn-off { border-color: rgba(255,255,255,0.18); color: #FFFFFF; }
 html[data-dark="true"] .yn-off:hover { background: rgba(255,255,255,0.06); }
-html[data-dark="true"] .yn-off-ring  { border-color: rgba(255,255,255,0.30); }
+html[data-dark="true"] .yn-off-ring  { border-color: rgba(255,255,255,0.08); }
 
 .opt-on { color: #A614C3; }
 .opt-off { color: var(--ink-2); }
