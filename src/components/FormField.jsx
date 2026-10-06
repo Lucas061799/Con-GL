@@ -758,21 +758,24 @@ export function Textarea({ label, required, hint, placeholder, rows = 4, value, 
 export function YesNo({ value, onChange, className = '' }) {
   const pill = (v, labelText) => {
     const on = value === v
+    /* No answers in magenta, Yes in the violet — the pairing Commercial Auto
+       uses. */
+    const isNo = v === 'no'
     return (
       <button
         key={v}
         type="button"
         onClick={() => onChange && onChange(v)}
         className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all text-xs font-medium ${
-          on ? 'yn-on' : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50'
+          on ? (isNo ? 'yn-on-no' : 'yn-on') : 'yn-off'
         }`}
       >
         <span
           className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-            on ? 'yn-ring' : 'border-gray-300'
+            on ? (isNo ? 'yn-ring-no' : 'yn-ring') : 'yn-off-ring'
           }`}
         >
-          {on && <span className="yn-dot w-1.5 h-1.5 rounded-full" />}
+          {on && <span className={`${isNo ? 'yn-dot-no' : 'yn-dot'} w-1.5 h-1.5 rounded-full`} />}
         </span>
         {labelText}
       </button>
